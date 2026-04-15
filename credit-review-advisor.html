@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Credit Review Advisor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #dc3545;
+    --red-bg: #fdf0f1;
+    --red-border: #f5c6cb;
+    --orange: #fd7e14;
+    --orange-bg: #fff5ec;
+    --orange-border: #fde0c2;
+    --yellow: #e6a800;
+    --yellow-bg: #fff9e6;
+    --yellow-border: #ffeaa0;
+    --green: #28a745;
+    --green-bg: #eefaf1;
+    --green-border: #b7e4c7;
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #5a5f7a;
+    --border: #e2e5ec;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    overflow-y: auto;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+  }
+
+  /* ── Account Header ── */
+  .account-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 24px;
+  }
+
+  .account-header .left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .account-header .avatar {
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .account-header .info h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .account-header .info .unit-token {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    margin-top: 2px;
+  }
+
+  .account-header .meta {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .meta-item {
+    text-align: center;
+  }
+
+  .meta-item .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 2px;
+  }
+
+  .meta-item .value {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(253,126,20,0.2);
+    border: 1px solid rgba(253,126,20,0.4);
+    color: #ffb366;
+    padding: 3px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* ── Panel Title ── */
+  .panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .panel-title h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .panel-title .badge {
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .panel-title .subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-left: auto;
+  }
+
+  /* ── Section Headers ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 28px 0 14px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+  }
+
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Alert Cards ── */
+  .alert-card {
+    background: var(--card);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+    overflow: hidden;
+    display: flex;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s, transform 0.15s;
+  }
+
+  .alert-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .alert-bar {
+    width: 5px;
+    flex-shrink: 0;
+  }
+
+  .alert-bar.red { background: var(--red); }
+  .alert-bar.orange { background: var(--orange); }
+  .alert-bar.yellow { background: var(--yellow); }
+
+  .alert-content {
+    flex: 1;
+    padding: 18px 22px;
+  }
+
+  .alert-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .alert-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .alert-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .alert-icon.red { background: var(--red-bg); color: var(--red); }
+  .alert-icon.orange { background: var(--orange-bg); color: var(--orange); }
+  .alert-icon.yellow { background: var(--yellow-bg); color: var(--yellow); }
+
+  .alert-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .severity-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .severity-tag.red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .severity-tag.orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+  .severity-tag.yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+
+  .alert-detected {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    padding-left: 42px;
+  }
+
+  .alert-detected strong {
+    color: var(--text);
+  }
+
+  .alert-sop {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #6366f1;
+    background: #eef2ff;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    margin-left: 42px;
+    margin-bottom: 12px;
+  }
+
+  .alert-action-box {
+    margin-left: 42px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .alert-action-box.red {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+    color: #9b1c2a;
+  }
+
+  .alert-action-box.orange {
+    background: var(--orange-bg);
+    border: 1px solid var(--orange-border);
+    color: #b35600;
+  }
+
+  .alert-action-box.yellow {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow-border);
+    color: #8a6600;
+  }
+
+  .alert-action-box i {
+    font-size: 14px;
+  }
+
+  .expand-btn {
+    margin-left: 42px;
+    background: none;
+    border: none;
+    color: #6366f1;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    transition: color 0.15s;
+  }
+
+  .expand-btn:hover {
+    color: #4338ca;
+  }
+
+  .expand-btn i {
+    transition: transform 0.25s;
+    font-size: 10px;
+  }
+
+  .expand-btn.open i {
+    transform: rotate(90deg);
+  }
+
+  .full-procedure {
+    margin-left: 42px;
+    margin-top: 10px;
+    padding: 14px 16px;
+    background: #f8f9fb;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    border-left: 3px solid #d1d5e0;
+    display: none;
+  }
+
+  .full-procedure.show {
+    display: block;
+  }
+
+  .full-procedure .proc-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #8b8fa8;
+    margin-bottom: 6px;
+  }
+
+  /* ── Decision Summary ── */
+  .decision-summary {
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--red-border);
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .decision-header {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #fff;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .decision-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .decision-verdict {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  .decision-body {
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 32px;
+  }
+
+  .decision-field .field-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .decision-field .field-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .decision-field .field-value.red { color: var(--red); }
+
+  .decision-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .decision-footer .escalation-note {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #1a1a2e, #2d2d5e);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn-copy:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26,26,46,0.3);
+  }
+
+  .btn-copy:active {
+    transform: translateY(0);
+  }
+
+  .btn-copy.copied {
+    background: var(--green);
+  }
+
+  /* ── Passed Checks ── */
+  .passed-section {
+    background: var(--card);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--green-border);
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .passed-header {
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .passed-header:hover {
+    background: var(--green-bg);
+  }
+
+  .passed-header .left-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .passed-header .check-icon {
+    width: 28px; height: 28px;
+    background: var(--green-bg);
+    color: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+
+  .passed-header h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .passed-header .count {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .passed-header .chevron {
+    color: var(--text-secondary);
+    transition: transform 0.25s;
+    font-size: 12px;
+  }
+
+  .passed-header.open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .passed-body {
+    display: none;
+    padding: 0 22px 18px;
+  }
+
+  .passed-body.show {
+    display: block;
+  }
+
+  .passed-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .passed-item:last-child {
+    border-bottom: none;
+  }
+
+  .passed-item .check {
+    color: var(--green);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .passed-item .detail {
+    color: var(--text-secondary);
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* ── Timestamp ── */
+  .timestamp-bar {
+    text-align: center;
+    padding: 20px 0 0;
+    font-size: 11px;
+    color: #b0b4c8;
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #1a1a2e;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    z-index: 1000;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .container { padding: 12px 14px 30px; }
+    .account-header { padding: 16px 18px; flex-direction: column; align-items: flex-start; }
+    .account-header .meta { gap: 16px; }
+    .decision-body { grid-template-columns: 1fr; gap: 12px; }
+    .alert-detected, .alert-sop, .alert-action-box, .expand-btn, .full-procedure { margin-left: 0; }
+  }
+</style>
+  <script type="application/ld+json">
+{
+  "@context": "urn:goose.ai:schema",
+  "@type": "GooseApp",
+  "name": "smart-credit-advisor",
+  "description": "Decision-support panel that analyzes account signals and surfaces SOP procedures and recommended actions.",
+  "width": 1280,
+  "height": 900,
+  "resizable": true,
+  "mcpServers": [
+    "apps"
+  ]
+}
+  </script>
+  <script type="application/x-goose-prd">
+
+Build a prototype of a "Smart Credit Review Advisor" panel that would sit inside a loan management tool. This is a decision-support engine that analyzes account signals and automatically surfaces the relevant SOP procedures, recommended actions, and Adverse Action Notices (AANs).
+
+## Layout
+Single page with a mock account header at top showing:
+- Unit Token: LDXF2AMSD5BVD
+- Business: Autofraud Network LLC
+- Risk Grade: B2
+
+## Main Content: Smart CROP Advisor Panel
+
+### Section 1: Active Alerts (auto-detected)
+Show 4-5 alert cards in a vertical stack. Each card has:
+- Left color bar: RED for critical, ORANGE for warning, YELLOW for info
+- Alert icon + title (e.g., "High Chargeback Rate Detected")
+- What was detected (e.g., "Chargeback GPV is 4.2% of total GPV in last 12 months — exceeds 3% threshold")
+- SOP Reference (e.g., "CROP §7.4 — Chargeback GPV")
+- Recommended Action in a highlighted box (e.g., "DECLINE 180 days — AAN: Chargeback History")
+- Expandable "Full Procedure" section that shows the detailed SOP text when clicked
+
+Example alerts to show:
+
+1. RED - "High Chargeback Rate" 
+   - Detected: Chargeback GPV is 4.2% (threshold: 3%)
+   - SOP: CROP §7.4
+   - Action: DECLINE 180 days — AAN: Chargeback History
+   - Full procedure: "If chargeback GPV > 3% total GPV in the last 12 months, then decline for 180 days."
+
+2. RED - "Linked Account Frozen"
+   - Detected: Linked unit ABCD1234 is frozen by Credit Risk (chargebacks)
+   - SOP: CROP §7.3 — Connected User Graph
+   - Action: DECLINE permanently — AAN: Adverse Account Activity
+   - Full procedure: "If a hard linked unit is frozen or deactivated, the reviewer will determine the source... If due to Compliance, Risk or Legal concerns and the association poses elevated risk, decline for adverse account activity."
+
+3. ORANGE - "Recent Bank Account Change"
+   - Detected: Bank account changed 5 days ago (within 14-day window)
+   - SOP: CROP §7.4 — Bank Change
+   - Action: SSP for bank account change documentation
+   - Full procedure: "Recent Bank Change: If found within 14 days, SSP for bank account change. If the recently linked bank account has been previously linked to the Square account, requesting additional information through SSP is not required."
+
+4. ORANGE - "Processing Gap Detected"
+   - Detected: No transactions for 9 consecutive days (threshold: 7 days)
+   - SOP: CROP §7.4 — Non-Seasonal Processing Gaps
+   - Action: SSP for payment slowdown explanation
+   - Full procedure: "If the seller has not processed for 7 or more consecutive days, and this gap is out of line with the seller's normal payment processing activity, SSP the seller for payment slowdown."
+
+5. YELLOW - "Loan Amount > $75K"
+   - Detected: Loan principal is $116,600
+   - SOP: CROP §7.11
+   - Action: Requires LexisNexis search + UCC Lien search
+   - Full procedure: "For loan applications > $75k the Reviewer should perform a LexisNexis Search and a UCC Lien Search."
+
+### Section 2: Recommended Decision Summary
+A summary box at the bottom with:
+- Overall recommendation: "DECLINE" in red or "APPROVE WITH CONDITIONS" in green or "REQUIRES ESCALATION" in orange
+- Primary AAN to use
+- Decline window (days)
+- Escalation channels if needed
+- A "Copy Decision" button that copies a formatted decision summary
+
+### Section 3: No Issues Detected (collapsed)
+Show a green section for checks that passed:
+- "Account Standing: ✅ Active, not frozen, not deactivated"
+- "Card Present Ratio: ✅ 72% CP (above 50% threshold)"
+- "PAN Diversity: ✅ 45% (above 20% threshold)"
+- "Liens: ✅ No UCC filings found"
+
+## Design
+- Clean, modern design with white cards on light gray background
+- Use Font Awesome icons
+- Color coding: Red (#dc3545), Orange (#fd7e14), Yellow (#ffc107), Green (#28a745)
+- Professional font (system fonts)
+- Each alert card should feel like an actionable item, not just information
+- The "Recommended Action" box inside each card should stand out with a light background tint matching the severity color
+- Make it feel like a decision-support tool, not a reference document
+- 1200px max width, centered
+
+  </script>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Account Header -->
+  <div class="account-header">
+    <div class="left">
+      <div class="avatar"><i class="fas fa-building"></i></div>
+      <div class="info">
+        <h1>Autofraud Network LLC</h1>
+        <div class="unit-token">LDXF2AMSD5BVD</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="meta-item">
+        <div class="label">Unit Token</div>
+        <div class="value" style="font-family: monospace; font-size: 12px;">LDXF2AMSD5BVD</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Risk Grade</div>
+        <div class="value"><span class="risk-badge"><i class="fas fa-exclamation-triangle"></i> B2</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Status</div>
+        <div class="value" style="color: #4ade80;"><i class="fas fa-circle" style="font-size:8px;"></i> Active</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Loan Amount</div>
+        <div class="value">$116,600</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Title -->
+  <div class="panel-title">
+    <i class="fas fa-brain" style="color: #6366f1; font-size: 20px;"></i>
+    <h2>Smart CROP Advisor</h2>
+    <span class="badge">5 Alerts</span>
+    <span class="subtitle"><i class="fas fa-clock"></i> Analyzed just now</span>
+  </div>
+
+  <!-- Section 1: Active Alerts -->
+  <div class="section-header">
+    <i class="fas fa-bell"></i> Active Alerts — Auto-Detected
+  </div>
+
+  <!-- Alert 1: High Chargeback Rate -->
+  <div class="alert-card">
+    <div class="alert-bar red"></div>
+    <div class="alert-content">
+      <div class="alert-top">
+        <div class="alert-title-row">
+          <div class="alert-icon red"><i class="fas fa-chart-line"></i></div>
+          <span class="alert-title">High Chargeback Rate Detected</span>
+        </div>
+        <span class="severity-tag red">Critical</span>
+      </div>
+      <div class="alert-detected">
+        Chargeback GPV is <strong>4.2%</strong> of total GPV in last 12 months — exceeds <strong>3% threshold</strong>
+      </div>
+      <div class="alert-sop"><i class="fas fa-book"></i> CROP §7.4 — Chargeback GPV</div>
+      <div class="alert-action-box red">
+        <i class="fas fa-gavel"></i>
+        <span>DECLINE 180 days — AAN: Chargeback History</span>
+      </div>
+      <button class="expand-btn" onclick="toggleProcedure(this)">
+        <i class="fas fa-chevron-right"></i> Full Procedure
+      </button>
+      <div class="full-procedure">
+        <div class="proc-label">CROP §7.4 — Chargeback GPV Procedure</div>
+        If chargeback GPV &gt; 3% total GPV in the last 12 months, then decline for 180 days. The Adverse Action Notice should reference "Chargeback History" as the primary reason. This threshold applies to all loan products regardless of principal amount.
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert 2: Linked Account Frozen -->
+  <div class="alert-card">
+    <div class="alert-bar red"></div>
+    <div class="alert-content">
+      <div class="alert-top">
+        <div class="alert-title-row">
+          <div class="alert-icon red"><i class="fas fa-link"></i></div>
+          <span class="alert-title">Linked Account Frozen</span>
+        </div>
+        <span class="severity-tag red">Critical</span>
+      </div>
+      <div class="alert-detected">
+        Linked unit <strong>ABCD1234</strong> is frozen by Credit Risk (chargebacks)
+      </div>
+      <div class="alert-sop"><i class="fas fa-book"></i> CROP §7.3 — Connected User Graph</div>
+      <div class="alert-action-box red">
+        <i class="fas fa-ban"></i>
+        <span>DECLINE permanently — AAN: Adverse Account Activity</span>
+      </div>
+      <button class="expand-btn" onclick="toggleProcedure(this)">
+        <i class="fas fa-chevron-right"></i> Full Procedure
+      </button>
+      <div class="full-procedure">
+        <div class="proc-label">CROP §7.3 — Connected User Graph Procedure</div>
+        If a hard linked unit is frozen or deactivated, the reviewer will determine the source of the freeze or deactivation. If due to Compliance, Risk or Legal concerns and the association poses elevated risk, decline for adverse account activity. The decline should be permanent unless overridden by a senior reviewer or team lead.
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert 3: Recent Bank Account Change -->
+  <div class="alert-card">
+    <div class="alert-bar orange"></div>
+    <div class="alert-content">
+      <div class="alert-top">
+        <div class="alert-title-row">
+          <div class="alert-icon orange"><i class="fas fa-university"></i></div>
+          <span class="alert-title">Recent Bank Account Change</span>
+        </div>
+        <span class="severity-tag orange">Warning</span>
+      </div>
+      <div class="alert-detected">
+        Bank account changed <strong>5 days ago</strong> (within 14-day window)
+      </div>
+      <div class="alert-sop"><i class="fas fa-book"></i> CROP §7.4 — Bank Change</div>
+      <div class="alert-action-box orange">
+        <i class="fas fa-envelope"></i>
+        <span>SSP for bank account change documentation</span>
+      </div>
+      <button class="expand-btn" onclick="toggleProcedure(this)">
+        <i class="fas fa-chevron-right"></i> Full Procedure
+      </button>
+      <div class="full-procedure">
+        <div class="proc-label">CROP §7.4 — Bank Change Procedure</div>
+        Recent Bank Change: If found within 14 days, SSP for bank account change. If the recently linked bank account has been previously linked to the Square account, requesting additional information through SSP is not required. Verify the new bank account details match the business entity on file.
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert 4: Processing Gap -->
+  <div class="alert-card">
+    <div class="alert-bar orange"></div>
+    <div class="alert-content">
+      <div class="alert-top">
+        <div class="alert-title-row">
+          <div class="alert-icon orange"><i class="fas fa-pause-circle"></i></div>
+          <span class="alert-title">Processing Gap Detected</span>
+        </div>
+        <span class="severity-tag orange">Warning</span>
+      </div>
+      <div class="alert-detected">
+        No transactions for <strong>9 consecutive days</strong> (threshold: 7 days)
+      </div>
+      <div class="alert-sop"><i class="fas fa-book"></i> CROP §7.4 — Non-Seasonal Processing Gaps</div>
+      <div class="alert-action-box orange">
+        <i class="fas fa-envelope"></i>
+        <span>SSP for payment slowdown explanation</span>
+      </div>
+      <button class="expand-btn" onclick="toggleProcedure(this)">
+        <i class="fas fa-chevron-right"></i> Full Procedure
+      </button>
+      <div class="full-procedure">
+        <div class="proc-label">CROP §7.4 — Non-Seasonal Processing Gaps Procedure</div>
+        If the seller has not processed for 7 or more consecutive days, and this gap is out of line with the seller's normal payment processing activity, SSP the seller for payment slowdown. Review historical processing patterns to determine if the gap is seasonal or anomalous before initiating SSP.
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert 5: Loan Amount > $75K -->
+  <div class="alert-card">
+    <div class="alert-bar yellow"></div>
+    <div class="alert-content">
+      <div class="alert-top">
+        <div class="alert-title-row">
+          <div class="alert-icon yellow"><i class="fas fa-dollar-sign"></i></div>
+          <span class="alert-title">Loan Amount &gt; $75K</span>
+        </div>
+        <span class="severity-tag yellow">Info</span>
+      </div>
+      <div class="alert-detected">
+        Loan principal is <strong>$116,600</strong> — exceeds $75,000 enhanced review threshold
+      </div>
+      <div class="alert-sop"><i class="fas fa-book"></i> CROP §7.11</div>
+      <div class="alert-action-box yellow">
+        <i class="fas fa-search"></i>
+        <span>Requires LexisNexis search + UCC Lien search</span>
+      </div>
+      <button class="expand-btn" onclick="toggleProcedure(this)">
+        <i class="fas fa-chevron-right"></i> Full Procedure
+      </button>
+      <div class="full-procedure">
+        <div class="proc-label">CROP §7.11 — Enhanced Review Procedure</div>
+        For loan applications &gt; $75k the Reviewer should perform a LexisNexis Search and a UCC Lien Search. Document all findings in the review notes. Any adverse findings from these searches should be escalated to a senior reviewer for additional assessment.
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Recommended Decision Summary -->
+  <div class="section-header">
+    <i class="fas fa-clipboard-check"></i> Recommended Decision Summary
+  </div>
+
+  <div class="decision-summary">
+    <div class="decision-header">
+      <h3><i class="fas fa-exclamation-circle"></i> Overall Recommendation</h3>
+      <span class="decision-verdict">DECLINE</span>
+    </div>
+    <div class="decision-body">
+      <div class="decision-field">
+        <div class="field-label">Primary AAN</div>
+        <div class="field-value red">Adverse Account Activity</div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label">Secondary AAN</div>
+        <div class="field-value red">Chargeback History</div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label">Decline Window</div>
+        <div class="field-value">Permanent (linked account freeze)</div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label">Driving Alerts</div>
+        <div class="field-value">2 Critical · 2 Warning · 1 Info</div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label">Escalation Required</div>
+        <div class="field-value" style="color: var(--orange);">Yes — Permanent decline requires TL review</div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label">Escalation Channel</div>
+        <div class="field-value">#credit-risk-escalations → Team Lead Queue</div>
+      </div>
+    </div>
+    <div class="decision-footer">
+      <div class="escalation-note">
+        <i class="fas fa-info-circle"></i>
+        This recommendation is auto-generated. Reviewer must verify all signals before finalizing.
+      </div>
+      <button class="btn-copy" id="copyBtn" onclick="copyDecision()">
+        <i class="fas fa-copy"></i> Copy Decision
+      </button>
+    </div>
+  </div>
+
+  <!-- Section 3: Passed Checks -->
+  <div class="section-header">
+    <i class="fas fa-shield-alt"></i> Additional Checks
+  </div>
+
+  <div class="passed-section">
+    <div class="passed-header" id="passedHeader" onclick="togglePassed()">
+      <div class="left-side">
+        <div class="check-icon"><i class="fas fa-check"></i></div>
+        <h4>No Issues Detected</h4>
+        <span class="count">— 4 checks passed</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div class="passed-body" id="passedBody">
+      <div class="passed-item">
+        <i class="fas fa-check-circle check"></i>
+        <span>Account Standing</span>
+        <span class="detail">Active, not frozen, not deactivated</span>
+      </div>
+      <div class="passed-item">
+        <i class="fas fa-check-circle check"></i>
+        <span>Card Present Ratio</span>
+        <span class="detail">72% CP (above 50% threshold)</span>
+      </div>
+      <div class="passed-item">
+        <i class="fas fa-check-circle check"></i>
+        <span>PAN Diversity</span>
+        <span class="detail">45% (above 20% threshold)</span>
+      </div>
+      <div class="passed-item">
+        <i class="fas fa-check-circle check"></i>
+        <span>UCC Liens</span>
+        <span class="detail">No UCC filings found</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="timestamp-bar">
+    Analysis generated on <span id="timestamp"></span> · Engine v2.4.1 · CROP SOP rev. 2024-Q4
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle"></i>
+  <span id="toastMsg">Decision copied to clipboard</span>
+</div>
+
+<script>
+  // Set timestamp
+  document.getElementById('timestamp').textContent = new Date().toLocaleString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  });
+
+  // Toggle full procedure
+  function toggleProcedure(btn) {
+    const proc = btn.nextElementSibling;
+    const isOpen = proc.classList.contains('show');
+    proc.classList.toggle('show');
+    btn.classList.toggle('open');
+    btn.innerHTML = isOpen
+      ? '<i class="fas fa-chevron-right"></i> Full Procedure'
+      : '<i class="fas fa-chevron-right"></i> Hide Procedure';
+  }
+
+  // Toggle passed checks
+  function togglePassed() {
+    const header = document.getElementById('passedHeader');
+    const body = document.getElementById('passedBody');
+    header.classList.toggle('open');
+    body.classList.toggle('show');
+  }
+
+  // Copy decision
+  function copyDecision() {
+    const decision = `CREDIT REVIEW DECISION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Unit Token: LDXF2AMSD5BVD
+Business: Autofraud Network LLC
+Risk Grade: B2
+Loan Amount: $116,600
+
+DECISION: DECLINE
+Primary AAN: Adverse Account Activity
+Secondary AAN: Chargeback History
+Decline Window: Permanent (linked account freeze)
+
+DRIVING ALERTS:
+• [CRITICAL] High Chargeback Rate — 4.2% GPV (threshold: 3%) — CROP §7.4
+• [CRITICAL] Linked Account Frozen — Unit ABCD1234 frozen (chargebacks) — CROP §7.3
+• [WARNING] Recent Bank Account Change — Changed 5 days ago — CROP §7.4
+• [WARNING] Processing Gap — 9 consecutive days — CROP §7.4
+• [INFO] Loan Amount > $75K — $116,600 — CROP §7.11
+
+ESCALATION: Required — Permanent decline requires TL review
+Channel: #credit-risk-escalations → Team Lead Queue
+
+PASSED CHECKS:
+✅ Account Standing: Active
+✅ Card Present Ratio: 72% (threshold: 50%)
+✅ PAN Diversity: 45% (threshold: 20%)
+✅ UCC Liens: None found
+
+Generated: ${new Date().toLocaleString()}
+Engine: v2.4.1 | CROP SOP rev. 2024-Q4`;
+
+    const btn = document.getElementById('copyBtn');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(decision).then(() => {
+        showCopySuccess(btn);
+      }).catch(() => {
+        fallbackCopy(decision, btn);
+      });
+    } else {
+      fallbackCopy(decision, btn);
+    }
+  }
+
+  function fallbackCopy(text, btn) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showCopySuccess(btn);
+    } catch (e) {
+      showToast('Failed to copy — try manually', true);
+    }
+  }
+
+  function showCopySuccess(btn) {
+    btn.classList.add('copied');
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    showToast('Decision summary copied to clipboard');
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<i class="fas fa-copy"></i> Copy Decision';
+    }, 2500);
+  }
+
+  function showToast(msg, isError) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    toastMsg.textContent = msg;
+    toast.style.background = isError ? 'var(--red)' : '#1a1a2e';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+</script>
+
+</body>
+</html>
