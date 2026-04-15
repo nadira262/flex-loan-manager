@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flex Loan Manager Bot</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg-primary:#0f1923;--bg-secondary:#1a2736;--bg-card:#1e2f40;--bg-card-hover:#243a4e;
+--text-primary:#e8edf2;--text-secondary:#8899aa;--text-muted:#5a6a7a;
+--accent-blue:#3b82f6;--accent-green:#22c55e;--accent-yellow:#eab308;
+--accent-orange:#f97316;--accent-red:#ef4444;--accent-purple:#a855f7;
+--border-color:#2a3a4a;--shadow:0 4px 24px rgba(0,0,0,0.3);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:4px}
+.header{background:linear-gradient(135deg,#0c1520 0%,#1a2d42 100%);border-bottom:1px solid var(--border-color);padding:20px 32px;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff}
+.brand h1{font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.brand-sub{font-size:12px;color:var(--text-secondary);font-weight:500;text-transform:uppercase;letter-spacing:1px}
+.header-actions{display:flex;gap:8px}
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent-blue);color:#fff}.btn-primary:hover{background:#2563eb}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border-color)}.btn-secondary:hover{background:var(--bg-card-hover)}
+.btn-success{background:var(--accent-green);color:#fff}
+.search-bar{display:flex;gap:10px;align-items:center}
+.search-input{flex:1;min-width:280px;padding:12px 18px;background:var(--bg-card);border:2px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:15px;font-family:inherit;font-weight:500;transition:border-color .2s}
+.search-input:focus{outline:none;border-color:var(--accent-blue)}
+.search-input::placeholder{color:var(--text-muted)}
+.btn-lookup{padding:12px 28px;font-size:15px;border-radius:10px}
+.spinner{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.main{padding:24px 32px;max-width:1600px;margin:0 auto}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;text-align:center;color:var(--text-secondary)}
+.empty-state i{font-size:64px;margin-bottom:20px;opacity:.3}
+.empty-state h2{font-size:24px;margin-bottom:8px;color:var(--text-primary);opacity:.6}
+.empty-state p{font-size:14px;max-width:400px}
+.dashboard{display:none}
+.section{margin-bottom:28px}
+.section-title{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--text-primary)}
+.section-title i{color:var(--accent-blue);font-size:14px}
+.cards-row{display:grid;gap:12px}
+.cards-7{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.cards-5{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.cards-4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.cards-3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:16px;transition:all .2s}
+.card:hover{border-color:rgba(59,130,246,0.3)}
+.card-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text-secondary);margin-bottom:6px}
+.card-value{font-size:20px;font-weight:700;color:var(--text-primary)}
+.card-value.small{font-size:16px}
+.badge{display:inline-flex;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.5px}
+.badge-green{background:rgba(34,197,94,.15);color:#4ade80}
+.badge-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+.badge-yellow{background:rgba(234,179,8,.15);color:#facc15}
+.badge-orange{background:rgba(249,115,22,.15);color:#fb923c}
+.badge-red{background:rgba(239,68,68,.15);color:#f87171}
+.badge-gray{background:rgba(100,116,139,.15);color:#94a3b8}
+.badge-large{font-size:22px;padding:8px 20px}
+.table-wrap{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;overflow:hidden}
+.table-wrap table{width:100%;border-collapse:collapse}
+.table-wrap th{background:var(--bg-secondary);padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-secondary);border-bottom:1px solid var(--border-color)}
+.table-wrap td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(42,58,74,.5);font-weight:500}
+.table-wrap tr:last-child td{border-bottom:none}
+.table-wrap tbody tr{cursor:pointer;transition:background .15s}
+.table-wrap tbody tr:hover{background:var(--bg-card-hover)}
+.table-wrap tbody tr.selected{background:rgba(59,130,246,.1);border-left:3px solid var(--accent-blue)}
+.chart-container{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:20px;position:relative}
+.chart-row{display:grid;grid-template-columns:280px 1fr;gap:16px;align-items:start}
+.chart-full{width:100%}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut-wrap canvas{max-width:240px;max-height:240px}
+.metrics-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.metric-card{background:var(--bg-secondary);border-radius:8px;padding:12px;text-align:center}
+.metric-card .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-secondary);margin-bottom:4px}
+.metric-card .value{font-size:16px;font-weight:700}
+.alerts-container{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.alert-banner{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.alert-red{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.alert-yellow{background:rgba(234,179,8,.15);color:#facc15;border:1px solid rgba(234,179,8,.3)}
+.alert-green{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.projection-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:20px}
+.proj-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(42,58,74,.5);font-size:13px}
+.proj-row:last-child{border-bottom:none}
+.proj-label{color:var(--text-secondary);font-weight:500}
+.proj-value{font-weight:700}
+.timeline-bar{height:24px;background:var(--bg-secondary);border-radius:12px;overflow:hidden;margin-top:16px;position:relative}
+.timeline-fill{height:100%;border-radius:12px;transition:width 1s ease;position:relative}
+.timeline-fill::after{content:attr(data-label);position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.trend-up{color:var(--accent-green)}.trend-down{color:var(--accent-red)}.trend-stable{color:var(--accent-yellow)}
+.linked-token{color:var(--accent-blue);cursor:pointer;text-decoration:none;font-family:monospace;font-size:12px;font-weight:600;transition:color .2s}
+.linked-token:hover{color:#60a5fa;text-decoration:underline}
+.linked-empty{display:flex;align-items:center;justify-content:center;padding:32px;color:var(--text-muted);font-size:14px;gap:10px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px}
+.linked-empty i{font-size:18px;opacity:.5}
+.linked-row{transition:background .15s}
+.linked-row:hover{background:var(--bg-card-hover)}
+.linked-count{display:inline-flex;align-items:center;justify-content:center;background:rgba(59,130,246,.15);color:#60a5fa;width:26px;height:26px;border-radius:50%;font-size:12px;font-weight:700}
+
+/* Eligibility Section Styles */
+.eligibility-container{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;overflow:hidden}
+.eligibility-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:1px solid var(--border-color);background:var(--bg-secondary)}
+.eligibility-summary{display:flex;align-items:center;gap:12px}
+.eligibility-summary .count-badge{font-size:14px;font-weight:700;padding:6px 14px;border-radius:8px}
+.eligibility-summary .count-badge.has-failures{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.eligibility-summary .count-badge.all-pass{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+.eligibility-summary .summary-text{font-size:13px;color:var(--text-secondary);font-weight:500}
+.eligibility-toggle{display:flex;background:var(--bg-primary);border-radius:8px;overflow:hidden;border:1px solid var(--border-color)}
+.eligibility-toggle button{padding:7px 16px;font-size:12px;font-weight:600;font-family:inherit;border:none;cursor:pointer;transition:all .2s;color:var(--text-secondary);background:transparent}
+.eligibility-toggle button.active{background:var(--accent-blue);color:#fff}
+.eligibility-toggle button:hover:not(.active){background:var(--bg-card-hover);color:var(--text-primary)}
+.elig-category{border-bottom:1px solid var(--border-color)}
+.elig-category:last-child{border-bottom:none}
+.elig-category-header{padding:12px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .15s;user-select:none}
+.elig-category-header:hover{background:var(--bg-card-hover)}
+.elig-category-header .cat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.elig-category-header .cat-icon.cat-account{background:rgba(59,130,246,.15);color:#60a5fa}
+.elig-category-header .cat-icon.cat-processing{background:rgba(168,85,247,.15);color:#c084fc}
+.elig-category-header .cat-icon.cat-slumps{background:rgba(249,115,22,.15);color:#fb923c}
+.elig-category-header .cat-icon.cat-chargebacks{background:rgba(239,68,68,.15);color:#f87171}
+.elig-category-header .cat-icon.cat-loans{background:rgba(234,179,8,.15);color:#facc15}
+.elig-category-header .cat-icon.cat-business{background:rgba(34,197,94,.15);color:#4ade80}
+.elig-category-header .cat-name{font-size:14px;font-weight:600;flex:1}
+.elig-category-header .cat-stats{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.elig-category-header .cat-stats .pass-count{color:#4ade80}
+.elig-category-header .cat-stats .fail-count{color:#f87171}
+.elig-category-header .cat-chevron{color:var(--text-muted);transition:transform .2s;font-size:12px}
+.elig-category-header .cat-chevron.open{transform:rotate(180deg)}
+.elig-category-body{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.elig-category-body.open{max-height:2000px;padding:4px 20px 16px}
+.elig-rule{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(42,58,74,.3)}
+.elig-rule:last-child{border-bottom:none}
+.elig-rule .rule-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.elig-rule .rule-icon.pass{background:rgba(34,197,94,.15);color:#4ade80}
+.elig-rule .rule-icon.fail{background:rgba(239,68,68,.2);color:#f87171}
+.elig-rule .rule-content{flex:1;min-width:0}
+.elig-rule .rule-key{font-size:11px;font-family:monospace;color:var(--text-muted);margin-bottom:2px;word-break:break-all}
+.elig-rule .rule-desc{font-size:13px;font-weight:500;color:var(--text-primary);line-height:1.4}
+.elig-rule .rule-desc.fail-desc{color:#f87171}
+.elig-no-failures{padding:20px;text-align:center;color:var(--text-muted);font-size:13px}
+.elig-category-body .no-items-msg{padding:12px 0;font-size:13px;color:var(--text-muted);font-style:italic}
+
+@media(max-width:900px){
+.header{padding:16px}.main{padding:16px}.search-bar{flex-wrap:wrap}.search-input{min-width:200px}
+.chart-row{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}.cards-7,.cards-5,.cards-4{grid-template-columns:repeat(2,1fr)}
+.eligibility-header{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:600px){.cards-7,.cards-5,.cards-4,.cards-3{grid-template-columns:1fr}}
+.fade-in{animation:fadeIn .5s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+  <script type="application/ld+json">
+{
+  "@context": "urn:goose.ai:schema",
+  "@type": "GooseApp",
+  "name": "flex-loan-manager",
+  "description": "Internal ops tool for Square Capital Flex Loan lookup, eligibility checks, and merchant dashboards",
+  "width": 1600,
+  "height": 900,
+  "resizable": true,
+  "mcpServers": [
+    "apps"
+  ]
+}
+  </script>
+  <script type="application/x-goose-prd">
+# Flex Loan Manager Bot — Internal Tool
+
+## Overview
+An internal operations tool for Square Capital teams to look up a merchant by their **Unit Token** and view a comprehensive dashboard of their Flex Loan performance, GPV trends, repayment progress, risk grade, business health signals, loan eligibility, and linked accounts.
+
+## Design
+- Dark professional theme with a modern dashboard feel (dark navy/charcoal background, accent colors for status)
+- Clean card-based layout with clear sections
+- Charts using Chart.js for GPV trends and repayment progress
+- Responsive layout
+
+## Layout & Sections (in order)
+
+### Header
+- Title: "Flex Loan Manager Bot" with Square Capital branding
+- Subtitle: "Internal Operations Tool"
+- Search bar: Large prominent input for **Unit Token** with a "Look Up" button
+- Loading spinner when fetching data
+
+### Mock Data
+Realistic mock data generated deterministically from token string via seeded PRNG. ~75% of tokens have active loans; ~25% have no active offer (triggering eligibility view).
+
+### Section 1: Merchant Overview (top row of cards)
+- Merchant Name, Unit Token, Risk Grade (colored badge), Merchant Status, Business Category, Days Since Activation, Country
+
+### Section 2: Active Flex Loans (table) — MOVED TO TOP
+- Table showing all active flex loans immediately after Merchant Overview
+- Columns: Plan Group ID, Status, Financed, Fee, Receivables, Hold Rate, Risk, Activated, Origination
+- Color-coded status badges
+- Clicking a row selects it and updates Repayment Progress below
+- If NO active loans exist, shows "No Active Flex Loans" message and directs to Loan Eligibility section
+
+### Section 3: Loan Eligibility (NEW — shown when NO active offer)
+- Appears only when the merchant has no active Flex Loan offer
+- Shows a comprehensive checklist of 44 eligibility rules organized into 6 categories
+- Summary header: "X of 44 eligibility checks failed" with red/green indicator
+- Toggle between "Failed Only" (default) and "All Checks" views
+- Collapsible category groups with pass/fail counts per category
+- Categories with failures auto-expand; others start collapsed
+
+**Categories and Rules:**
+1. **Account Standing** (7 rules): account_deleted, not_activated, customer_is_blacklisted, compliance_hashtag_violation_eligibility, frozen, frozen_recently, suspected
+2. **Processing Activity** (9 rules): trailing year active days/payments/amounts, annualized sales, recent activity checks, processing time minimums, card diversity
+3. **Business Health Slumps** (4 rules): payment amount/count/active days slumps, weekly sales threshold
+4. **Chargeback & Disputes** (4 rules): chargeback amounts (12wk/1yr), count limits, active reserves
+5. **Existing Loan Status** (11 rules): past due, written off, breached, transferred, canceled, declined, prepayment activity, MPO eligibility, outstanding applications
+6. **Business Type & Limits** (9 rules): blacklisted/blocked types, ineligible states, payment limits, offer amount limits, sales projections, hold rate validation, risk score limits
+
+Each rule shows: pass (green check) or fail (red X), rule key (monospace), human-readable description.
+Mock data: 1-4 randomly failed rules when no active loans.
+
+### Section 4: Linked Accounts with Active Loans
+- Table of linked unit tokens with clickable navigation
+- Shows business name, location, active loan count, total financed, status, risk grade
+- 0-3 linked accounts per token
+
+### Section 5: Repayment Progress (selected loan — only shown with active loans)
+- Donut chart + repayment curve line chart
+- Key metrics: Total Receivables, Cumulative Repaid, Outstanding, Repayment Fraction, Days Active, Est. Duration, Projected Payoff
+
+### Section 6: GPV Trends
+- Daily GPV line chart (180 days) with 30-day rolling average
+- Anomaly highlighting (spikes/drops)
+- Summary cards: Last 30/90 Days GPV, Avg Daily, Trend, Projected Monthly
+
+### Section 7: Business Health Signals
+- Alert flags (colored banners) — includes "NO ACTIVE OFFER" alert when applicable
+- Chargeback summary cards and monthly stacked bar chart
+
+### Section 8: Projected Loan Payoff (only shown with active loans)
+- Repayment pace, projected payoff dates (current, +10%, -20%)
+- Visual timeline progress bar
+
+## Interactions
+- Token lookup generates all mock data and renders full dashboard
+- Clicking linked account loads that account's dashboard
+- Clicking loan row updates Repayment Progress
+- Eligibility toggle switches between Failed Only / All Checks views
+- Category headers collapse/expand rule lists
+- Copy Report includes eligibility failures when no active loans
+- All charts animate on load with hover tooltips
+
+## Technical Notes
+- Chart.js (CDN) for all charts
+- Seeded PRNG for deterministic data
+- Entirely client-side, no backend
+- Font Awesome icons, Inter font from Google Fonts
+  </script>
+</head>
+<body>
+<header class="header">
+<div class="header-top">
+<div class="brand">
+<div class="brand-icon">SQ</div>
+<div>
+<h1>Flex Loan Manager Bot</h1>
+<div class="brand-sub">Square Capital — Internal Operations Tool</div>
+</div>
+</div>
+<div class="header-actions">
+<button class="btn btn-secondary" id="copyBtn" style="display:none" onclick="copyReport()"><i class="fas fa-copy"></i> Copy Report</button>
+</div>
+</div>
+<div class="search-bar">
+<input type="text" class="search-input" id="tokenInput" placeholder="Enter Unit Token (e.g., MLXBYSKMVA9NJ)" spellcheck="false">
+<button class="btn btn-primary btn-lookup" id="lookupBtn" onclick="lookupMerchant()">
+<i class="fas fa-search"></i> Look Up
+<div class="spinner" id="spinner"></div>
+</button>
+</div>
+</header>
+<main class="main">
+<div class="empty-state" id="emptyState">
+<i class="fas fa-building-columns"></i>
+<h2>No Merchant Loaded</h2>
+<p>Enter a Unit Token above to look up a merchant and view their Flex Loan dashboard.</p>
+</div>
+<div class="dashboard" id="dashboard"></div>
+</main>
+<script>
+// Seeded PRNG
+class SeededRNG{constructor(s){this.seed=this.hashStr(s)}hashStr(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return Math.abs(h)||1}next(){this.seed^=this.seed<<13;this.seed^=this.seed>>17;this.seed^=this.seed<<5;return(this.seed>>>0)/4294967296}range(a,b){return a+this.next()*(b-a)}int(a,b){return Math.floor(this.range(a,b+1))}pick(arr){return arr[this.int(0,arr.length-1)]}shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=this.int(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}}
+
+const fmt$=(v)=>'$'+Number(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtPct=(v)=>(v*100).toFixed(2)+'%';
+const fmtDate=(d)=>{const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[d.getMonth()]+' '+String(d.getDate()).padStart(2,'0')+', '+d.getFullYear()};
+const addDays=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r};
+const daysBetween=(a,b)=>Math.round((b-a)/(86400000));
+
+let charts=[];
+function destroyCharts(){charts.forEach(c=>{try{c.destroy()}catch(e){}});charts=[]}
+
+const firstNames=['Sunrise','Golden','Pacific','Metro','Harbor','Summit','Valley','River','Crown','Atlas','Maple','Cedar','Silver','Iron','Copper','Jade','Coral','Azure','Ember','Sage'];
+const lastNames=['Bakery','Bistro','Café','Deli','Kitchen','Market','Boutique','Studio','Workshop','Goods','Supply','Trading','Provisions','Mercantile','Emporium','Collective','Co','Shop','House','Place'];
+const categories=['Food & Beverage','Retail','Health & Beauty','Professional Services','Home & Repair','Entertainment','Fitness & Wellness','Automotive','Education','Technology'];
+const statuses=['originated','allocated','originated','allocated','closed','originated'];
+const origTypes=['flex_loan','flex_loan_plus','flex_loan'];
+const locationSuffixes=['Main St','Downtown','Westside','East Branch','North Plaza','South Center','Airport','Mall Location','Flagship','Express'];
+
+// ========== ELIGIBILITY RULES ==========
+const ELIGIBILITY_RULES = {
+'Account Standing': {
+  icon: 'fas fa-user-shield',
+  cssClass: 'cat-account',
+  rules: [
+    {key:'account_deleted', desc:'The merchant\'s Square linked account is currently deleted.'},
+    {key:'not_activated', desc:'The merchant is currently not activated.'},
+    {key:'customer_is_blacklisted', desc:'Ineligible due to history of financial crimes/fraud, or at risk of being DA by Credit Risk team.'},
+    {key:'compliance_hashtag_violation_eligibility', desc:'Tagged with certain hashtags making them ineligible.'},
+    {key:'frozen', desc:'The merchant is currently frozen.'},
+    {key:'frozen_recently', desc:'The merchant has been frozen in the past 90 days.'},
+    {key:'suspected', desc:'Merchant is marked as suspect by Square\'s risk team.'}
+  ]
+},
+'Processing Activity': {
+  icon: 'fas fa-chart-bar',
+  cssClass: 'cat-processing',
+  rules: [
+    {key:'trailing_one_year_active_day_count_less_than_minimum', desc:'Fewer than 20 active days in the last year.'},
+    {key:'trailing_one_year_payment_count_less_than_minimum', desc:'Fewer than 50 payments in the last year.'},
+    {key:'trailing_one_year_payment_amount_less_than_minimum', desc:'Processed less than $10,000 in the last year.'},
+    {key:'annualized_sales_amount_less_than_minimum', desc:'Projected GPV less than $10,000.'},
+    {key:'not_active_in_last_day', desc:'No processing in the last calendar day.'},
+    {key:'trailing_four_weeks_active_days_less_than_minimum', desc:'Fewer than 3 active days in the last 4 weeks.'},
+    {key:'active_less_than_one_of_last_seven_days', desc:'No activity in the past 7 days.'},
+    {key:'processing_less_than_minimum_time_v2', desc:'Less than 6 months since first payment on Square.'},
+    {key:'more_than_sixty_days_since_four_cards_used', desc:'More than 60 days since 4 distinct cards seen.'}
+  ]
+},
+'Business Health Slumps': {
+  icon: 'fas fa-chart-line-down',
+  cssClass: 'cat-slumps',
+  rules: [
+    {key:'in_payment_amount_slump', desc:'Card sales in past 4 weeks < half of average 4-week amount.'},
+    {key:'in_payment_count_slump', desc:'Payment count in past 4 weeks < half of average 4-week count.'},
+    {key:'in_active_days_slump', desc:'Active days in past 4 weeks < 2/3 of average 4-week active days.'},
+    {key:'last_week_sales_below_threshold', desc:'1-week GPV / 4-week GPV below 0.15.'}
+  ]
+},
+'Chargeback & Disputes': {
+  icon: 'fas fa-exclamation-triangle',
+  cssClass: 'cat-chargebacks',
+  rules: [
+    {key:'chargeback_amount_too_large_last_twelve_weeks', desc:'Chargeback amount in past 12 weeks > 3% of net sales.'},
+    {key:'chargeback_amount_too_large_last_year', desc:'Chargeback amount in past year > 3% of net sales.'},
+    {key:'chargeback_count_too_large_last_four_weeks', desc:'More than 4 disputes in last 4 weeks.'},
+    {key:'has_active_reserves', desc:'High-risk for chargebacks with portion of sales reserved.'}
+  ]
+},
+'Existing Loan Status': {
+  icon: 'fas fa-file-contract',
+  cssClass: 'cat-loans',
+  rules: [
+    {key:'plan_past_due', desc:'Open plan is in a past due state.'},
+    {key:'plan_written_off', desc:'Previously written off MCA plan.'},
+    {key:'plan_breached', desc:'Previously breached plan not marked as ignore.'},
+    {key:'plan_transferred', desc:'Previously transferred MCA plan.'},
+    {key:'plan_canceled_after_activation_recently', desc:'Plan canceled in past 14 days that never activated.'},
+    {key:'application_or_plan_declined', desc:'Recent application or plan declined during manual review.'},
+    {key:'cash_advance_plan_declined', desc:'Plan previously declined by ops.'},
+    {key:'has_prepay_or_extra_payment_recently', desc:'Extra payment or prepayment in last 7 days.'},
+    {key:'has_recent_standard_plan_payment_activity', desc:'Recent ACH debit payment.'},
+    {key:'not_mpo_eligible', desc:'Has not paid down current plan enough for MPO.'},
+    {key:'customer_has_submitted_application', desc:'Has an outstanding loan application.'}
+  ]
+},
+'Business Type & Limits': {
+  icon: 'fas fa-building',
+  cssClass: 'cat-business',
+  rules: [
+    {key:'business_type_blacklisted', desc:'Business type is charitable_orgs, charitable_social_service_organizations, or political_organizations.'},
+    {key:'business_type_blocked', desc:'Business type blocked (same restricted categories).'},
+    {key:'customer_has_address_in_ineligible_state', desc:'Located in ineligible state (currently all states eligible).'},
+    {key:'has_payment_limit', desc:'Currently has a payment limit restricting transaction processing.'},
+    {key:'offer_amount_cents_limit', desc:'Max offer amount based on risk grade exceeded.'},
+    {key:'max_offer_amount_cents', desc:'Max offer > 20% of forecasted sales or 50% of historical processing.'},
+    {key:'future_sales_limit_exceeded', desc:'Calculated GPV > max projected GPV, hold rate would be < 25 bps.'},
+    {key:'hold_rate_or_max_offer_invalid', desc:'Calculated hold rate or offer would be nil or 0.'},
+    {key:'risk_score_limit_exceeded', desc:'Risk fee rate is nil because risk score is too high.'}
+  ]
+}
+};
+
+function getAllRuleKeys(){
+const keys=[];
+for(const cat of Object.values(ELIGIBILITY_RULES)){
+  for(const rule of cat.rules){keys.push(rule.key)}
+}
+return keys;
+}
+
+function generateEligibilityData(token, hasActiveLoans){
+const r=new SeededRNG(token+'_eligibility_v3');
+const allKeys=getAllRuleKeys();
+const failedKeys=new Set();
+if(!hasActiveLoans){
+  const numFails=r.int(1,4);
+  const shuffled=r.shuffle([...allKeys]);
+  for(let i=0;i<numFails;i++){failedKeys.add(shuffled[i])}
+}
+const results={};
+for(const [catName,catData] of Object.entries(ELIGIBILITY_RULES)){
+  results[catName]={icon:catData.icon,cssClass:catData.cssClass,rules:[]};
+  for(const rule of catData.rules){
+    results[catName].rules.push({key:rule.key,desc:rule.desc,passed:!failedKeys.has(rule.key)});
+  }
+}
+return {results,totalRules:allKeys.length,failedCount:failedKeys.size};
+}
+
+function generateLinkedToken(rng){
+const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+let token='';
+for(let i=0;i<13;i++){token+=chars[rng.int(0,chars.length-1)]}
+return token;
+}
+
+function generateLinkedAccounts(token){
+const r=new SeededRNG(token+'_linked_accounts_v2');
+const numLinked=r.int(0,3);
+const linked=[];
+for(let i=0;i<numLinked;i++){
+const linkedToken=generateLinkedToken(r);
+if(linkedToken===token)continue;
+const lr=new SeededRNG(linkedToken);
+const bizName=lr.pick(firstNames)+' '+lr.pick(lastNames);
+const locationName=bizName+' — '+r.pick(locationSuffixes);
+const numActiveLoans=r.int(1,3);
+let totalFinanced=0;
+const loanStatuses=[];
+for(let j=0;j<numActiveLoans;j++){
+totalFinanced+=r.int(5000,100000)*100;
+loanStatuses.push(r.pick(['originated','allocated']));
+}
+const riskGrades=['A','A','B','B','B','C','C','D'];
+const risk=r.pick(riskGrades);
+const primaryStatus=loanStatuses[0];
+linked.push({unitToken:linkedToken,businessName:bizName,locationName:locationName,activeLoanCount:numActiveLoans,totalFinanced:totalFinanced,status:primaryStatus,risk:risk});
+}
+return linked;
+}
+
+function generateData(token){
+const r=new SeededRNG(token);
+const merchantName=r.pick(firstNames)+' '+r.pick(lastNames);
+const riskGrades=['A','A','B','B','B','C','C','D','F'];
+const merchantRisk=r.pick(riskGrades);
+const isActive=r.next()>0.1;
+const category=r.pick(categories);
+const daysActive=r.int(120,1800);
+const activationDate=addDays(new Date(),-daysActive);
+
+// Determine if this merchant has active loans (some don't — for eligibility demo)
+const hasActiveOfferRoll=r.next();
+const hasActiveLoans=hasActiveOfferRoll>0.25; // 75% have active loans, 25% don't
+
+const numLoans=hasActiveLoans?r.int(1,4):0;
+const loans=[];
+for(let i=0;i<numLoans;i++){
+const financed=r.int(5000,100000)*100;
+const feeRate=r.range(0.05,0.15);
+const fee=Math.round(financed*feeRate);
+const receivables=financed+fee;
+const holdRate=r.int(500,2000);
+const loanRisk=r.pick(['A','B','B','C','C','D']);
+const loanStatus=i===0?r.pick(['originated','allocated']):r.pick(statuses);
+const loanDaysAgo=r.int(30,Math.min(daysActive,600));
+const loanActivated=addDays(new Date(),-loanDaysAgo);
+const repayFrac=loanStatus==='closed'?1:r.range(0.1,0.85);
+const cumRepaid=Math.round(receivables*repayFrac);
+const estDuration=r.int(180,540);
+const planId='PG'+token.substring(0,4)+r.int(1000,9999);
+loans.push({planId,status:loanStatus,financed,fee,receivables,holdRate,risk:loanRisk,activated:loanActivated,daysAgo:loanDaysAgo,origType:r.pick(origTypes),repayFrac,cumRepaid,outstanding:receivables-cumRepaid,estDuration});
+}
+
+// GPV data (180 days)
+const baseGPV=r.range(500,5000);
+const gpvData=[];
+const today=new Date();
+for(let i=179;i>=0;i--){
+const date=addDays(today,-i);
+const seasonal=1+0.2*Math.sin((i/30)*Math.PI);
+const trend=1+(r.next()-0.48)*0.02;
+const noise=r.range(0.4,1.8);
+const val=Math.max(0,baseGPV*seasonal*trend*noise);
+gpvData.push({date,value:val});
+}
+
+// Chargebacks (12 months)
+const cbData=[];
+const baseRate=r.range(0.003,0.035);
+for(let i=11;i>=0;i--){
+const month=new Date(today.getFullYear(),today.getMonth()-i,1);
+const totalPayments=r.int(80,400);
+const cbCount=Math.max(0,Math.round(totalPayments*baseRate*r.range(0.3,2.5)));
+const won=Math.round(cbCount*r.range(0.3,0.7));
+const lost=Math.round((cbCount-won)*r.range(0.4,0.8));
+const pending=cbCount-won-lost;
+const avgAmount=r.range(20,200);
+cbData.push({month,total:cbCount,won:Math.max(0,won),lost:Math.max(0,lost),pending:Math.max(0,pending),amount:cbCount*avgAmount,totalPayments});
+}
+
+const linkedAccounts=generateLinkedAccounts(token);
+const eligibility=generateEligibilityData(token,hasActiveLoans);
+
+return{merchantName,token,risk:merchantRisk,isActive,category,daysActive,activationDate,loans,gpvData,cbData,linkedAccounts,hasActiveLoans,eligibility};
+}
+
+let currentData=null;
+let selectedLoanIdx=0;
+let eligibilityViewMode='failed'; // 'failed' or 'all'
+let eligibilityCategoryStates={}; // track open/closed per category
+
+function lookupMerchant(tokenOverride){
+const token=tokenOverride||document.getElementById('tokenInput').value.trim().toUpperCase();
+if(!token){document.getElementById('tokenInput').focus();return}
+document.getElementById('tokenInput').value=token;
+const btn=document.getElementById('lookupBtn');
+const spin=document.getElementById('spinner');
+const icon=btn.querySelector('i');
+spin.style.display='inline-block';icon.style.display='none';
+btn.disabled=true;
+setTimeout(()=>{
+destroyCharts();
+currentData=generateData(token);
+selectedLoanIdx=0;
+eligibilityViewMode='failed';
+eligibilityCategoryStates={};
+renderDashboard();
+spin.style.display='none';icon.style.display='inline';
+btn.disabled=false;
+document.getElementById('emptyState').style.display='none';
+document.getElementById('dashboard').style.display='block';
+document.getElementById('copyBtn').style.display='flex';
+window.scrollTo({top:0,behavior:'smooth'});
+},800);
+}
+
+function lookupLinkedAccount(token){lookupMerchant(token)}
+
+document.getElementById('tokenInput').addEventListener('keydown',e=>{if(e.key==='Enter')lookupMerchant()});
+
+function riskBadge(g){
+const m={A:'badge-green',B:'badge-blue',C:'badge-yellow',D:'badge-orange',F:'badge-red'};
+return '<span class="badge '+(m[g]||'badge-gray')+'">'+g+'</span>';
+}
+function riskBadgeLg(g){
+const m={A:'badge-green',B:'badge-blue',C:'badge-yellow',D:'badge-orange',F:'badge-red'};
+return '<span class="badge badge-large '+(m[g]||'badge-gray')+'">'+g+'</span>';
+}
+function statusBadge(s){
+const m={originated:'badge-blue',allocated:'badge-green',closed:'badge-gray',charged_off:'badge-red',breached:'badge-orange'};
+return '<span class="badge '+(m[s]||'badge-gray')+'">'+s.replace('_',' ').toUpperCase()+'</span>';
+}
+
+function toggleEligibilityView(mode){
+eligibilityViewMode=mode;
+renderEligibilitySection();
+}
+
+function toggleEligibilityCategory(catName){
+eligibilityCategoryStates[catName]=!eligibilityCategoryStates[catName];
+const body=document.getElementById('elig-body-'+catName.replace(/[^a-zA-Z]/g,''));
+const chevron=document.getElementById('elig-chev-'+catName.replace(/[^a-zA-Z]/g,''));
+if(body&&chevron){
+  if(eligibilityCategoryStates[catName]){
+    body.classList.add('open');
+    chevron.classList.add('open');
+  } else {
+    body.classList.remove('open');
+    chevron.classList.remove('open');
+  }
+}
+}
+
+function renderEligibilitySection(){
+if(!currentData||currentData.hasActiveLoans)return;
+const el=document.getElementById('eligibilityContent');
+if(!el)return;
+const elig=currentData.eligibility;
+const mode=eligibilityViewMode;
+
+let html='';
+html+=`<div class="eligibility-header">
+<div class="eligibility-summary">
+  <span class="count-badge ${elig.failedCount>0?'has-failures':'all-pass'}">
+    ${elig.failedCount>0?'<i class="fas fa-times-circle"></i>':'<i class="fas fa-check-circle"></i>'}
+    &nbsp;${elig.failedCount} of ${elig.totalRules} checks failed
+  </span>
+  <span class="summary-text">${elig.failedCount>0?'This seller is not eligible for a Flex Loan offer':'All eligibility checks passed'}</span>
+</div>
+<div class="eligibility-toggle">
+  <button class="${mode==='failed'?'active':''}" onclick="toggleEligibilityView('failed')"><i class="fas fa-times-circle"></i>&nbsp; Failed Only</button>
+  <button class="${mode==='all'?'active':''}" onclick="toggleEligibilityView('all')"><i class="fas fa-list-check"></i>&nbsp; All Checks</button>
+</div>
+</div>`;
+
+for(const [catName,catData] of Object.entries(elig.results)){
+  const catId=catName.replace(/[^a-zA-Z]/g,'');
+  const failedInCat=catData.rules.filter(r=>!r.passed);
+  const passedInCat=catData.rules.filter(r=>r.passed);
+  const rulesToShow=mode==='failed'?failedInCat:catData.rules;
+
+  // In failed-only mode, skip categories with no failures
+  if(mode==='failed'&&failedInCat.length===0)continue;
+
+  // Default: categories with failures start open, others closed
+  if(eligibilityCategoryStates[catName]===undefined){
+    eligibilityCategoryStates[catName]=failedInCat.length>0;
+  }
+  const isOpen=eligibilityCategoryStates[catName];
+
+  html+=`<div class="elig-category">
+  <div class="elig-category-header" onclick="toggleEligibilityCategory('${catName}')">
+    <div class="cat-icon ${catData.cssClass}"><i class="${catData.icon}"></i></div>
+    <span class="cat-name">${catName}</span>
+    <div class="cat-stats">
+      ${failedInCat.length>0?'<span class="fail-count"><i class="fas fa-times"></i> '+failedInCat.length+' failed</span>':''}
+      <span class="pass-count"><i class="fas fa-check"></i> ${passedInCat.length} passed</span>
+    </div>
+    <i class="fas fa-chevron-down cat-chevron ${isOpen?'open':''}" id="elig-chev-${catId}"></i>
+  </div>
+  <div class="elig-category-body ${isOpen?'open':''}" id="elig-body-${catId}">`;
+
+  if(rulesToShow.length===0){
+    html+=`<div class="no-items-msg">No failed checks in this category</div>`;
+  } else {
+    for(const rule of rulesToShow){
+      const icon=rule.passed?'<div class="rule-icon pass"><i class="fas fa-check"></i></div>':'<div class="rule-icon fail"><i class="fas fa-times"></i></div>';
+      html+=`<div class="elig-rule">
+        ${icon}
+        <div class="rule-content">
+          <div class="rule-key">${rule.key}</div>
+          <div class="rule-desc ${rule.passed?'':'fail-desc'}">${rule.desc}</div>
+        </div>
+      </div>`;
+    }
+  }
+
+  html+=`</div></div>`;
+}
+
+el.innerHTML=html;
+}
+
+function renderDashboard(){
+const d=currentData;
+const hasLoans=d.hasActiveLoans&&d.loans.length>0;
+const loan=hasLoans?d.loans[selectedLoanIdx]:null;
+
+// GPV calculations
+const last30gpv=d.gpvData.slice(-30).reduce((s,v)=>s+v.value,0);
+const last90gpv=d.gpvData.slice(-90).reduce((s,v)=>s+v.value,0);
+const avgDaily=d.gpvData.reduce((s,v)=>s+v.value,0)/d.gpvData.length;
+const first90avg=d.gpvData.slice(0,90).reduce((s,v)=>s+v.value,0)/90;
+const last90avg=last90gpv/90;
+const gpvChange=(last90avg-first90avg)/first90avg;
+const gpvTrend=gpvChange>0.05?'↑':gpvChange<-0.05?'↓':'→';
+const gpvTrendClass=gpvChange>0.05?'trend-up':gpvChange<-0.05?'trend-down':'trend-stable';
+const projMonthly=avgDaily*30;
+
+// Chargeback calculations
+const last3cb=d.cbData.slice(-3);
+const totalCB=last3cb.reduce((s,v)=>s+v.total,0);
+const totalCBAmount=last3cb.reduce((s,v)=>s+v.amount,0);
+const totalPayments3=last3cb.reduce((s,v)=>s+v.totalPayments,0);
+const cbRate=totalPayments3>0?totalCB/totalPayments3:0;
+const totalWon=last3cb.reduce((s,v)=>s+v.won,0);
+const winRate=totalCB>0?totalWon/totalCB:0;
+const cbRateClass=cbRate<0.01?'badge-green':cbRate<0.02?'badge-yellow':'badge-red';
+
+// Alerts
+const alerts=[];
+if(loan){
+  const expectedFrac=Math.min(1,loan.daysAgo/loan.estDuration);
+  if(cbRate>0.02)alerts.push({type:'alert-red',text:'🔴 HIGH CHARGEBACK RATE — '+fmtPct(cbRate)});
+  if(last30gpv/30<0.7*(last90gpv/90))alerts.push({type:'alert-yellow',text:'🟡 GPV DECLINE DETECTED'});
+  if(loan.repayFrac<0.8*expectedFrac&&loan.status!=='closed')alerts.push({type:'alert-yellow',text:'🟡 REPAYMENT BEHIND SCHEDULE'});
+  if(loan.outstanding>loan.receivables)alerts.push({type:'alert-red',text:'🔴 LOAN PAST DUE'});
+} else {
+  if(cbRate>0.02)alerts.push({type:'alert-red',text:'🔴 HIGH CHARGEBACK RATE — '+fmtPct(cbRate)});
+  if(last30gpv/30<0.7*(last90gpv/90))alerts.push({type:'alert-yellow',text:'🟡 GPV DECLINE DETECTED'});
+  if(!d.hasActiveLoans)alerts.push({type:'alert-yellow',text:'🟡 NO ACTIVE OFFER — See Loan Eligibility below'});
+}
+if(alerts.length===0)alerts.push({type:'alert-green',text:'🟢 HEALTHY — No alerts detected'});
+
+// Repayment calculations (only if loan exists)
+let repaidPerDay=0,daysToPayoff=Infinity,projPayoff=null,projPayoffUp=null,projPayoffDown=null,progressPct=0;
+if(loan){
+  repaidPerDay=loan.daysAgo>0?loan.cumRepaid/loan.daysAgo:0;
+  daysToPayoff=repaidPerDay>0?Math.ceil(loan.outstanding/repaidPerDay):Infinity;
+  projPayoff=addDays(new Date(),daysToPayoff);
+  projPayoffUp=addDays(new Date(),repaidPerDay>0?Math.ceil(loan.outstanding/(repaidPerDay*1.1)):Infinity);
+  projPayoffDown=addDays(new Date(),repaidPerDay>0?Math.ceil(loan.outstanding/(repaidPerDay*0.8)):Infinity);
+  const totalProjectedDays=loan.daysAgo+daysToPayoff;
+  progressPct=Math.min(100,(loan.daysAgo/totalProjectedDays)*100);
+}
+
+// Linked Accounts HTML
+let linkedHTML='';
+if(d.linkedAccounts.length>0){
+linkedHTML=`
+<div class="table-wrap">
+<table><thead><tr>
+<th>Unit Token</th><th>Business / Location</th><th>Active Loans</th><th>Total Financed</th><th>Loan Status</th><th>Risk Grade</th>
+</tr></thead><tbody>
+${d.linkedAccounts.map(la=>`<tr class="linked-row" onclick="lookupLinkedAccount('${la.unitToken}')">
+<td><span class="linked-token" title="Click to load ${la.unitToken}">${la.unitToken}</span></td>
+<td><div style="font-weight:600;font-size:13px">${la.businessName}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">${la.locationName}</div></td>
+<td><span class="linked-count">${la.activeLoanCount}</span></td>
+<td style="font-weight:600">${fmt$(la.totalFinanced/100)}</td>
+<td>${statusBadge(la.status)}</td>
+<td>${riskBadge(la.risk)}</td>
+</tr>`).join('')}
+</tbody></table>
+</div>`;
+} else {
+linkedHTML=`<div class="linked-empty"><i class="fas fa-link-slash"></i> No linked accounts with active loans found</div>`;
+}
+
+// Build HTML
+let html=`
+<!-- Section 1: Merchant Overview -->
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-store"></i> Merchant Overview</div>
+<div class="cards-row cards-7">
+<div class="card"><div class="card-label">Merchant Name</div><div class="card-value small">${d.merchantName}</div></div>
+<div class="card"><div class="card-label">Unit Token</div><div class="card-value small" style="font-size:12px;word-break:break-all;font-family:monospace">${d.token}</div></div>
+<div class="card"><div class="card-label">Risk Grade</div><div class="card-value">${riskBadgeLg(d.risk)}</div></div>
+<div class="card"><div class="card-label">Status</div><div class="card-value">${d.isActive?'<span class="badge badge-green">ACTIVE</span>':'<span class="badge badge-red">INACTIVE</span>'}</div></div>
+<div class="card"><div class="card-label">Business Category</div><div class="card-value small" style="font-size:14px">${d.category}</div></div>
+<div class="card"><div class="card-label">Days Since Activation</div><div class="card-value">${d.daysActive.toLocaleString()}</div></div>
+<div class="card"><div class="card-label">Country</div><div class="card-value small">🇺🇸 USD</div></div>
+</div>
+</div>`;
+
+// Section 2: Active Flex Loans (moved to top, right after Merchant Overview)
+if(hasLoans){
+html+=`
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-file-invoice-dollar"></i> Active Flex Loans</div>
+<div class="table-wrap">
+<table><thead><tr>
+<th>Plan Group ID</th><th>Status</th><th>Financed</th><th>Fee</th><th>Receivables</th><th>Hold Rate</th><th>Risk</th><th>Activated</th><th>Origination</th>
+</tr></thead><tbody>
+${d.loans.map((l,i)=>`<tr class="${i===selectedLoanIdx?'selected':''}" onclick="selectLoan(${i})">
+<td style="font-family:monospace;font-size:12px">${l.planId}</td>
+<td>${statusBadge(l.status)}</td>
+<td>${fmt$(l.financed/100)}</td>
+<td>${fmt$(l.fee/100)}</td>
+<td>${fmt$(l.receivables/100)}</td>
+<td>${(l.holdRate/10000*100).toFixed(2)}%</td>
+<td>${riskBadge(l.risk)}</td>
+<td>${fmtDate(l.activated)}</td>
+<td style="font-size:12px">${l.origType.replace(/_/g,' ')}</td>
+</tr>`).join('')}
+</tbody></table>
+</div>
+</div>`;
+} else {
+// No active loans — show Loan Eligibility section
+html+=`
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-file-invoice-dollar"></i> Active Flex Loans</div>
+<div class="linked-empty" style="flex-direction:column;gap:6px;padding:24px">
+  <div style="display:flex;align-items:center;gap:8px"><i class="fas fa-ban" style="font-size:18px;opacity:.5"></i> <span style="font-weight:600">No Active Flex Loans</span></div>
+  <span style="font-size:12px">This merchant does not have an active Flex Loan offer. See eligibility details below.</span>
+</div>
+</div>
+
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-clipboard-check"></i> Loan Eligibility <span class="badge badge-red" style="margin-left:8px;font-size:11px">NO ACTIVE OFFER</span></div>
+<div class="eligibility-container" id="eligibilityContent"></div>
+</div>`;
+}
+
+// Section: Linked Accounts
+html+=`
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-link"></i> Linked Accounts with Active Loans <span style="font-size:12px;font-weight:500;color:var(--text-muted);margin-left:6px">(${d.linkedAccounts.length} found)</span></div>
+${linkedHTML}
+</div>`;
+
+// Section: Repayment Progress (only if loans exist)
+if(hasLoans&&loan){
+html+=`
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-chart-pie"></i> Repayment Progress — ${loan.planId}</div>
+<div class="chart-row">
+<div class="donut-wrap"><canvas id="donutChart"></canvas></div>
+<div class="chart-container" style="border:none;padding:0;background:transparent"><canvas id="repayChart" height="220"></canvas></div>
+</div>
+<div class="metrics-row">
+<div class="metric-card"><div class="label">Total Receivables</div><div class="value">${fmt$(loan.receivables/100)}</div></div>
+<div class="metric-card"><div class="label">Cumulative Repaid</div><div class="value" style="color:var(--accent-green)">${fmt$(loan.cumRepaid/100)}</div></div>
+<div class="metric-card"><div class="label">Outstanding</div><div class="value" style="color:var(--accent-orange)">${fmt$(loan.outstanding/100)}</div></div>
+<div class="metric-card"><div class="label">Repayment Fraction</div><div class="value">${fmtPct(loan.repayFrac)}</div></div>
+<div class="metric-card"><div class="label">Days Active</div><div class="value">${loan.daysAgo}</div></div>
+<div class="metric-card"><div class="label">Est. Duration</div><div class="value">${loan.estDuration}d</div></div>
+<div class="metric-card"><div class="label">Projected Payoff</div><div class="value" style="font-size:13px">${daysToPayoff<9999?fmtDate(projPayoff):'N/A'}</div></div>
+</div>
+</div>`;
+}
+
+// Section: GPV Trends
+html+=`
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-chart-line"></i> GPV Trends (Last 180 Days)</div>
+<div class="chart-container"><canvas id="gpvChart" height="280"></canvas></div>
+<div class="cards-row cards-5" style="margin-top:14px">
+<div class="card"><div class="card-label">Last 30 Days GPV</div><div class="card-value small">${fmt$(last30gpv)}</div></div>
+<div class="card"><div class="card-label">Last 90 Days GPV</div><div class="card-value small">${fmt$(last90gpv)}</div></div>
+<div class="card"><div class="card-label">Avg Daily GPV</div><div class="card-value small">${fmt$(avgDaily)}</div></div>
+<div class="card"><div class="card-label">GPV Trend</div><div class="card-value small ${gpvTrendClass}">${gpvTrend} ${(gpvChange*100).toFixed(1)}%</div></div>
+<div class="card"><div class="card-label">Proj. Monthly GPV</div><div class="card-value small">${fmt$(projMonthly)}</div></div>
+</div>
+</div>`;
+
+// Section: Business Health Signals
+html+=`
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-shield-halved"></i> Business Health Signals</div>
+<div class="alerts-container">${alerts.map(a=>`<div class="alert-banner ${a.type}">${a.text}</div>`).join('')}</div>
+<div class="cards-row cards-4" style="margin-bottom:14px">
+<div class="card"><div class="card-label">Chargebacks (90d)</div><div class="card-value">${totalCB}</div></div>
+<div class="card"><div class="card-label">Disputed Amount (90d)</div><div class="card-value small">${fmt$(totalCBAmount)}</div></div>
+<div class="card"><div class="card-label">Chargeback Rate</div><div class="card-value"><span class="badge ${cbRateClass}">${fmtPct(cbRate)}</span></div></div>
+<div class="card"><div class="card-label">Win Rate</div><div class="card-value">${fmtPct(winRate)}</div></div>
+</div>
+<div class="chart-container"><canvas id="cbChart" height="240"></canvas></div>
+</div>`;
+
+// Section: Projected Loan Payoff (only if loans exist)
+if(hasLoans&&loan){
+html+=`
+<div class="section fade-in">
+<div class="section-title"><i class="fas fa-forward"></i> Projected Loan Payoff</div>
+<div class="projection-card">
+<div class="proj-row"><span class="proj-label">Current Repayment Pace</span><span class="proj-value">${fmt$(repaidPerDay/100)}/day</span></div>
+<div class="proj-row"><span class="proj-label">Projected Payoff (Current Pace)</span><span class="proj-value">${daysToPayoff<9999?fmtDate(projPayoff)+' ('+daysToPayoff+'d)':'N/A'}</span></div>
+<div class="proj-row"><span class="proj-label">If GPV +10%</span><span class="proj-value" style="color:var(--accent-green)">${daysToPayoff<9999?fmtDate(projPayoffUp):'N/A'}</span></div>
+<div class="proj-row"><span class="proj-label">If GPV -20%</span><span class="proj-value" style="color:var(--accent-red)">${daysToPayoff<9999?fmtDate(projPayoffDown):'N/A'}</span></div>
+<div style="margin-top:12px">
+<div class="card-label" style="margin-bottom:6px">Progress Timeline</div>
+<div class="timeline-bar">
+<div class="timeline-fill" data-label="${progressPct.toFixed(0)}% elapsed" style="width:${progressPct}%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple))"></div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--text-muted)">
+<span>${fmtDate(loan.activated)}</span>
+<span>${daysToPayoff<9999?fmtDate(projPayoff):'TBD'}</span>
+</div>
+</div>
+</div>
+</div>`;
+}
+
+document.getElementById('dashboard').innerHTML=html;
+
+// Render eligibility section if no active loans
+if(!d.hasActiveLoans){
+  renderEligibilitySection();
+}
+
+renderCharts();
+}
+
+function selectLoan(i){selectedLoanIdx=i;destroyCharts();renderDashboard()}
+
+function renderCharts(){
+const d=currentData;
+const hasLoans=d.hasActiveLoans&&d.loans.length>0;
+const loan=hasLoans?d.loans[selectedLoanIdx]:null;
+const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8899aa',font:{family:'Inter',size:11}}},tooltip:{backgroundColor:'#1e2f40',titleColor:'#e8edf2',bodyColor:'#e8edf2',borderColor:'#2a3a4a',borderWidth:1,padding:10,titleFont:{family:'Inter',weight:'600'},bodyFont:{family:'Inter'}}},scales:{x:{ticks:{color:'#5a6a7a',font:{family:'Inter',size:10}},grid:{color:'rgba(42,58,74,0.4)'}},y:{ticks:{color:'#5a6a7a',font:{family:'Inter',size:10}},grid:{color:'rgba(42,58,74,0.4)'}}}};
+
+if(hasLoans&&loan){
+// Donut Chart
+const donutCtx=document.getElementById('donutChart').getContext('2d');
+const donutChart=new Chart(donutCtx,{type:'doughnut',data:{labels:['Repaid','Outstanding'],datasets:[{data:[loan.cumRepaid/100,loan.outstanding/100],backgroundColor:['#22c55e','#374151'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:true,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmt$(ctx.parsed)},backgroundColor:'#1e2f40',titleColor:'#e8edf2',bodyColor:'#e8edf2',borderColor:'#2a3a4a',borderWidth:1}},animation:{animateRotate:true,duration:1200}}});
+charts.push(donutChart);
+
+// Repayment Curve
+const repayCtx=document.getElementById('repayChart').getContext('2d');
+const rng2=new SeededRNG(d.token+'repay'+selectedLoanIdx);
+const repayLabels=[];const actualData=[];const expectedData=[];
+const steps=Math.min(loan.daysAgo,60);
+for(let i=0;i<=steps;i++){
+const day=Math.round(i*loan.daysAgo/steps);
+repayLabels.push('Day '+day);
+const expected=Math.min(1,day/loan.estDuration);
+expectedData.push(expected);
+const noise=rng2.range(-0.03,0.03);
+const actual=Math.min(loan.repayFrac,loan.repayFrac*(day/loan.daysAgo)+noise);
+actualData.push(Math.max(0,Math.min(1,actual)));
+}
+actualData[actualData.length-1]=loan.repayFrac;
+const repayChart=new Chart(repayCtx,{type:'line',data:{labels:repayLabels,datasets:[{label:'Actual Repayment',data:actualData,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.3,pointRadius:0,pointHoverRadius:4,borderWidth:2},{label:'Expected (Linear)',data:expectedData,borderColor:'#6b7280',borderDash:[6,4],fill:false,tension:0,pointRadius:0,borderWidth:1.5}]},options:{...chartOpts,plugins:{...chartOpts.plugins,tooltip:{...chartOpts.plugins.tooltip,callbacks:{label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y*100).toFixed(1)+'%'}}},scales:{...chartOpts.scales,y:{...chartOpts.scales.y,min:0,max:1,ticks:{...chartOpts.scales.y.ticks,callback:v=>(v*100)+'%'}}},animation:{duration:1500}}});
+charts.push(repayChart);
+}
+
+// GPV Chart
+const gpvCtx=document.getElementById('gpvChart').getContext('2d');
+const gpvLabels=d.gpvData.map(g=>{const m=g.date.getMonth()+1;const dd=g.date.getDate();return m+'/'+dd});
+const gpvValues=d.gpvData.map(g=>g.value);
+const rollingAvg=[];const spikePoints=[];const dropPoints=[];
+for(let i=0;i<gpvValues.length;i++){
+if(i<29){rollingAvg.push(null);spikePoints.push(null);dropPoints.push(null);continue}
+const avg=gpvValues.slice(i-29,i+1).reduce((s,v)=>s+v,0)/30;
+rollingAvg.push(avg);
+spikePoints.push(gpvValues[i]>2*avg?gpvValues[i]:null);
+dropPoints.push(gpvValues[i]<0.5*avg?gpvValues[i]:null);
+}
+const gpvChart=new Chart(gpvCtx,{type:'line',data:{labels:gpvLabels,datasets:[{label:'Daily GPV',data:gpvValues,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.05)',fill:true,tension:0.2,pointRadius:0,pointHoverRadius:3,borderWidth:1.5},{label:'30-Day Avg',data:rollingAvg,borderColor:'#f97316',borderDash:[6,3],fill:false,tension:0.3,pointRadius:0,borderWidth:1.5},{label:'Spike',data:spikePoints,borderColor:'transparent',backgroundColor:'#ef4444',pointRadius:5,pointHoverRadius:7,showLine:false,type:'scatter'},{label:'Drop',data:dropPoints,borderColor:'transparent',backgroundColor:'#eab308',pointRadius:5,pointHoverRadius:7,showLine:false,type:'scatter'}]},options:{...chartOpts,plugins:{...chartOpts.plugins,tooltip:{...chartOpts.plugins.tooltip,callbacks:{label:ctx=>{if(ctx.dataset.label==='Spike')return'⚠️ Spike: '+fmt$(ctx.parsed.y);if(ctx.dataset.label==='Drop')return'⚠️ Drop: '+fmt$(ctx.parsed.y);return ctx.dataset.label+': '+fmt$(ctx.parsed.y)}}}},scales:{...chartOpts.scales,y:{...chartOpts.scales.y,ticks:{...chartOpts.scales.y.ticks,callback:v=>'$'+Math.round(v).toLocaleString()}}},animation:{duration:1500}}});
+charts.push(gpvChart);
+
+// Chargeback Chart
+const cbCtx=document.getElementById('cbChart').getContext('2d');
+const cbLabels=d.cbData.map(c=>{const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[c.month.getMonth()]+' '+c.month.getFullYear()});
+const cbChart=new Chart(cbCtx,{type:'bar',data:{labels:cbLabels,datasets:[{label:'Won',data:d.cbData.map(c=>c.won),backgroundColor:'#22c55e',borderRadius:3},{label:'Lost',data:d.cbData.map(c=>c.lost),backgroundColor:'#ef4444',borderRadius:3},{label:'Pending',data:d.cbData.map(c=>c.pending),backgroundColor:'#eab308',borderRadius:3}]},options:{...chartOpts,plugins:{...chartOpts.plugins},scales:{...chartOpts.scales,x:{...chartOpts.scales.x,stacked:true},y:{...chartOpts.scales.y,stacked:true,beginAtZero:true,ticks:{...chartOpts.scales.y.ticks,stepSize:1}}},animation:{duration:1200}}});
+charts.push(cbChart);
+}
+
+function copyReport(){
+if(!currentData)return;
+const d=currentData;
+const hasLoans=d.hasActiveLoans&&d.loans.length>0;
+const loan=hasLoans?d.loans[selectedLoanIdx]:null;
+const last30gpv=d.gpvData.slice(-30).reduce((s,v)=>s+v.value,0);
+const avgDaily=d.gpvData.reduce((s,v)=>s+v.value,0)/d.gpvData.length;
+const last3cb=d.cbData.slice(-3);
+const totalCB=last3cb.reduce((s,v)=>s+v.total,0);
+const totalPayments3=last3cb.reduce((s,v)=>s+v.totalPayments,0);
+const cbRate=totalPayments3>0?totalCB/totalPayments3:0;
+
+let loanReport='';
+if(hasLoans&&loan){
+  const repaidPerDay=loan.daysAgo>0?loan.cumRepaid/loan.daysAgo:0;
+  const daysToPayoff=repaidPerDay>0?Math.ceil(loan.outstanding/repaidPerDay):Infinity;
+  loanReport=`
+SELECTED LOAN: ${loan.planId}
+Status: ${loan.status.toUpperCase()}
+Financed: ${fmt$(loan.financed/100)}
+Receivables: ${fmt$(loan.receivables/100)}
+Repaid: ${fmt$(loan.cumRepaid/100)} (${fmtPct(loan.repayFrac)})
+Outstanding: ${fmt$(loan.outstanding/100)}
+Hold Rate: ${(loan.holdRate/10000*100).toFixed(2)}%
+Repayment Pace: ${fmt$(repaidPerDay/100)}/day
+Projected Payoff: ${daysToPayoff<9999?fmtDate(addDays(new Date(),daysToPayoff)):'N/A'}`;
+} else {
+  loanReport=`
+ACTIVE LOANS: None
+LOAN ELIGIBILITY: ${d.eligibility.failedCount} of ${d.eligibility.totalRules} checks failed`;
+  for(const [catName,catData] of Object.entries(d.eligibility.results)){
+    const failed=catData.rules.filter(r=>!r.passed);
+    if(failed.length>0){
+      loanReport+='\n  '+catName+':';
+      failed.forEach(r=>{loanReport+='\n    ✗ '+r.key+': '+r.desc});
+    }
+  }
+}
+
+let linkedReport='';
+if(d.linkedAccounts.length>0){
+linkedReport='\nLINKED ACCOUNTS WITH ACTIVE LOANS\n';
+d.linkedAccounts.forEach(la=>{
+linkedReport+='  Unit Token: '+la.unitToken+' | '+la.businessName+' | Loans: '+la.activeLoanCount+' | Financed: '+fmt$(la.totalFinanced/100)+' | Risk: '+la.risk+'\n';
+});
+} else {
+linkedReport='\nLINKED ACCOUNTS: None with active loans\n';
+}
+
+const report=`FLEX LOAN MANAGER — MERCHANT REPORT
+====================================
+Merchant: ${d.merchantName}
+Unit Token: ${d.token}
+Risk Grade: ${d.risk}
+Status: ${d.isActive?'ACTIVE':'INACTIVE'}
+Category: ${d.category}
+Days Active: ${d.daysActive}
+${linkedReport}${loanReport}
+
+GPV SUMMARY
+Last 30 Days: ${fmt$(last30gpv)}
+Avg Daily: ${fmt$(avgDaily)}
+
+CHARGEBACKS (90d)
+Count: ${totalCB}
+Rate: ${fmtPct(cbRate)}
+
+Generated: ${new Date().toISOString()}`;
+
+navigator.clipboard.writeText(report).then(()=>{
+const btn=document.getElementById('copyBtn');
+btn.innerHTML='<i class="fas fa-check"></i> Copied!';
+btn.classList.remove('btn-secondary');btn.classList.add('btn-success');
+setTimeout(()=>{btn.innerHTML='<i class="fas fa-copy"></i> Copy Report';btn.classList.remove('btn-success');btn.classList.add('btn-secondary')},2000);
+}).catch(()=>{alert('Failed to copy. Please try again.')});
+}
+
+// Pre-fill demo token
+document.getElementById('tokenInput').value='MLXBYSKMVA9NJ';
+</script>
+</body>
+</html>
