@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Review Advisor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1a2332;--navy-light:#243044;--navy-lighter:#2d3a4e;--blue:#2d7ff9;--blue-light:#e8f0fe;--blue-dark:#1a5fd4;--red:#e74c3c;--red-light:#fdeaea;--orange:#f39c12;--orange-light:#fef5e7;--yellow:#f1c40f;--yellow-light:#fef9e7;--green:#27ae60;--green-light:#e8f8f0;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-300:#dee2e6;--gray-400:#ced4da;--gray-500:#adb5bd;--gray-600:#868e96;--gray-700:#495057;--gray-800:#343a40;--gray-900:#212529;--white:#ffffff;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 12px rgba(0,0,0,.1);--shadow-lg:0 8px 24px rgba(0,0,0,.12);--radius:8px;--radius-sm:6px;--radius-lg:12px}
+body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--gray-900);display:flex;height:100vh;overflow:hidden;font-size:13px;line-height:1.5}
+.sidebar{width:280px;min-width:280px;background:var(--navy);color:var(--white);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--navy-lighter);border-radius:4px}
+.sidebar-header{padding:20px 16px 12px;border-bottom:1px solid var(--navy-light)}
+.sidebar-header h1{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sidebar-header h1 i{color:var(--blue);font-size:18px}
+.sidebar-header .subtitle{font-size:10px;color:var(--gray-500);margin-top:2px;letter-spacing:.5px;text-transform:uppercase}
+.search-section{padding:12px 16px;border-bottom:1px solid var(--navy-light)}
+.search-section label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:6px;display:block}
+.search-row{display:flex;gap:6px}
+.search-row input{flex:1;background:var(--navy-light);border:1px solid var(--navy-lighter);color:var(--white);padding:7px 10px;border-radius:var(--radius-sm);font-size:12px;font-family:inherit}
+.search-row input::placeholder{color:var(--gray-600)}
+.search-row input:focus{outline:none;border-color:var(--blue)}
+.search-row button{background:var(--blue);color:var(--white);border:none;padding:7px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:12px;font-weight:600}
+.search-row button:hover{background:var(--blue-dark)}
+.quick-info{padding:12px 16px;border-bottom:1px solid var(--navy-light)}
+.quick-info h3{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:8px}
+.info-card{background:var(--navy-light);border-radius:var(--radius-sm);padding:10px 12px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:11px}
+.info-row .label{color:var(--gray-500)}
+.info-row .value{font-weight:600;color:var(--gray-200)}
+.info-row .value.risk-a{color:#4ecdc4}
+.info-row .value.status-pending{color:var(--orange)}
+.business-name-row .value{display:flex;align-items:center;gap:6px}
+.biz-link{color:var(--gray-400);font-size:11px;text-decoration:none;transition:color .15s;display:inline-flex;align-items:center}
+.biz-link:hover{color:var(--blue)}
+.biz-link-main{color:var(--gray-500);font-size:13px;text-decoration:none;transition:color .15s;display:inline-flex;align-items:center}
+.biz-link-main:hover{color:var(--blue)}
+.sla-section{padding:12px 16px;border-bottom:1px solid var(--navy-light)}
+.sla-section h3{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:8px}
+.sla-card{background:var(--navy-light);border-radius:var(--radius-sm);padding:10px 12px}
+.sla-bar{height:4px;background:var(--navy-lighter);border-radius:2px;margin:8px 0 4px;overflow:hidden}
+.sla-bar-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .3s}
+.sla-text{font-size:10px;color:var(--gray-500);display:flex;justify-content:space-between}
+.quick-actions{padding:12px 16px;flex:1}
+.quick-actions h3{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:8px}
+.action-btn{width:100%;padding:8px 12px;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;margin-bottom:6px;display:flex;align-items:center;gap:8px;font-family:inherit;transition:opacity .15s}
+.action-btn:hover{opacity:.9}
+.action-btn.approve{background:var(--green);color:var(--white)}
+.action-btn.decline{background:var(--red);color:var(--white)}
+.action-btn.ssp{background:var(--blue);color:var(--white)}
+.action-btn.escalate{background:var(--orange);color:var(--white)}
+.main{flex:1;overflow-y:auto;padding:0}
+.main::-webkit-scrollbar{width:6px}
+.main::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px}
+.content-wrapper{max-width:1280px;margin:0 auto;padding:20px 24px 100px}
+.section{margin-bottom:24px}
+.section-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-title .emoji{font-size:16px}
+.overview-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.ov-card{background:var(--white);border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow);border:1px solid var(--gray-200)}
+.ov-card .ov-label{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--gray-600);margin-bottom:4px}
+.ov-card .ov-value{font-size:16px;font-weight:700;color:var(--gray-900)}
+.ov-card .ov-sub{font-size:10px;color:var(--gray-500);margin-top:2px}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.badge-a{background:#e0f7f5;color:#0d9488}
+.badge-c{background:#fef3c7;color:#d97706}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-orange{background:var(--orange-light);color:var(--orange)}
+.blocker-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gray-200);margin-bottom:14px;overflow:hidden}
+.blocker-card .blocker-border{width:5px;min-height:100%}
+.blocker-card .blocker-inner{display:flex}
+.border-red{background:var(--red)}
+.border-orange{background:var(--orange)}
+.border-yellow{background:var(--yellow)}
+.blocker-content{flex:1;padding:16px 18px}
+.blocker-header{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.blocker-header h3{font-size:14px;font-weight:700}
+.blocker-tag{font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.3px}
+.tag-critical{background:var(--red-light);color:var(--red)}
+.tag-warning{background:var(--orange-light);color:var(--orange)}
+.blocker-code{font-size:10px;color:var(--gray-500);font-family:monospace;margin-bottom:8px}
+.blocker-desc{font-size:12px;color:var(--gray-700);margin-bottom:10px;padding:8px 12px;background:var(--gray-50);border-radius:var(--radius-sm);border-left:3px solid var(--gray-300)}
+.sop-ref{font-size:11px;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:4px}
+.sop-ref i{font-size:10px}
+.checklist{list-style:none;margin:0;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100);font-size:12px;color:var(--gray-700)}
+.checklist li:last-child{border-bottom:none}
+.checklist input[type="checkbox"]{margin-top:2px;accent-color:var(--blue);cursor:pointer;width:15px;height:15px;flex-shrink:0}
+.checklist li.checked{color:var(--gray-400);text-decoration:line-through}
+.decline-info{margin-top:10px;padding:10px 12px;background:var(--red-light);border-radius:var(--radius-sm);font-size:11px;color:var(--red)}
+.decline-info strong{display:block;margin-bottom:2px}
+.signal-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gray-200);padding:14px 18px;margin-bottom:10px}
+.signal-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.signal-header h4{font-size:13px;font-weight:600}
+.signal-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.signal-icon.warn{background:var(--orange-light);color:var(--orange)}
+.signal-icon.ok{background:var(--green-light);color:var(--green)}
+.signal-icon.info{background:var(--blue-light);color:var(--blue)}
+.signal-detail{font-size:12px;color:var(--gray-600);margin-bottom:4px}
+.signal-detail strong{color:var(--gray-800)}
+.signal-assessment{font-size:11px;padding:6px 10px;border-radius:var(--radius-sm);margin-top:6px}
+.assessment-warn{background:var(--orange-light);color:#b45309}
+.assessment-ok{background:var(--green-light);color:#15803d}
+.assessment-info{background:var(--blue-light);color:#1d4ed8}
+.passed-section{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gray-200);overflow:hidden}
+.collapsible-header{padding:14px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none}
+.collapsible-header:hover{background:var(--gray-50)}
+.collapsible-header h3{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.collapsible-header .chevron{transition:transform .2s;color:var(--gray-500)}
+.collapsible-header.open .chevron{transform:rotate(180deg)}
+.collapsible-body{padding:0 18px 14px;display:none}
+.collapsible-body.open{display:block}
+.passed-item{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:12px;border-bottom:1px solid var(--gray-100)}
+.passed-item:last-child{border-bottom:none}
+.passed-item i{color:var(--green);font-size:14px}
+.passed-item .pass-label{color:var(--gray-700)}
+.passed-item .pass-value{margin-left:auto;font-weight:600;color:var(--green)}
+.decision-section{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);border:1px solid var(--gray-200);padding:20px 24px}
+.progress-bar-container{margin-bottom:16px}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-600);margin-bottom:6px}
+.progress-bar{height:8px;background:var(--gray-200);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:4px;transition:width .3s}
+.decision-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.meta-item{font-size:12px;color:var(--gray-600)}
+.meta-item strong{color:var(--gray-800)}
+.decision-buttons{display:flex;gap:10px;flex-wrap:wrap}
+.decision-btn{padding:10px 20px;border:none;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;transition:all .15s}
+.decision-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.decision-btn.d-approve{background:var(--green);color:var(--white)}
+.decision-btn.d-decline{background:var(--red);color:var(--white)}
+.decision-btn.d-ssp{background:var(--blue);color:var(--white)}
+.decision-btn.d-escalate{background:var(--orange);color:var(--white)}
+.decision-btn.d-copy{background:var(--gray-800);color:var(--white)}
+.ref-table{width:100%;border-collapse:collapse;font-size:12px}
+.ref-table th{text-align:left;padding:8px 12px;background:var(--gray-50);border-bottom:2px solid var(--gray-200);font-weight:600;color:var(--gray-700)}
+.ref-table td{padding:8px 12px;border-bottom:1px solid var(--gray-100);color:var(--gray-700)}
+.ref-table tr:hover td{background:var(--gray-50)}
+.ref-table code{background:var(--blue-light);padding:1px 6px;border-radius:3px;font-size:11px;color:var(--blue)}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
+.modal-overlay.show{display:flex}
+.modal{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h2{font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.modal p{font-size:13px;color:var(--gray-600);margin-bottom:16px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end}
+.modal-btn{padding:8px 18px;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.modal-btn.cancel{background:var(--gray-200);color:var(--gray-700)}
+.modal-btn.confirm-approve{background:var(--green);color:var(--white)}
+.modal-btn.confirm-decline{background:var(--red);color:var(--white)}
+.modal-btn.confirm-blue{background:var(--blue);color:var(--white)}
+.modal-btn.confirm-orange{background:var(--orange);color:var(--white)}
+.modal select,.modal textarea{width:100%;padding:8px 10px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-family:inherit;font-size:12px;margin-bottom:12px}
+.modal textarea{height:80px;resize:vertical}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--gray-900);color:var(--white);padding:12px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+.toast i{margin-right:6px}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--gray-500);text-align:center;padding:40px}
+.empty-state i{font-size:48px;margin-bottom:16px;color:var(--gray-300)}
+.empty-state h2{font-size:18px;color:var(--gray-600);margin-bottom:8px}
+.empty-state p{font-size:13px;max-width:300px}
+.aan-list{max-height:200px;overflow-y:auto;margin-bottom:12px}
+.aan-item{padding:6px 8px;border-bottom:1px solid var(--gray-100);font-size:11px;cursor:pointer;border-radius:4px}
+.aan-item:hover{background:var(--blue-light)}
+.aan-item.selected{background:var(--blue-light);border-left:3px solid var(--blue)}
+.aan-item strong{display:block;color:var(--gray-800);font-size:12px}
+.aan-item span{color:var(--gray-500)}
+.esc-channels{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.esc-channel{padding:8px 12px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius-sm);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:8px}
+.esc-channel:hover{background:var(--blue-light);border-color:var(--blue)}
+.esc-channel.selected{background:var(--blue-light);border-color:var(--blue)}
+.esc-channel code{font-size:11px;color:var(--blue)}
+.no-data{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:var(--gray-400)}
+.no-data i{font-size:40px;margin-bottom:12px}
+</style>
+  <script type="application/ld+json">
+{
+  "@context": "urn:goose.ai:schema",
+  "@type": "GooseApp",
+  "name": "sfs-credit-review-tool",
+  "description": "Internal tool for SFS analysts to review pending Square Capital loan applications with risk signals.",
+  "width": 1600,
+  "height": 1000,
+  "resizable": true,
+  "mcpServers": [
+    "apps"
+  ]
+}
+  </script>
+  <script type="application/x-goose-prd">
+# Credit Review Advisor — Flex Loan Application Tool
+
+## Overview
+An internal tool for SFS Pre-Origination analysts to review pending Square Capital loan applications. The tool pulls real application data, auto-detects risk signals, and surfaces the relevant Credit Review procedures with recommended actions.
+
+## Design
+- Clean, professional dark sidebar + white content area
+- Color scheme: Navy (#1a2332) sidebar, white content, blue accents (#2d7ff9)
+- Responsive, modern UI with clear hierarchy
+
+## Layout
+
+### Left Sidebar (fixed, 280px)
+- App title: "Credit Review Advisor"
+- Search input: "Enter Application Token" with lookup button
+- Quick info card showing: Business Name (with Google Search and Regulator icon links), Unit Token, Product, Loan Amount, Risk Grade, Status
+- SLA Timer: Days since submission, days remaining, extension status
+- Quick action buttons: Approve, Decline, Send SSP, Escalate
+
+### Business Name Quick Links
+- Google Search icon (fab fa-google) next to business name linking to Google search for "Y and R Clothing Houston TX" — opens in new tab
+- Regulator icon (fas fa-user-shield) next to business name linking to https://regulator.sqprod.co/n/users/L0B1STF8RCJQ1 — opens in new tab
+
+### Main Content Area (scrollable)
+
+#### Section 1: Application Overview (top banner)
+Cards showing:
+- Loan Amount: $115,000
+- Total Receivables: $131,330
+- Risk Grade: A2 (color coded badge)
+- Hold Rate: 20%
+- Product: Flex Loan
+- Origination Type: MPO (12th loan)
+- Submitted: Apr 14, 2026
+- Days in Review: calculated from submission date
+
+#### Section 2: 🚨 Active Blockers (most prominent section)
+Each blocker is a card with colored left border (red=critical, orange=warning, yellow=info):
+
+**Blocker 1: plan_amount_too_large (Orange)**
+- Title: "Plan Amount Too Large"
+- What it means: "Loan amount of $115,000 exceeds $40K threshold. All loans >$40K require manual review regardless of other blockers."
+- SOP Reference: "§7.2 — Flex, ABL & Term Loans >$10k and ≤$75k" AND "§7.11 — Loans >$75k through $250k"
+- Required Actions (checklist):
+  - [ ] Review processing history for outlier transactions
+  - [ ] Check for seasonality concerns
+  - [ ] Perform LexisNexis public record search (go/sfsln) — required for loans >$75K
+  - [ ] Perform UCC Lien Search via Lien Solutions (go/ls) — required for loans >$75K
+  - [ ] Conduct SOS Search for corporations/LLCs/LPs
+  - [ ] Check bankruptcy against applicant (using SSN)
+  - [ ] Check bankruptcy against account owner (using SSN from View All Merchant PII)
+  - [ ] Check for financial claims/judgments >$30K (3 years) or >$50K
+  - [ ] If >4 all-asset liens, decline 365 days "Too Many Liens"
+  - [ ] If not current on repayment, decline 365 days "Not Current on Liens"
+- If decline needed: AAN options shown with decline windows
+
+**Blocker 2: has_recent_sketchy_login (Red)**
+- Title: "Recent Sketchy Login"
+- What it means: "A suspicious login was detected on this account near the application date."
+- SOP Reference: "§7.9 — Risk"
+- Required Actions (checklist — 2FA-focused, no Square Card steps):
+  - [ ] Check 2FA status at go/id using unit email
+  - [ ] If 2FA set up before app AND phone matches activation number → Continue review
+  - [ ] If 2FA NOT set up OR phone doesn't match → Create ATO alert case
+  - [ ] If ATO confirmed → Decline 10 days, AAN: "Business Verification Failure"
+  - [ ] If non-ATO → Continue review
+  - [ ] If ATO team can't resolve within 7 days → Decline 10 days, AAN: "Business Verification Failure"
+
+#### Section 3: 📊 Auto-Detected Signals
+Based on real account data, show detected signals with CROP guidance:
+
+**Chargeback Analysis (from real data: 15 disputes, $148K disputed)**
+- Signal: "15 disputes in last 12 months"
+- Assessment: Check if chargeback GPV > 3% of total GPV
+- If yes → "Decline 180 days — AAN: Chargeback History" (§7.4)
+- If chargeback + failed debit for insufficient funds → "Decline 180 days — AAN: Chargebacks"
+- Show: "Consider escalation to #cap-credit-risk-esc if criteria met"
+
+**Existing Active Loan**
+- Signal: "Active Flex Loan: $56,700 (Plan Group 14878128, Risk C1, originated)"
+- Assessment: MPO eligible — 12th loan, 11 prior plans all closed successfully
+- Check: Is current plan past due? If yes → Decline 90 days, AAN: "Plan Past Due"
+
+**Processing Activity (from real GPV data)**
+- Signal: "164 active days in 180 days, avg $2,300/day GPV"
+- Assessment: ✅ Healthy — consistent processing, no gaps detected
+- CP%: ~99% card present → ✅ Low fraud risk
+
+**Linked Accounts**
+- Signal: "No linked accounts with active loans found"
+- Assessment: ✅ No CUHOP concerns
+
+#### Section 4: ✅ Passed Checks (collapsed by default)
+Green checkmarks for all auto-approved steps:
+- AutoComplianceSfn: ✅ Approved
+- AutoLegalEntity: ✅ Approved
+- Processing Activity: ✅ Healthy
+- Card Present %: ✅ 99%
+- Linked Accounts: ✅ No concerns
+
+#### Section 5: 📋 Decision Summary (sticky bottom or prominent section)
+- Progress bar: "X of Y items reviewed" (16 total checklist items)
+- Loan Tier: "$115K — Tier: $75K-$250K (LexisNexis + UCC required)"
+- Overall Assessment: Based on reviewed items
+- Decision buttons: 
+  - "Approve" (green) — with confirmation modal
+  - "Decline" (red) — opens AAN selector with decline window
+  - "Send SSP" (blue) — shows available SSP templates
+  - "Escalate" (orange) — shows escalation channels dropdown
+- "Copy Decision Summary" button — copies formatted text for Regulator comments
+
+#### Section 6: 📖 Escalation Quick Reference (collapsed)
+Table of all escalation channels
+
+#### Section 7: 📖 AAN Quick Reference (collapsed)
+Full list of all Adverse Action Notices with descriptions from the SOP
+
+## Real Data (hardcoded for demo — application A-1WTAWDQDJE0X2F)
+- Business: Y and R Clothing
+- Unit Token: L0B1STF8RCJQ1
+- Merchant Token: MLDAZTSHYND95
+- Location: Houston, TX
+- MCC: clothing_and_accessories / Retail
+- Account Since: Dec 2, 2020
+- Product: Flex Loan (product_id=3)
+- Offer Amount: $115,000 (11,500,000 cents)
+- Receivables: $131,330 (13,133,000 cents)
+- Risk Grade: A2
+- Submitted: Apr 14, 2026
+- Status: Submitted (pending)
+- Blockers: plan_amount_too_large, has_recent_sketchy_login
+- Auto-approved: AutoComplianceSfn, AutoLegalEntity
+- SSP Sent: No
+- Prior Plans: 11 closed successfully
+- Active Loan: Plan Group 14878128, $56,700, C1 risk, originated
+- Chargebacks: 15 disputes in 12 months, ~$148K total disputed
+- GPV: ~$2,300/day avg, 164 active days in 180 days
+- CP%: ~99%
+- Linked accounts with active loans: None
+
+## Interactions
+- Clicking checkboxes updates the progress counter (16 total items)
+- Clicking "Show Full Procedure" expands the full SOP text
+- Decision buttons show confirmation modals
+- Copy button copies formatted decision summary
+- Collapsible sections for AAN reference and escalation channels
+- Search bar accepts application token (for demo, any input shows the hardcoded data)
+- Business name quick links open Google Search and Regulator in new tabs
+
+## Size: 1600x1000
+  </script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h1><i class="fas fa-shield-halved"></i> Credit Review Advisor</h1>
+    <div class="subtitle">SFS Pre-Origination</div>
+  </div>
+
+  <div class="search-section">
+    <label>Application Token</label>
+    <div class="search-row">
+      <input type="text" id="tokenInput" placeholder="A-1WTAWDQDJE0X2F" value="A-1WTAWDQDJE0X2F">
+      <button onclick="lookupApplication()"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+
+  <div id="sidebarInfo" style="display:none">
+    <div class="quick-info">
+      <h3>Quick Info</h3>
+      <div class="info-card">
+        <div class="info-row business-name-row">
+          <span class="label">Business</span>
+          <span class="value">
+            Y and R Clothing
+            <a href="https://www.google.com/search?q=Y+and+R+Clothing+Houston+TX" target="_blank" rel="noopener noreferrer" class="biz-link" title="Google Search"><i class="fab fa-google"></i></a>
+            <a href="https://regulator.sqprod.co/n/users/L0B1STF8RCJQ1" target="_blank" rel="noopener noreferrer" class="biz-link" title="View in Regulator"><i class="fas fa-user-shield"></i></a>
+          </span>
+        </div>
+        <div class="info-row"><span class="label">Unit Token</span><span class="value" style="font-family:monospace;font-size:10px">L0B1STF8RCJQ1</span></div>
+        <div class="info-row"><span class="label">Product</span><span class="value">Flex Loan</span></div>
+        <div class="info-row"><span class="label">Loan Amount</span><span class="value">$115,000</span></div>
+        <div class="info-row"><span class="label">Risk Grade</span><span class="value risk-a">A2</span></div>
+        <div class="info-row"><span class="label">Status</span><span class="value status-pending">Pending</span></div>
+      </div>
+    </div>
+
+    <div class="sla-section">
+      <h3>SLA Timer</h3>
+      <div class="sla-card">
+        <div class="info-row"><span class="label">Submitted</span><span class="value">Apr 14, 2026</span></div>
+        <div class="info-row"><span class="label">Days in Review</span><span class="value" id="daysInReview">—</span></div>
+        <div class="info-row"><span class="label">SLA Deadline</span><span class="value">5 business days</span></div>
+        <div class="info-row"><span class="label">Extension</span><span class="value" style="color:var(--gray-500)">None</span></div>
+        <div class="sla-bar"><div class="sla-bar-fill" id="slaFill" style="width:60%"></div></div>
+        <div class="sla-text"><span>Day 3 of 5</span><span>2 days remaining</span></div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <h3>Quick Actions</h3>
+      <button class="action-btn approve" onclick="showApproveModal()"><i class="fas fa-check-circle"></i> Approve</button>
+      <button class="action-btn decline" onclick="showDeclineModal()"><i class="fas fa-times-circle"></i> Decline</button>
+      <button class="action-btn ssp" onclick="showSSPModal()"><i class="fas fa-envelope"></i> Send SSP</button>
+      <button class="action-btn escalate" onclick="showEscalateModal()"><i class="fas fa-arrow-up-right-from-square"></i> Escalate</button>
+    </div>
+  </div>
+
+  <div id="sidebarEmpty" class="no-data" style="padding:40px 16px">
+    <i class="fas fa-search"></i>
+    <p style="font-size:11px;margin-top:8px;color:var(--gray-500)">Enter an application token to begin review</p>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main" id="mainContent">
+  <div id="emptyState" class="empty-state" style="height:100vh">
+    <i class="fas fa-folder-open"></i>
+    <h2>No Application Loaded</h2>
+    <p>Enter an application token in the sidebar to load the credit review workspace.</p>
+  </div>
+
+  <div id="appContent" class="content-wrapper" style="display:none">
+
+    <!-- Section 1: Overview -->
+    <div class="section">
+      <div class="section-title"><span class="emoji">📋</span> Application Overview</div>
+      <div class="overview-cards">
+        <div class="ov-card">
+          <div class="ov-label">Loan Amount</div>
+          <div class="ov-value">$115,000</div>
+          <div class="ov-sub">11,500,000 cents</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-label">Total Receivables</div>
+          <div class="ov-value">$131,330</div>
+          <div class="ov-sub">13,133,000 cents</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-label">Risk Grade</div>
+          <div class="ov-value"><span class="badge badge-a">A2</span></div>
+          <div class="ov-sub">Low risk tier</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-label">Hold Rate</div>
+          <div class="ov-value">20%</div>
+          <div class="ov-sub">Standard rate</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-label">Product</div>
+          <div class="ov-value" style="font-size:14px">Flex Loan</div>
+          <div class="ov-sub">product_id=3</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-label">Origination Type</div>
+          <div class="ov-value" style="font-size:14px">MPO</div>
+          <div class="ov-sub">12th loan</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-label">Submitted</div>
+          <div class="ov-value" style="font-size:14px">Apr 14, 2026</div>
+          <div class="ov-sub">Pending review</div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-label">Days in Review</div>
+          <div class="ov-value" id="daysCard">3</div>
+          <div class="ov-sub">SLA: 5 business days</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Active Blockers -->
+    <div class="section">
+      <div class="section-title"><span class="emoji">🚨</span> Active Blockers <span class="badge badge-red" style="font-size:11px;margin-left:4px">2 blockers</span></div>
+
+      <!-- Blocker 1 -->
+      <div class="blocker-card">
+        <div class="blocker-inner">
+          <div class="blocker-border border-orange"></div>
+          <div class="blocker-content">
+            <div class="blocker-header">
+              <h3>Plan Amount Too Large</h3>
+              <span class="blocker-tag tag-warning">Warning</span>
+            </div>
+            <div class="blocker-code">plan_amount_too_large</div>
+            <div class="blocker-desc">
+              Loan amount of <strong>$115,000</strong> exceeds $40K threshold. All loans &gt;$40K require manual review regardless of other blockers.
+            </div>
+            <div class="sop-ref"><i class="fas fa-book"></i> §7.2 — Flex, ABL & Term Loans &gt;$10k and ≤$75k &nbsp;|&nbsp; §7.11 — Loans &gt;$75k through $250k</div>
+            <div style="font-size:11px;font-weight:600;color:var(--gray-700);margin-bottom:6px">Required Actions:</div>
+            <ul class="checklist" data-group="blocker1">
+              <li><input type="checkbox" onchange="updateProgress()"><span>Review processing history for outlier transactions</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>Check for seasonality concerns</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>Perform LexisNexis public record search (<code>go/sfsln</code>) — <strong>required for loans &gt;$75K</strong></span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>Perform UCC Lien Search via Lien Solutions (<code>go/ls</code>) — <strong>required for loans &gt;$75K</strong></span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>Conduct SOS Search for corporations/LLCs/LPs</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>Check bankruptcy against applicant (using SSN)</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>Check bankruptcy against account owner (using SSN from View All Merchant PII)</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>Check for financial claims/judgments &gt;$30K (3 years) or &gt;$50K</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>If &gt;4 all-asset liens → decline 365 days "Too Many Liens"</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>If not current on repayment → decline 365 days "Not Current on Liens"</span></li>
+            </ul>
+            <div class="decline-info">
+              <strong><i class="fas fa-exclamation-triangle"></i> If decline needed:</strong>
+              AAN: "Too Many Liens" (365 days) or "Not Current on Liens" (365 days)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blocker 2 -->
+      <div class="blocker-card">
+        <div class="blocker-inner">
+          <div class="blocker-border border-red"></div>
+          <div class="blocker-content">
+            <div class="blocker-header">
+              <h3>Recent Sketchy Login</h3>
+              <span class="blocker-tag tag-critical">Critical</span>
+            </div>
+            <div class="blocker-code">has_recent_sketchy_login</div>
+            <div class="blocker-desc">
+              A <strong>suspicious login</strong> was detected on this account near the application date. Must rule out Account Takeover (ATO) before proceeding.
+            </div>
+            <div class="sop-ref"><i class="fas fa-book"></i> §7.9 — Risk</div>
+            <div style="font-size:11px;font-weight:600;color:var(--gray-700);margin-bottom:6px">Required Actions:</div>
+            <ul class="checklist" data-group="blocker2">
+              <li><input type="checkbox" onchange="updateProgress()"><span>Check 2FA status at <code>go/id</code> using unit email</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>If 2FA set up before app AND phone matches activation number → Continue review</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>If 2FA NOT set up OR phone doesn't match → Create ATO alert case</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>If ATO confirmed → Decline 10 days, AAN: "Business Verification Failure"</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>If non-ATO → Continue review</span></li>
+              <li><input type="checkbox" onchange="updateProgress()"><span>If ATO team can't resolve within 7 days → Decline 10 days, AAN: "Business Verification Failure"</span></li>
+            </ul>
+            <div class="decline-info">
+              <strong><i class="fas fa-exclamation-triangle"></i> If ATO confirmed:</strong>
+              Decline 10 days — AAN: "Business Verification Failure"
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Auto-Detected Signals -->
+    <div class="section">
+      <div class="section-title"><span class="emoji">📊</span> Auto-Detected Signals</div>
+
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-icon warn"><i class="fas fa-exclamation"></i></div>
+          <h4>Chargeback Analysis</h4>
+          <span class="badge badge-orange">Review Required</span>
+        </div>
+        <div class="signal-detail"><strong>Signal:</strong> 15 disputes in last 12 months, ~$148K total disputed amount</div>
+        <div class="signal-detail"><strong>Assessment:</strong> Check if chargeback GPV &gt; 3% of total GPV</div>
+        <div class="signal-detail"><strong>If yes →</strong> "Decline 180 days — AAN: Chargeback History" (§7.4)</div>
+        <div class="signal-detail"><strong>If chargeback + failed debit for insufficient funds →</strong> "Decline 180 days — AAN: Chargebacks"</div>
+        <div class="signal-assessment assessment-warn">
+          <i class="fas fa-info-circle"></i> Consider escalation to <code>#cap-credit-risk-esc</code> if criteria met
+        </div>
+      </div>
+
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-icon info"><i class="fas fa-file-invoice-dollar"></i></div>
+          <h4>Existing Active Loan</h4>
+          <span class="badge badge-blue">MPO Eligible</span>
+        </div>
+        <div class="signal-detail"><strong>Signal:</strong> Active Flex Loan: $56,700 (Plan Group 14878128, Risk C1, originated)</div>
+        <div class="signal-detail"><strong>Assessment:</strong> MPO eligible — 12th loan, 11 prior plans all closed successfully</div>
+        <div class="signal-detail"><strong>Check:</strong> Is current plan past due? If yes → Decline 90 days, AAN: "Plan Past Due"</div>
+        <div class="signal-assessment assessment-info">
+          <i class="fas fa-check-circle"></i> 11 prior plans closed successfully. Verify current plan is not past due.
+        </div>
+      </div>
+
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-icon ok"><i class="fas fa-chart-line"></i></div>
+          <h4>Processing Activity</h4>
+          <span class="badge badge-green">Healthy</span>
+        </div>
+        <div class="signal-detail"><strong>Signal:</strong> 164 active days in 180 days, avg $2,300/day GPV</div>
+        <div class="signal-detail"><strong>Assessment:</strong> ✅ Healthy — consistent processing, no gaps detected</div>
+        <div class="signal-detail"><strong>CP%:</strong> ~99% card present → ✅ Low fraud risk</div>
+        <div class="signal-assessment assessment-ok">
+          <i class="fas fa-check-circle"></i> Processing activity is consistent and healthy. No concerns.
+        </div>
+      </div>
+
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-icon ok"><i class="fas fa-link"></i></div>
+          <h4>Linked Accounts</h4>
+          <span class="badge badge-green">Clear</span>
+        </div>
+        <div class="signal-detail"><strong>Signal:</strong> No linked accounts with active loans found</div>
+        <div class="signal-detail"><strong>Assessment:</strong> ✅ No CUHOP concerns</div>
+        <div class="signal-assessment assessment-ok">
+          <i class="fas fa-check-circle"></i> No linked account issues detected.
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Passed Checks -->
+    <div class="section">
+      <div class="passed-section">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <h3><span>✅</span> Passed Checks <span class="badge badge-green" style="margin-left:6px">5 passed</span></h3>
+          <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="collapsible-body">
+          <div class="passed-item"><i class="fas fa-check-circle"></i><span class="pass-label">AutoComplianceSfn</span><span class="pass-value">Approved</span></div>
+          <div class="passed-item"><i class="fas fa-check-circle"></i><span class="pass-label">AutoLegalEntity</span><span class="pass-value">Approved</span></div>
+          <div class="passed-item"><i class="fas fa-check-circle"></i><span class="pass-label">Processing Activity</span><span class="pass-value">Healthy</span></div>
+          <div class="passed-item"><i class="fas fa-check-circle"></i><span class="pass-label">Card Present %</span><span class="pass-value">99%</span></div>
+          <div class="passed-item"><i class="fas fa-check-circle"></i><span class="pass-label">Linked Accounts</span><span class="pass-value">No concerns</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Decision Summary -->
+    <div class="section">
+      <div class="section-title"><span class="emoji">📋</span> Decision Summary</div>
+      <div class="decision-section">
+        <div class="progress-bar-container">
+          <div class="progress-label">
+            <span id="progressText">0 of 16 items reviewed</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+        <div class="decision-meta">
+          <div class="meta-item"><strong>Loan Tier:</strong> $115K — Tier: $75K–$250K</div>
+          <div class="meta-item"><strong>Requirements:</strong> LexisNexis + UCC Lien Search required</div>
+          <div class="meta-item"><strong>Application:</strong> A-1WTAWDQDJE0X2F</div>
+          <div class="meta-item"><strong>Overall Assessment:</strong> <span id="overallAssessment" style="color:var(--orange);font-weight:600">Review in progress</span></div>
+        </div>
+        <div class="decision-buttons">
+          <button class="decision-btn d-approve" onclick="showApproveModal()"><i class="fas fa-check-circle"></i> Approve</button>
+          <button class="decision-btn d-decline" onclick="showDeclineModal()"><i class="fas fa-times-circle"></i> Decline</button>
+          <button class="decision-btn d-ssp" onclick="showSSPModal()"><i class="fas fa-envelope"></i> Send SSP</button>
+          <button class="decision-btn d-escalate" onclick="showEscalateModal()"><i class="fas fa-arrow-up-right-from-square"></i> Escalate</button>
+          <button class="decision-btn d-copy" onclick="copyDecisionSummary()"><i class="fas fa-copy"></i> Copy Decision Summary</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6: Escalation Quick Reference -->
+    <div class="section">
+      <div class="passed-section">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <h3><span>📖</span> Escalation Quick Reference</h3>
+          <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="collapsible-body">
+          <table class="ref-table">
+            <thead><tr><th>Team / Function</th><th>Channel / Contact</th></tr></thead>
+            <tbody>
+              <tr><td>Pre-Origination Team Lead</td><td><strong>Keely Villa</strong></td></tr>
+              <tr><td>ATO (Account Takeover)</td><td><code>#sfs-ato</code></td></tr>
+              <tr><td>Compliance</td><td><code>#compliance</code></td></tr>
+              <tr><td>Credit Risk</td><td><code>#cap-credit-risk-esc</code></td></tr>
+              <tr><td>Customer Success</td><td><code>#sfs-ssp-esc</code></td></tr>
+              <tr><td>Fraud Ops</td><td><code>#risk-ops-escalations</code></td></tr>
+              <tr><td>Loan Application Review</td><td><code>#sfs-loan-app-review</code></td></tr>
+              <tr><td>Recovery</td><td><code>#Recovery</code></td></tr>
+              <tr><td>CBD</td><td><code>#cbd</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 7: AAN Quick Reference -->
+    <div class="section">
+      <div class="passed-section">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <h3><span>📖</span> AAN Quick Reference</h3>
+          <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="collapsible-body">
+          <table class="ref-table">
+            <thead><tr><th>AAN Code</th><th>Description</th><th>Decline Window</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Too Many Liens</strong></td><td>More than 4 all-asset liens found in UCC search</td><td>365 days</td></tr>
+              <tr><td><strong>Not Current on Liens</strong></td><td>Seller is not current on existing lien repayment</td><td>365 days</td></tr>
+              <tr><td><strong>Business Verification Failure</strong></td><td>ATO confirmed or unable to verify business identity</td><td>10 days</td></tr>
+              <tr><td><strong>Chargeback History</strong></td><td>Chargeback GPV exceeds 3% of total GPV</td><td>180 days</td></tr>
+              <tr><td><strong>Chargebacks</strong></td><td>Chargebacks + failed debit for insufficient funds</td><td>180 days</td></tr>
+              <tr><td><strong>Plan Past Due</strong></td><td>Current active plan is past due on repayment</td><td>90 days</td></tr>
+              <tr><td><strong>Bankruptcy</strong></td><td>Active bankruptcy found against applicant or account owner</td><td>365 days</td></tr>
+              <tr><td><strong>Financial Claims/Judgments</strong></td><td>Financial claims/judgments &gt;$30K (3yr) or &gt;$50K found</td><td>365 days</td></tr>
+              <tr><td><strong>Insufficient Processing History</strong></td><td>Insufficient or inconsistent processing activity</td><td>90 days</td></tr>
+              <tr><td><strong>High Risk Industry</strong></td><td>Business operates in a restricted or high-risk industry</td><td>365 days</td></tr>
+              <tr><td><strong>Compliance Failure</strong></td><td>Failed compliance or sanctions screening</td><td>365 days</td></tr>
+              <tr><td><strong>Fraud Concern</strong></td><td>Fraud indicators detected on account</td><td>365 days</td></tr>
+              <tr><td><strong>Owner Identity Mismatch</strong></td><td>Owner identity does not match records</td><td>90 days</td></tr>
+              <tr><td><strong>Negative Balance History</strong></td><td>Repeated negative balance or insufficient funds events</td><td>180 days</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Modals -->
+<div class="modal-overlay" id="approveModal">
+  <div class="modal">
+    <h2><i class="fas fa-check-circle" style="color:var(--green)"></i> Approve Application</h2>
+    <p>You are about to approve application <strong>A-1WTAWDQDJE0X2F</strong> for <strong>Y and R Clothing</strong>.</p>
+    <div style="background:var(--green-light);padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:12px;color:#15803d">
+      <strong>Loan Amount:</strong> $115,000 &nbsp;|&nbsp; <strong>Risk Grade:</strong> A2 &nbsp;|&nbsp; <strong>Product:</strong> Flex Loan
+    </div>
+    <label style="font-size:11px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:4px">Regulator Comments (optional)</label>
+    <textarea placeholder="Add any notes for the approval record..."></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal('approveModal')">Cancel</button>
+      <button class="modal-btn confirm-approve" onclick="confirmAction('approved')">Confirm Approval</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="declineModal">
+  <div class="modal">
+    <h2><i class="fas fa-times-circle" style="color:var(--red)"></i> Decline Application</h2>
+    <p>Select an Adverse Action Notice (AAN) and decline window for application <strong>A-1WTAWDQDJE0X2F</strong>.</p>
+    <label style="font-size:11px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:4px">Select AAN Reason</label>
+    <div class="aan-list" id="aanList">
+      <div class="aan-item" onclick="selectAAN(this,'Too Many Liens','365 days')"><strong>Too Many Liens</strong><span>365 days — More than 4 all-asset liens</span></div>
+      <div class="aan-item" onclick="selectAAN(this,'Not Current on Liens','365 days')"><strong>Not Current on Liens</strong><span>365 days — Not current on lien repayment</span></div>
+      <div class="aan-item" onclick="selectAAN(this,'Business Verification Failure','10 days')"><strong>Business Verification Failure</strong><span>10 days — ATO confirmed</span></div>
+      <div class="aan-item" onclick="selectAAN(this,'Chargeback History','180 days')"><strong>Chargeback History</strong><span>180 days — Chargeback GPV &gt; 3%</span></div>
+      <div class="aan-item" onclick="selectAAN(this,'Chargebacks','180 days')"><strong>Chargebacks</strong><span>180 days — Chargebacks + failed debit</span></div>
+      <div class="aan-item" onclick="selectAAN(this,'Plan Past Due','90 days')"><strong>Plan Past Due</strong><span>90 days — Active plan past due</span></div>
+      <div class="aan-item" onclick="selectAAN(this,'Bankruptcy','365 days')"><strong>Bankruptcy</strong><span>365 days — Active bankruptcy found</span></div>
+      <div class="aan-item" onclick="selectAAN(this,'Financial Claims/Judgments','365 days')"><strong>Financial Claims/Judgments</strong><span>365 days — Claims &gt;$30K or &gt;$50K</span></div>
+    </div>
+    <div id="selectedAAN" style="display:none;background:var(--red-light);padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:12px;color:var(--red)">
+      <strong>Selected:</strong> <span id="aanName"></span> — <span id="aanWindow"></span>
+    </div>
+    <label style="font-size:11px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:4px">Regulator Comments</label>
+    <textarea placeholder="Document the reason for decline..."></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal('declineModal')">Cancel</button>
+      <button class="modal-btn confirm-decline" onclick="confirmAction('declined')">Confirm Decline</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="sspModal">
+  <div class="modal">
+    <h2><i class="fas fa-envelope" style="color:var(--blue)"></i> Send SSP</h2>
+    <p>Select an SSP template to send to the seller for application <strong>A-1WTAWDQDJE0X2F</strong>.</p>
+    <label style="font-size:11px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:4px">SSP Template</label>
+    <select id="sspTemplate">
+      <option value="">— Select template —</option>
+      <option value="bank_statements">Bank Statements (last 3 months)</option>
+      <option value="tax_returns">Tax Returns (most recent year)</option>
+      <option value="business_license">Business License / Registration</option>
+      <option value="identity_verification">Identity Verification Documents</option>
+      <option value="financial_statements">Financial Statements</option>
+      <option value="lease_agreement">Lease / Rental Agreement</option>
+      <option value="custom">Custom Request</option>
+    </select>
+    <label style="font-size:11px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:4px">Additional Notes</label>
+    <textarea placeholder="Add specific instructions for the seller..."></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal('sspModal')">Cancel</button>
+      <button class="modal-btn confirm-blue" onclick="confirmAction('ssp_sent')">Send SSP</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="escalateModal">
+  <div class="modal">
+    <h2><i class="fas fa-arrow-up-right-from-square" style="color:var(--orange)"></i> Escalate Application</h2>
+    <p>Select an escalation channel for application <strong>A-1WTAWDQDJE0X2F</strong>.</p>
+    <div class="esc-channels" id="escChannels">
+      <div class="esc-channel" onclick="selectEscChannel(this,'#sfs-ato')"><i class="fas fa-shield-halved"></i> ATO Team <code>#sfs-ato</code></div>
+      <div class="esc-channel" onclick="selectEscChannel(this,'#compliance')"><i class="fas fa-gavel"></i> Compliance <code>#compliance</code></div>
+      <div class="esc-channel" onclick="selectEscChannel(this,'#cap-credit-risk-esc')"><i class="fas fa-chart-line"></i> Credit Risk <code>#cap-credit-risk-esc</code></div>
+      <div class="esc-channel" onclick="selectEscChannel(this,'#sfs-ssp-esc')"><i class="fas fa-headset"></i> Customer Success <code>#sfs-ssp-esc</code></div>
+      <div class="esc-channel" onclick="selectEscChannel(this,'#risk-ops-escalations')"><i class="fas fa-user-secret"></i> Fraud Ops <code>#risk-ops-escalations</code></div>
+      <div class="esc-channel" onclick="selectEscChannel(this,'#sfs-loan-app-review')"><i class="fas fa-file-circle-check"></i> Loan App Review <code>#sfs-loan-app-review</code></div>
+      <div class="esc-channel" onclick="selectEscChannel(this,'Keely Villa')"><i class="fas fa-user-tie"></i> Team Lead <strong>Keely Villa</strong></div>
+    </div>
+    <label style="font-size:11px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:4px">Escalation Reason</label>
+    <textarea placeholder="Describe why this application needs escalation..."></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal('escalateModal')">Cancel</button>
+      <button class="modal-btn confirm-orange" onclick="confirmAction('escalated')">Submit Escalation</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  let selectedAANData = null;
+  let selectedEscData = null;
+  let appLoaded = false;
+
+  function lookupApplication() {
+    const token = document.getElementById('tokenInput').value.trim();
+    if (!token) {
+      showToast('Please enter an application token', 'fas fa-exclamation-circle');
+      return;
+    }
+    document.getElementById('sidebarInfo').style.display = 'block';
+    document.getElementById('sidebarEmpty').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+    appLoaded = true;
+    calculateDays();
+    updateProgress();
+    showToast('Application loaded: ' + token, 'fas fa-check-circle');
+  }
+
+  function calculateDays() {
+    const submitted = new Date(2026, 3, 14);
+    const now = new Date();
+    let days = 3;
+    if (now > submitted) {
+      const diff = Math.floor((now - submitted) / (1000 * 60 * 60 * 24));
+      days = diff;
+    }
+    document.getElementById('daysInReview').textContent = days + ' days';
+    document.getElementById('daysCard').textContent = days;
+    const pct = Math.min((days / 5) * 100, 100);
+    document.getElementById('slaFill').style.width = pct + '%';
+    if (pct > 80) {
+      document.getElementById('slaFill').style.background = 'var(--red)';
+    } else if (pct > 50) {
+      document.getElementById('slaFill').style.background = 'var(--orange)';
+    }
+  }
+
+  function updateProgress() {
+    const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+    const total = checkboxes.length;
+    let checked = 0;
+    checkboxes.forEach(function(cb) {
+      const li = cb.parentElement;
+      if (cb.checked) {
+        checked++;
+        li.classList.add('checked');
+      } else {
+        li.classList.remove('checked');
+      }
+    });
+    const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+    document.getElementById('progressText').textContent = checked + ' of ' + total + ' items reviewed';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+    const assessment = document.getElementById('overallAssessment');
+    if (pct === 100) {
+      assessment.textContent = 'All items reviewed — Ready for decision';
+      assessment.style.color = 'var(--green)';
+    } else if (pct >= 50) {
+      assessment.textContent = 'Review in progress (' + pct + '% complete)';
+      assessment.style.color = 'var(--blue)';
+    } else {
+      assessment.textContent = 'Review in progress (' + pct + '% complete)';
+      assessment.style.color = 'var(--orange)';
+    }
+  }
+
+  function toggleCollapsible(header) {
+    header.classList.toggle('open');
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+  }
+
+  function showApproveModal() {
+    if (!appLoaded) { showToast('Load an application first', 'fas fa-exclamation-circle'); return; }
+    document.getElementById('approveModal').classList.add('show');
+  }
+
+  function showDeclineModal() {
+    if (!appLoaded) { showToast('Load an application first', 'fas fa-exclamation-circle'); return; }
+    selectedAANData = null;
+    document.querySelectorAll('#aanList .aan-item').forEach(function(el) { el.classList.remove('selected'); });
+    document.getElementById('selectedAAN').style.display = 'none';
+    document.getElementById('declineModal').classList.add('show');
+  }
+
+  function showSSPModal() {
+    if (!appLoaded) { showToast('Load an application first', 'fas fa-exclamation-circle'); return; }
+    document.getElementById('sspModal').classList.add('show');
+  }
+
+  function showEscalateModal() {
+    if (!appLoaded) { showToast('Load an application first', 'fas fa-exclamation-circle'); return; }
+    selectedEscData = null;
+    document.querySelectorAll('#escChannels .esc-channel').forEach(function(el) { el.classList.remove('selected'); });
+    document.getElementById('escalateModal').classList.add('show');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+
+  function selectAAN(el, name, window_) {
+    document.querySelectorAll('#aanList .aan-item').forEach(function(item) { item.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedAANData = { name: name, window: window_ };
+    document.getElementById('aanName').textContent = name;
+    document.getElementById('aanWindow').textContent = window_;
+    document.getElementById('selectedAAN').style.display = 'block';
+  }
+
+  function selectEscChannel(el, channel) {
+    document.querySelectorAll('#escChannels .esc-channel').forEach(function(item) { item.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedEscData = channel;
+  }
+
+  function confirmAction(type) {
+    if (type === 'approved') {
+      closeModal('approveModal');
+      showToast('Application APPROVED — Y and R Clothing ($115,000)', 'fas fa-check-circle');
+    } else if (type === 'declined') {
+      if (!selectedAANData) {
+        showToast('Please select an AAN reason', 'fas fa-exclamation-circle');
+        return;
+      }
+      closeModal('declineModal');
+      showToast('Application DECLINED — AAN: ' + selectedAANData.name + ' (' + selectedAANData.window + ')', 'fas fa-times-circle');
+    } else if (type === 'ssp_sent') {
+      const template = document.getElementById('sspTemplate').value;
+      if (!template) {
+        showToast('Please select an SSP template', 'fas fa-exclamation-circle');
+        return;
+      }
+      closeModal('sspModal');
+      showToast('SSP sent to Y and R Clothing', 'fas fa-envelope');
+    } else if (type === 'escalated') {
+      if (!selectedEscData) {
+        showToast('Please select an escalation channel', 'fas fa-exclamation-circle');
+        return;
+      }
+      closeModal('escalateModal');
+      showToast('Escalated to ' + selectedEscData, 'fas fa-arrow-up-right-from-square');
+    }
+  }
+
+  function copyDecisionSummary() {
+    if (!appLoaded) { showToast('Load an application first', 'fas fa-exclamation-circle'); return; }
+    const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+    let checked = 0;
+    checkboxes.forEach(function(cb) { if (cb.checked) checked++; });
+    const total = checkboxes.length;
+
+    const summary = [
+      '=== CREDIT REVIEW DECISION SUMMARY ===',
+      'Application: A-1WTAWDQDJE0X2F',
+      'Business: Y and R Clothing',
+      'Unit Token: L0B1STF8RCJQ1',
+      'Merchant Token: MLDAZTSHYND95',
+      'Location: Houston, TX',
+      'MCC: clothing_and_accessories / Retail',
+      '',
+      'Product: Flex Loan (product_id=3)',
+      'Loan Amount: $115,000',
+      'Total Receivables: $131,330',
+      'Risk Grade: A2',
+      'Hold Rate: 20%',
+      'Origination Type: MPO (12th loan)',
+      'Loan Tier: $75K–$250K (LexisNexis + UCC required)',
+      '',
+      'Submitted: Apr 14, 2026',
+      'Review Progress: ' + checked + '/' + total + ' items (' + Math.round((checked/total)*100) + '%)',
+      '',
+      'BLOCKERS:',
+      '• plan_amount_too_large (Warning) — $115K exceeds $40K threshold',
+      '• has_recent_sketchy_login (Critical) — Suspicious login detected',
+      '',
+      'AUTO-DETECTED SIGNALS:',
+      '• Chargebacks: 15 disputes, ~$148K disputed (Review Required)',
+      '• Active Loan: $56,700 Plan Group 14878128, C1 (MPO Eligible)',
+      '• Processing: 164/180 active days, $2,300/day avg (Healthy)',
+      '• Linked Accounts: None found (Clear)',
+      '',
+      'PASSED CHECKS:',
+      '• AutoComplianceSfn: Approved',
+      '• AutoLegalEntity: Approved',
+      '• Processing Activity: Healthy',
+      '• Card Present %: 99%',
+      '• Linked Accounts: No concerns',
+      '',
+      'Decision: _______________',
+      'AAN (if decline): _______________',
+      'Reviewer: _______________',
+      'Date: ' + new Date().toLocaleDateString(),
+      '======================================='
+    ].join('\n');
+
+    navigator.clipboard.writeText(summary).then(function() {
+      showToast('Decision summary copied to clipboard', 'fas fa-copy');
+    }).catch(function() {
+      const ta = document.createElement('textarea');
+      ta.value = summary;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast('Decision summary copied to clipboard', 'fas fa-copy'); }
+      catch(e) { showToast('Failed to copy — please copy manually', 'fas fa-exclamation-circle'); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  function showToast(message, icon) {
+    const toast = document.getElementById('toast');
+    toast.innerHTML = '<i class="' + icon + '"></i> ' + message;
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 3000);
+  }
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        overlay.classList.remove('show');
+      }
+    });
+  });
+
+  // Auto-load on Enter key
+  document.getElementById('tokenInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') lookupApplication();
+  });
+</script>
+</body>
+</html>
