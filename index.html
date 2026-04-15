@@ -146,10 +146,92 @@ body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:var(--tex
 .elig-no-failures{padding:20px;text-align:center;color:var(--text-muted);font-size:13px}
 .elig-category-body .no-items-msg{padding:12px 0;font-size:13px;color:var(--text-muted);font-style:italic}
 
+/* CROP Section Styles */
+.crop-outer{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;overflow:hidden}
+.crop-main-header{padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;transition:background .15s;background:linear-gradient(135deg,#162538 0%,#1a3050 100%);border-bottom:1px solid var(--border-color)}
+.crop-main-header:hover{background:linear-gradient(135deg,#1a2d42 0%,#1e3858 100%)}
+.crop-main-header .crop-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;flex-shrink:0}
+.crop-main-header .crop-title-wrap{flex:1}
+.crop-main-header .crop-title{font-size:15px;font-weight:700;color:var(--text-primary)}
+.crop-main-header .crop-subtitle{font-size:11px;color:var(--text-secondary);font-weight:500;margin-top:2px}
+.crop-main-header .crop-chevron{color:var(--text-muted);font-size:14px;transition:transform .25s}
+.crop-main-header .crop-chevron.open{transform:rotate(180deg)}
+.crop-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.crop-body.open{max-height:50000px}
+.crop-search-bar{padding:12px 20px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);display:flex;gap:10px;align-items:center}
+.crop-search-input{flex:1;padding:9px 14px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;color:var(--text-primary);font-size:13px;font-family:inherit;font-weight:500;transition:border-color .2s}
+.crop-search-input:focus{outline:none;border-color:var(--accent-blue)}
+.crop-search-input::placeholder{color:var(--text-muted)}
+.crop-search-count{font-size:11px;color:var(--text-muted);font-weight:600;white-space:nowrap}
+.crop-subsection{border-bottom:1px solid var(--border-color)}
+.crop-subsection:last-child{border-bottom:none}
+.crop-subsection.hidden{display:none}
+.crop-sub-header{padding:11px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s}
+.crop-sub-header:hover{background:var(--bg-card-hover)}
+.crop-sub-header .sub-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.crop-sub-header .sub-icon.si-blockers{background:rgba(239,68,68,.12);color:#f87171}
+.crop-sub-header .sub-icon.si-linked{background:rgba(59,130,246,.12);color:#60a5fa}
+.crop-sub-header .sub-icon.si-processing{background:rgba(168,85,247,.12);color:#c084fc}
+.crop-sub-header .sub-icon.si-compliance{background:rgba(234,179,8,.12);color:#facc15}
+.crop-sub-header .sub-icon.si-aan{background:rgba(249,115,22,.12);color:#fb923c}
+.crop-sub-header .sub-icon.si-escalation{background:rgba(34,197,94,.12);color:#4ade80}
+.crop-sub-header .sub-icon.si-sla{background:rgba(56,189,248,.12);color:#38bdf8}
+.crop-sub-header .sub-icon.si-threshold{background:rgba(244,114,182,.12);color:#f472b6}
+.crop-sub-header .sub-name{font-size:13px;font-weight:600;flex:1;color:var(--text-primary)}
+.crop-sub-header .sub-count{font-size:11px;color:var(--text-muted);font-weight:500}
+.crop-sub-header .sub-chevron{color:var(--text-muted);font-size:11px;transition:transform .2s}
+.crop-sub-header .sub-chevron.open{transform:rotate(180deg)}
+.crop-sub-body{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 20px}
+.crop-sub-body.open{max-height:8000px;padding:8px 20px 16px}
+.crop-item{padding:10px 12px;border-radius:8px;margin-bottom:6px;background:var(--bg-secondary);border:1px solid rgba(42,58,74,.5);transition:all .15s}
+.crop-item:last-child{margin-bottom:0}
+.crop-item.hidden{display:none}
+.crop-item:hover{border-color:rgba(59,130,246,.25)}
+.crop-item-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.crop-item-title .ci-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px}
+.ci-tag-decline{background:rgba(239,68,68,.15);color:#f87171}
+.ci-tag-escalate{background:rgba(234,179,8,.15);color:#facc15}
+.ci-tag-approve{background:rgba(34,197,94,.15);color:#4ade80}
+.ci-tag-review{background:rgba(59,130,246,.15);color:#60a5fa}
+.ci-tag-wait{background:rgba(168,85,247,.15);color:#c084fc}
+.crop-item-desc{font-size:12px;color:var(--text-secondary);line-height:1.5;font-weight:400}
+.crop-item-desc strong{color:var(--text-primary);font-weight:600}
+.crop-item-desc .hl{color:var(--accent-blue);font-weight:600}
+.crop-item-desc .warn{color:#fb923c;font-weight:600}
+.crop-item-desc .danger{color:#f87171;font-weight:600}
+.crop-item-desc .ok{color:#4ade80;font-weight:600}
+.crop-esc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.crop-esc-card{background:var(--bg-secondary);border:1px solid rgba(42,58,74,.5);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;transition:border-color .15s}
+.crop-esc-card:hover{border-color:rgba(59,130,246,.3)}
+.crop-esc-card .esc-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.crop-esc-card .esc-icon.esc-lead{background:rgba(59,130,246,.12);color:#60a5fa}
+.crop-esc-card .esc-icon.esc-slack{background:rgba(168,85,247,.12);color:#c084fc}
+.crop-esc-card .esc-info .esc-label{font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.crop-esc-card .esc-info .esc-value{font-size:13px;font-weight:600;color:var(--text-primary);margin-top:1px}
+.crop-aan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+.crop-aan-item{background:var(--bg-secondary);border:1px solid rgba(42,58,74,.5);border-radius:6px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:8px}
+.crop-aan-item i{color:var(--accent-orange);font-size:10px}
+.crop-aan-item.hidden{display:none}
+.crop-sla-table{width:100%;border-collapse:collapse}
+.crop-sla-table th{text-align:left;padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-secondary);background:var(--bg-primary);border-bottom:1px solid var(--border-color)}
+.crop-sla-table td{padding:8px 12px;font-size:13px;font-weight:500;border-bottom:1px solid rgba(42,58,74,.4)}
+.crop-sla-table tr:last-child td{border-bottom:none}
+.crop-threshold-table{width:100%;border-collapse:collapse}
+.crop-threshold-table th{text-align:left;padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-secondary);background:var(--bg-primary);border-bottom:1px solid var(--border-color)}
+.crop-threshold-table td{padding:8px 12px;font-size:13px;font-weight:500;border-bottom:1px solid rgba(42,58,74,.4)}
+.crop-threshold-table tr:last-child td{border-bottom:none}
+.crop-threshold-table .tier-badge{display:inline-flex;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.tier-standard{background:rgba(34,197,94,.12);color:#4ade80}
+.tier-full{background:rgba(59,130,246,.12);color:#60a5fa}
+.tier-enhanced{background:rgba(234,179,8,.12);color:#facc15}
+.tier-max{background:rgba(239,68,68,.12);color:#f87171}
+mark{background:rgba(59,130,246,.25);color:var(--text-primary);border-radius:2px;padding:0 2px}
+
 @media(max-width:900px){
 .header{padding:16px}.main{padding:16px}.search-bar{flex-wrap:wrap}.search-input{min-width:200px}
 .chart-row{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}.cards-7,.cards-5,.cards-4{grid-template-columns:repeat(2,1fr)}
 .eligibility-header{flex-direction:column;align-items:flex-start}
+.crop-esc-grid{grid-template-columns:1fr}.crop-aan-grid{grid-template-columns:1fr}
 }
 @media(max-width:600px){.cards-7,.cards-5,.cards-4,.cards-3{grid-template-columns:1fr}}
 .fade-in{animation:fadeIn .5s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -159,9 +241,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:var(--tex
   "@context": "urn:goose.ai:schema",
   "@type": "GooseApp",
   "name": "flex-loan-manager",
-  "description": "Internal ops tool for Square Capital Flex Loan lookup, eligibility checks, and merchant dashboards",
+  "description": "Internal ops tool for Square Capital Flex Loan lookup, eligibility, and CROP review reference",
   "width": 1600,
-  "height": 900,
+  "height": 1000,
   "resizable": true,
   "mcpServers": [
     "apps"
@@ -172,7 +254,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:var(--tex
 # Flex Loan Manager Bot — Internal Tool
 
 ## Overview
-An internal operations tool for Square Capital teams to look up a merchant by their **Unit Token** and view a comprehensive dashboard of their Flex Loan performance, GPV trends, repayment progress, risk grade, business health signals, loan eligibility, and linked accounts.
+An internal operations tool for Square Capital teams to look up a merchant by their **Unit Token** and view a comprehensive dashboard of their Flex Loan performance, GPV trends, repayment progress, risk grade, business health signals, loan eligibility, linked accounts, and **Credit Review Operating Procedures (CROP)** reference.
 
 ## Design
 - Dark professional theme with a modern dashboard feel (dark navy/charcoal background, accent colors for status)
@@ -194,14 +276,14 @@ Realistic mock data generated deterministically from token string via seeded PRN
 ### Section 1: Merchant Overview (top row of cards)
 - Merchant Name, Unit Token, Risk Grade (colored badge), Merchant Status, Business Category, Days Since Activation, Country
 
-### Section 2: Active Flex Loans (table) — MOVED TO TOP
+### Section 2: Active Flex Loans (table)
 - Table showing all active flex loans immediately after Merchant Overview
 - Columns: Plan Group ID, Status, Financed, Fee, Receivables, Hold Rate, Risk, Activated, Origination
 - Color-coded status badges
 - Clicking a row selects it and updates Repayment Progress below
 - If NO active loans exist, shows "No Active Flex Loans" message and directs to Loan Eligibility section
 
-### Section 3: Loan Eligibility (NEW — shown when NO active offer)
+### Section 3: Loan Eligibility (shown when NO active offer)
 - Appears only when the merchant has no active Flex Loan offer
 - Shows a comprehensive checklist of 44 eligibility rules organized into 6 categories
 - Summary header: "X of 44 eligibility checks failed" with red/green indicator
@@ -210,35 +292,52 @@ Realistic mock data generated deterministically from token string via seeded PRN
 - Categories with failures auto-expand; others start collapsed
 
 **Categories and Rules:**
-1. **Account Standing** (7 rules): account_deleted, not_activated, customer_is_blacklisted, compliance_hashtag_violation_eligibility, frozen, frozen_recently, suspected
-2. **Processing Activity** (9 rules): trailing year active days/payments/amounts, annualized sales, recent activity checks, processing time minimums, card diversity
-3. **Business Health Slumps** (4 rules): payment amount/count/active days slumps, weekly sales threshold
-4. **Chargeback & Disputes** (4 rules): chargeback amounts (12wk/1yr), count limits, active reserves
-5. **Existing Loan Status** (11 rules): past due, written off, breached, transferred, canceled, declined, prepayment activity, MPO eligibility, outstanding applications
-6. **Business Type & Limits** (9 rules): blacklisted/blocked types, ineligible states, payment limits, offer amount limits, sales projections, hold rate validation, risk score limits
+1. **Account Standing** (7 rules)
+2. **Processing Activity** (9 rules)
+3. **Business Health Slumps** (4 rules)
+4. **Chargeback & Disputes** (4 rules)
+5. **Existing Loan Status** (11 rules)
+6. **Business Type & Limits** (9 rules)
 
-Each rule shows: pass (green check) or fail (red X), rule key (monospace), human-readable description.
-Mock data: 1-4 randomly failed rules when no active loans.
+### Section 4: Credit Review Reference (CROP) — NEW
+A collapsible reference section for Credit Analysts during manual review. Defaults to **collapsed**. Contains a keyword search bar and 8 collapsible subsections:
 
-### Section 4: Linked Accounts with Active Loans
+1. **Application Blockers Quick Reference** (20 blockers) — Searchable/filterable list of all manual review blockers with procedures, tagged as Decline/Review/Escalate/Wait/Approve
+2. **Linked Account Review (Section 7.3)** (4 procedures) — Guidance for reviewing connected user graph: Negative Balance, Frozen/Deactivated, Bankruptcy, Evasion
+3. **Processing Activity Checks (Section 7.4)** (7 procedures) — Risk Score Exceeded, Large $ Outliers, Non-Seasonal Gaps, Seasonal Gaps, Bank Change, Refunds/Chargebacks, Failed Debits
+4. **Compliance Checks (Section 7.7)** (5 procedures) — Cash Advancing, Prepaid/Gift Card Abuse, Open LegitScript, CBD, Firearms
+5. **Adverse Action Notices (AANs)** (19 notices) — Quick reference grid of all AAN types
+6. **Escalation Channels** (9 channels) — Contact cards for Pre-Origination Lead, ATO, Compliance, Credit Risk, Customer Success, Fraud Ops, Loan App Review, Recovery, CBD
+7. **SLA Reference** (3 SLAs) — Table with internal/external SLAs for New Applications, SSP Responses, Complaints
+8. **Loan Size Thresholds** (4 tiers) — Table with review requirements per tier: Standard (≤$10K), Full CROP ($10K-$75K), Enhanced ($75K-$250K), Maximum (>$250K)
+
+**CROP Features:**
+- Entire section collapsible with blue/navy gradient header
+- Each subsection independently collapsible with chevron icons
+- Search bar at top filters all procedures/items by keyword
+- Search shows match count and auto-expands matching subsections
+- Color-coded action tags (Decline=red, Escalate=yellow, Approve=green, Review=blue, Wait=purple)
+- Styled consistently with the dark dashboard theme
+
+### Section 5: Linked Accounts with Active Loans
 - Table of linked unit tokens with clickable navigation
 - Shows business name, location, active loan count, total financed, status, risk grade
 - 0-3 linked accounts per token
 
-### Section 5: Repayment Progress (selected loan — only shown with active loans)
+### Section 6: Repayment Progress (selected loan — only shown with active loans)
 - Donut chart + repayment curve line chart
 - Key metrics: Total Receivables, Cumulative Repaid, Outstanding, Repayment Fraction, Days Active, Est. Duration, Projected Payoff
 
-### Section 6: GPV Trends
+### Section 7: GPV Trends
 - Daily GPV line chart (180 days) with 30-day rolling average
 - Anomaly highlighting (spikes/drops)
 - Summary cards: Last 30/90 Days GPV, Avg Daily, Trend, Projected Monthly
 
-### Section 7: Business Health Signals
+### Section 8: Business Health Signals
 - Alert flags (colored banners) — includes "NO ACTIVE OFFER" alert when applicable
 - Chargeback summary cards and monthly stacked bar chart
 
-### Section 8: Projected Loan Payoff (only shown with active loans)
+### Section 9: Projected Loan Payoff (only shown with active loans)
 - Repayment pace, projected payoff dates (current, +10%, -20%)
 - Visual timeline progress bar
 
@@ -248,6 +347,7 @@ Mock data: 1-4 randomly failed rules when no active loans.
 - Clicking loan row updates Repayment Progress
 - Eligibility toggle switches between Failed Only / All Checks views
 - Category headers collapse/expand rule lists
+- CROP section: main toggle, subsection toggles, keyword search with auto-expand
 - Copy Report includes eligibility failures when no active loans
 - All charts animate on load with hover tooltips
 
@@ -311,8 +411,7 @@ const locationSuffixes=['Main St','Downtown','Westside','East Branch','North Pla
 // ========== ELIGIBILITY RULES ==========
 const ELIGIBILITY_RULES = {
 'Account Standing': {
-  icon: 'fas fa-user-shield',
-  cssClass: 'cat-account',
+  icon: 'fas fa-user-shield', cssClass: 'cat-account',
   rules: [
     {key:'account_deleted', desc:'The merchant\'s Square linked account is currently deleted.'},
     {key:'not_activated', desc:'The merchant is currently not activated.'},
@@ -324,8 +423,7 @@ const ELIGIBILITY_RULES = {
   ]
 },
 'Processing Activity': {
-  icon: 'fas fa-chart-bar',
-  cssClass: 'cat-processing',
+  icon: 'fas fa-chart-bar', cssClass: 'cat-processing',
   rules: [
     {key:'trailing_one_year_active_day_count_less_than_minimum', desc:'Fewer than 20 active days in the last year.'},
     {key:'trailing_one_year_payment_count_less_than_minimum', desc:'Fewer than 50 payments in the last year.'},
@@ -339,8 +437,7 @@ const ELIGIBILITY_RULES = {
   ]
 },
 'Business Health Slumps': {
-  icon: 'fas fa-chart-line-down',
-  cssClass: 'cat-slumps',
+  icon: 'fas fa-chart-line', cssClass: 'cat-slumps',
   rules: [
     {key:'in_payment_amount_slump', desc:'Card sales in past 4 weeks < half of average 4-week amount.'},
     {key:'in_payment_count_slump', desc:'Payment count in past 4 weeks < half of average 4-week count.'},
@@ -349,8 +446,7 @@ const ELIGIBILITY_RULES = {
   ]
 },
 'Chargeback & Disputes': {
-  icon: 'fas fa-exclamation-triangle',
-  cssClass: 'cat-chargebacks',
+  icon: 'fas fa-exclamation-triangle', cssClass: 'cat-chargebacks',
   rules: [
     {key:'chargeback_amount_too_large_last_twelve_weeks', desc:'Chargeback amount in past 12 weeks > 3% of net sales.'},
     {key:'chargeback_amount_too_large_last_year', desc:'Chargeback amount in past year > 3% of net sales.'},
@@ -359,8 +455,7 @@ const ELIGIBILITY_RULES = {
   ]
 },
 'Existing Loan Status': {
-  icon: 'fas fa-file-contract',
-  cssClass: 'cat-loans',
+  icon: 'fas fa-file-contract', cssClass: 'cat-loans',
   rules: [
     {key:'plan_past_due', desc:'Open plan is in a past due state.'},
     {key:'plan_written_off', desc:'Previously written off MCA plan.'},
@@ -376,8 +471,7 @@ const ELIGIBILITY_RULES = {
   ]
 },
 'Business Type & Limits': {
-  icon: 'fas fa-building',
-  cssClass: 'cat-business',
+  icon: 'fas fa-building', cssClass: 'cat-business',
   rules: [
     {key:'business_type_blacklisted', desc:'Business type is charitable_orgs, charitable_social_service_organizations, or political_organizations.'},
     {key:'business_type_blocked', desc:'Business type blocked (same restricted categories).'},
@@ -394,9 +488,7 @@ const ELIGIBILITY_RULES = {
 
 function getAllRuleKeys(){
 const keys=[];
-for(const cat of Object.values(ELIGIBILITY_RULES)){
-  for(const rule of cat.rules){keys.push(rule.key)}
-}
+for(const cat of Object.values(ELIGIBILITY_RULES)){for(const rule of cat.rules){keys.push(rule.key)}}
 return keys;
 }
 
@@ -421,15 +513,12 @@ return {results,totalRules:allKeys.length,failedCount:failedKeys.size};
 
 function generateLinkedToken(rng){
 const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-let token='';
-for(let i=0;i<13;i++){token+=chars[rng.int(0,chars.length-1)]}
-return token;
+let token='';for(let i=0;i<13;i++){token+=chars[rng.int(0,chars.length-1)]}return token;
 }
 
 function generateLinkedAccounts(token){
 const r=new SeededRNG(token+'_linked_accounts_v2');
-const numLinked=r.int(0,3);
-const linked=[];
+const numLinked=r.int(0,3);const linked=[];
 for(let i=0;i<numLinked;i++){
 const linkedToken=generateLinkedToken(r);
 if(linkedToken===token)continue;
@@ -437,16 +526,11 @@ const lr=new SeededRNG(linkedToken);
 const bizName=lr.pick(firstNames)+' '+lr.pick(lastNames);
 const locationName=bizName+' — '+r.pick(locationSuffixes);
 const numActiveLoans=r.int(1,3);
-let totalFinanced=0;
-const loanStatuses=[];
-for(let j=0;j<numActiveLoans;j++){
-totalFinanced+=r.int(5000,100000)*100;
-loanStatuses.push(r.pick(['originated','allocated']));
-}
+let totalFinanced=0;const loanStatuses=[];
+for(let j=0;j<numActiveLoans;j++){totalFinanced+=r.int(5000,100000)*100;loanStatuses.push(r.pick(['originated','allocated']))}
 const riskGrades=['A','A','B','B','B','C','C','D'];
 const risk=r.pick(riskGrades);
-const primaryStatus=loanStatuses[0];
-linked.push({unitToken:linkedToken,businessName:bizName,locationName:locationName,activeLoanCount:numActiveLoans,totalFinanced:totalFinanced,status:primaryStatus,risk:risk});
+linked.push({unitToken:linkedToken,businessName:bizName,locationName:locationName,activeLoanCount:numActiveLoans,totalFinanced:totalFinanced,status:loanStatuses[0],risk:risk});
 }
 return linked;
 }
@@ -460,11 +544,8 @@ const isActive=r.next()>0.1;
 const category=r.pick(categories);
 const daysActive=r.int(120,1800);
 const activationDate=addDays(new Date(),-daysActive);
-
-// Determine if this merchant has active loans (some don't — for eligibility demo)
 const hasActiveOfferRoll=r.next();
-const hasActiveLoans=hasActiveOfferRoll>0.25; // 75% have active loans, 25% don't
-
+const hasActiveLoans=hasActiveOfferRoll>0.25;
 const numLoans=hasActiveLoans?r.int(1,4):0;
 const loans=[];
 for(let i=0;i<numLoans;i++){
@@ -483,23 +564,15 @@ const estDuration=r.int(180,540);
 const planId='PG'+token.substring(0,4)+r.int(1000,9999);
 loans.push({planId,status:loanStatus,financed,fee,receivables,holdRate,risk:loanRisk,activated:loanActivated,daysAgo:loanDaysAgo,origType:r.pick(origTypes),repayFrac,cumRepaid,outstanding:receivables-cumRepaid,estDuration});
 }
-
-// GPV data (180 days)
-const baseGPV=r.range(500,5000);
-const gpvData=[];
-const today=new Date();
+const baseGPV=r.range(500,5000);const gpvData=[];const today=new Date();
 for(let i=179;i>=0;i--){
 const date=addDays(today,-i);
 const seasonal=1+0.2*Math.sin((i/30)*Math.PI);
 const trend=1+(r.next()-0.48)*0.02;
 const noise=r.range(0.4,1.8);
-const val=Math.max(0,baseGPV*seasonal*trend*noise);
-gpvData.push({date,value:val});
+gpvData.push({date,value:Math.max(0,baseGPV*seasonal*trend*noise)});
 }
-
-// Chargebacks (12 months)
-const cbData=[];
-const baseRate=r.range(0.003,0.035);
+const cbData=[];const baseRate=r.range(0.003,0.035);
 for(let i=11;i>=0;i--){
 const month=new Date(today.getFullYear(),today.getMonth()-i,1);
 const totalPayments=r.int(80,400);
@@ -510,36 +583,25 @@ const pending=cbCount-won-lost;
 const avgAmount=r.range(20,200);
 cbData.push({month,total:cbCount,won:Math.max(0,won),lost:Math.max(0,lost),pending:Math.max(0,pending),amount:cbCount*avgAmount,totalPayments});
 }
-
-const linkedAccounts=generateLinkedAccounts(token);
-const eligibility=generateEligibilityData(token,hasActiveLoans);
-
-return{merchantName,token,risk:merchantRisk,isActive,category,daysActive,activationDate,loans,gpvData,cbData,linkedAccounts,hasActiveLoans,eligibility};
+return{merchantName,token,risk:merchantRisk,isActive,category,daysActive,activationDate,loans,gpvData,cbData,linkedAccounts:generateLinkedAccounts(token),hasActiveLoans,eligibility:generateEligibilityData(token,hasActiveLoans)};
 }
 
-let currentData=null;
-let selectedLoanIdx=0;
-let eligibilityViewMode='failed'; // 'failed' or 'all'
-let eligibilityCategoryStates={}; // track open/closed per category
+let currentData=null;let selectedLoanIdx=0;
+let eligibilityViewMode='failed';let eligibilityCategoryStates={};
+let cropMainOpen=false;let cropSubStates={};let cropSearchTerm='';
 
 function lookupMerchant(tokenOverride){
 const token=tokenOverride||document.getElementById('tokenInput').value.trim().toUpperCase();
 if(!token){document.getElementById('tokenInput').focus();return}
 document.getElementById('tokenInput').value=token;
-const btn=document.getElementById('lookupBtn');
-const spin=document.getElementById('spinner');
-const icon=btn.querySelector('i');
-spin.style.display='inline-block';icon.style.display='none';
-btn.disabled=true;
+const btn=document.getElementById('lookupBtn');const spin=document.getElementById('spinner');const icon=btn.querySelector('i');
+spin.style.display='inline-block';icon.style.display='none';btn.disabled=true;
 setTimeout(()=>{
-destroyCharts();
-currentData=generateData(token);
-selectedLoanIdx=0;
-eligibilityViewMode='failed';
-eligibilityCategoryStates={};
+destroyCharts();currentData=generateData(token);selectedLoanIdx=0;
+eligibilityViewMode='failed';eligibilityCategoryStates={};
+cropMainOpen=false;cropSubStates={};cropSearchTerm='';
 renderDashboard();
-spin.style.display='none';icon.style.display='inline';
-btn.disabled=false;
+spin.style.display='none';icon.style.display='inline';btn.disabled=false;
 document.getElementById('emptyState').style.display='none';
 document.getElementById('dashboard').style.display='block';
 document.getElementById('copyBtn').style.display='flex';
@@ -548,110 +610,439 @@ window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function lookupLinkedAccount(token){lookupMerchant(token)}
-
 document.getElementById('tokenInput').addEventListener('keydown',e=>{if(e.key==='Enter')lookupMerchant()});
 
-function riskBadge(g){
-const m={A:'badge-green',B:'badge-blue',C:'badge-yellow',D:'badge-orange',F:'badge-red'};
-return '<span class="badge '+(m[g]||'badge-gray')+'">'+g+'</span>';
-}
-function riskBadgeLg(g){
-const m={A:'badge-green',B:'badge-blue',C:'badge-yellow',D:'badge-orange',F:'badge-red'};
-return '<span class="badge badge-large '+(m[g]||'badge-gray')+'">'+g+'</span>';
-}
-function statusBadge(s){
-const m={originated:'badge-blue',allocated:'badge-green',closed:'badge-gray',charged_off:'badge-red',breached:'badge-orange'};
-return '<span class="badge '+(m[s]||'badge-gray')+'">'+s.replace('_',' ').toUpperCase()+'</span>';
-}
+function riskBadge(g){const m={A:'badge-green',B:'badge-blue',C:'badge-yellow',D:'badge-orange',F:'badge-red'};return '<span class="badge '+(m[g]||'badge-gray')+'">'+g+'</span>'}
+function riskBadgeLg(g){const m={A:'badge-green',B:'badge-blue',C:'badge-yellow',D:'badge-orange',F:'badge-red'};return '<span class="badge badge-large '+(m[g]||'badge-gray')+'">'+g+'</span>'}
+function statusBadge(s){const m={originated:'badge-blue',allocated:'badge-green',closed:'badge-gray',charged_off:'badge-red',breached:'badge-orange'};return '<span class="badge '+(m[s]||'badge-gray')+'">'+s.replace('_',' ').toUpperCase()+'</span>'}
 
-function toggleEligibilityView(mode){
-eligibilityViewMode=mode;
-renderEligibilitySection();
-}
-
+function toggleEligibilityView(mode){eligibilityViewMode=mode;renderEligibilitySection()}
 function toggleEligibilityCategory(catName){
 eligibilityCategoryStates[catName]=!eligibilityCategoryStates[catName];
-const body=document.getElementById('elig-body-'+catName.replace(/[^a-zA-Z]/g,''));
-const chevron=document.getElementById('elig-chev-'+catName.replace(/[^a-zA-Z]/g,''));
-if(body&&chevron){
-  if(eligibilityCategoryStates[catName]){
-    body.classList.add('open');
-    chevron.classList.add('open');
-  } else {
-    body.classList.remove('open');
-    chevron.classList.remove('open');
-  }
-}
+const catId=catName.replace(/[^a-zA-Z]/g,'');
+const body=document.getElementById('elig-body-'+catId);
+const chevron=document.getElementById('elig-chev-'+catId);
+if(body&&chevron){body.classList.toggle('open',eligibilityCategoryStates[catName]);chevron.classList.toggle('open',eligibilityCategoryStates[catName])}
 }
 
 function renderEligibilitySection(){
 if(!currentData||currentData.hasActiveLoans)return;
-const el=document.getElementById('eligibilityContent');
-if(!el)return;
-const elig=currentData.eligibility;
-const mode=eligibilityViewMode;
-
-let html='';
-html+=`<div class="eligibility-header">
+const el=document.getElementById('eligibilityContent');if(!el)return;
+const elig=currentData.eligibility;const mode=eligibilityViewMode;
+let html=`<div class="eligibility-header">
 <div class="eligibility-summary">
-  <span class="count-badge ${elig.failedCount>0?'has-failures':'all-pass'}">
-    ${elig.failedCount>0?'<i class="fas fa-times-circle"></i>':'<i class="fas fa-check-circle"></i>'}
-    &nbsp;${elig.failedCount} of ${elig.totalRules} checks failed
-  </span>
-  <span class="summary-text">${elig.failedCount>0?'This seller is not eligible for a Flex Loan offer':'All eligibility checks passed'}</span>
+<span class="count-badge ${elig.failedCount>0?'has-failures':'all-pass'}">
+${elig.failedCount>0?'<i class="fas fa-times-circle"></i>':'<i class="fas fa-check-circle"></i>'}
+&nbsp;${elig.failedCount} of ${elig.totalRules} checks failed
+</span>
+<span class="summary-text">${elig.failedCount>0?'This seller is not eligible for a Flex Loan offer':'All eligibility checks passed'}</span>
 </div>
 <div class="eligibility-toggle">
-  <button class="${mode==='failed'?'active':''}" onclick="toggleEligibilityView('failed')"><i class="fas fa-times-circle"></i>&nbsp; Failed Only</button>
-  <button class="${mode==='all'?'active':''}" onclick="toggleEligibilityView('all')"><i class="fas fa-list-check"></i>&nbsp; All Checks</button>
-</div>
-</div>`;
-
+<button class="${mode==='failed'?'active':''}" onclick="toggleEligibilityView('failed')"><i class="fas fa-times-circle"></i>&nbsp; Failed Only</button>
+<button class="${mode==='all'?'active':''}" onclick="toggleEligibilityView('all')"><i class="fas fa-list-check"></i>&nbsp; All Checks</button>
+</div></div>`;
 for(const [catName,catData] of Object.entries(elig.results)){
-  const catId=catName.replace(/[^a-zA-Z]/g,'');
-  const failedInCat=catData.rules.filter(r=>!r.passed);
-  const passedInCat=catData.rules.filter(r=>r.passed);
-  const rulesToShow=mode==='failed'?failedInCat:catData.rules;
-
-  // In failed-only mode, skip categories with no failures
-  if(mode==='failed'&&failedInCat.length===0)continue;
-
-  // Default: categories with failures start open, others closed
-  if(eligibilityCategoryStates[catName]===undefined){
-    eligibilityCategoryStates[catName]=failedInCat.length>0;
-  }
-  const isOpen=eligibilityCategoryStates[catName];
-
-  html+=`<div class="elig-category">
-  <div class="elig-category-header" onclick="toggleEligibilityCategory('${catName}')">
-    <div class="cat-icon ${catData.cssClass}"><i class="${catData.icon}"></i></div>
-    <span class="cat-name">${catName}</span>
-    <div class="cat-stats">
-      ${failedInCat.length>0?'<span class="fail-count"><i class="fas fa-times"></i> '+failedInCat.length+' failed</span>':''}
-      <span class="pass-count"><i class="fas fa-check"></i> ${passedInCat.length} passed</span>
-    </div>
-    <i class="fas fa-chevron-down cat-chevron ${isOpen?'open':''}" id="elig-chev-${catId}"></i>
-  </div>
-  <div class="elig-category-body ${isOpen?'open':''}" id="elig-body-${catId}">`;
-
-  if(rulesToShow.length===0){
-    html+=`<div class="no-items-msg">No failed checks in this category</div>`;
-  } else {
-    for(const rule of rulesToShow){
-      const icon=rule.passed?'<div class="rule-icon pass"><i class="fas fa-check"></i></div>':'<div class="rule-icon fail"><i class="fas fa-times"></i></div>';
-      html+=`<div class="elig-rule">
-        ${icon}
-        <div class="rule-content">
-          <div class="rule-key">${rule.key}</div>
-          <div class="rule-desc ${rule.passed?'':'fail-desc'}">${rule.desc}</div>
-        </div>
-      </div>`;
-    }
-  }
-
-  html+=`</div></div>`;
+const catId=catName.replace(/[^a-zA-Z]/g,'');
+const failedInCat=catData.rules.filter(r=>!r.passed);const passedInCat=catData.rules.filter(r=>r.passed);
+const rulesToShow=mode==='failed'?failedInCat:catData.rules;
+if(mode==='failed'&&failedInCat.length===0)continue;
+if(eligibilityCategoryStates[catName]===undefined)eligibilityCategoryStates[catName]=failedInCat.length>0;
+const isOpen=eligibilityCategoryStates[catName];
+html+=`<div class="elig-category"><div class="elig-category-header" onclick="toggleEligibilityCategory('${catName}')">
+<div class="cat-icon ${catData.cssClass}"><i class="${catData.icon}"></i></div>
+<span class="cat-name">${catName}</span>
+<div class="cat-stats">${failedInCat.length>0?'<span class="fail-count"><i class="fas fa-times"></i> '+failedInCat.length+' failed</span>':''}<span class="pass-count"><i class="fas fa-check"></i> ${passedInCat.length} passed</span></div>
+<i class="fas fa-chevron-down cat-chevron ${isOpen?'open':''}" id="elig-chev-${catId}"></i>
+</div><div class="elig-category-body ${isOpen?'open':''}" id="elig-body-${catId}">`;
+if(rulesToShow.length===0){html+=`<div class="no-items-msg">No failed checks in this category</div>`}
+else{for(const rule of rulesToShow){
+const icon=rule.passed?'<div class="rule-icon pass"><i class="fas fa-check"></i></div>':'<div class="rule-icon fail"><i class="fas fa-times"></i></div>';
+html+=`<div class="elig-rule">${icon}<div class="rule-content"><div class="rule-key">${rule.key}</div><div class="rule-desc ${rule.passed?'':'fail-desc'}">${rule.desc}</div></div></div>`;
+}}
+html+=`</div></div>`;
+}
+el.innerHTML=html;
 }
 
-el.innerHTML=html;
+// ========== CROP SECTION ==========
+function toggleCropMain(){
+cropMainOpen=!cropMainOpen;
+const body=document.getElementById('cropBody');
+const chev=document.getElementById('cropMainChevron');
+if(body){body.classList.toggle('open',cropMainOpen)}
+if(chev){chev.classList.toggle('open',cropMainOpen)}
+}
+
+function toggleCropSub(key){
+cropSubStates[key]=!cropSubStates[key];
+const body=document.getElementById('crop-sub-body-'+key);
+const chev=document.getElementById('crop-sub-chev-'+key);
+if(body){body.classList.toggle('open',cropSubStates[key])}
+if(chev){chev.classList.toggle('open',cropSubStates[key])}
+}
+
+function cropSearch(val){
+cropSearchTerm=val.toLowerCase().trim();
+const container=document.getElementById('cropBody');
+if(!container)return;
+const subsections=container.querySelectorAll('.crop-subsection');
+const items=container.querySelectorAll('.crop-item');
+const aanItems=container.querySelectorAll('.crop-aan-item');
+let totalVisible=0;
+
+if(!cropSearchTerm){
+  subsections.forEach(s=>s.classList.remove('hidden'));
+  items.forEach(i=>i.classList.remove('hidden'));
+  aanItems.forEach(i=>i.classList.remove('hidden'));
+  const countEl=document.getElementById('cropSearchCount');
+  if(countEl)countEl.textContent='';
+  return;
+}
+
+items.forEach(item=>{
+  const text=(item.getAttribute('data-search')||'').toLowerCase();
+  const match=text.includes(cropSearchTerm);
+  item.classList.toggle('hidden',!match);
+  if(match)totalVisible++;
+});
+aanItems.forEach(item=>{
+  const text=(item.getAttribute('data-search')||'').toLowerCase();
+  const match=text.includes(cropSearchTerm);
+  item.classList.toggle('hidden',!match);
+  if(match)totalVisible++;
+});
+
+subsections.forEach(sub=>{
+  const visItems=sub.querySelectorAll('.crop-item:not(.hidden), .crop-aan-item:not(.hidden)');
+  const hasTables=sub.querySelectorAll('.crop-sla-table, .crop-threshold-table, .crop-esc-grid').length>0;
+  const subText=(sub.getAttribute('data-search')||'').toLowerCase();
+  const subMatch=subText.includes(cropSearchTerm);
+  if(visItems.length>0||subMatch||(hasTables&&subText.includes(cropSearchTerm))){
+    sub.classList.remove('hidden');
+    const key=sub.getAttribute('data-crop-key');
+    if(key&&!cropSubStates[key]){toggleCropSub(key)}
+  } else {
+    sub.classList.add('hidden');
+  }
+});
+
+const countEl=document.getElementById('cropSearchCount');
+if(countEl)countEl.textContent=totalVisible+' match'+(totalVisible!==1?'es':'');
+}
+
+function buildCROPHTML(){
+return `
+<div class="crop-outer">
+<div class="crop-main-header" onclick="toggleCropMain()">
+  <div class="crop-icon"><i class="fas fa-book-open"></i></div>
+  <div class="crop-title-wrap">
+    <div class="crop-title">Credit Review Reference (CROP)</div>
+    <div class="crop-subtitle">Standard Operating Procedures for Manual Credit Review</div>
+  </div>
+  <i class="fas fa-chevron-down crop-chevron ${cropMainOpen?'open':''}" id="cropMainChevron"></i>
+</div>
+<div class="crop-body ${cropMainOpen?'open':''}" id="cropBody">
+  <div class="crop-search-bar">
+    <i class="fas fa-search" style="color:var(--text-muted);font-size:13px"></i>
+    <input type="text" class="crop-search-input" id="cropSearchInput" placeholder="Search procedures, blockers, AANs..." oninput="cropSearch(this.value)" value="${cropSearchTerm}">
+    <span class="crop-search-count" id="cropSearchCount"></span>
+  </div>
+
+  <!-- 1. Application Blockers -->
+  <div class="crop-subsection" data-crop-key="blockers" data-search="application blockers quick reference manual review">
+    <div class="crop-sub-header" onclick="toggleCropSub('blockers')">
+      <div class="sub-icon si-blockers"><i class="fas fa-ban"></i></div>
+      <span class="sub-name">Application Blockers Quick Reference</span>
+      <span class="sub-count">20 blockers</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['blockers']?'open':''}" id="crop-sub-chev-blockers"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['blockers']?'open':''}" id="crop-sub-body-blockers">
+      <div class="crop-item" data-search="active less than one of last 7 days processing activity inactive">
+        <div class="crop-item-title">Active Less than One of Last 7 Days <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Check if merchant has processed in the last 7 days. If no activity, assess for <strong>seasonal gaps</strong> or <strong>business closure</strong>. May require SSP for payment slowdown.</div>
+      </div>
+      <div class="crop-item" data-search="cbd seller cannabis cannabidiol program enrolled">
+        <div class="crop-item-title">Merchant is a CBD Seller <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Must be enrolled in CBD Program with <span class="hl">#CBDEDDApproved</span> tag. If not enrolled → <span class="danger">Decline permanently</span>. Verify via Compliance.</div>
+      </div>
+      <div class="crop-item" data-search="cash advance payment count over 500 high volume">
+        <div class="crop-item-title">Cash Advance Payment Count Over 500 <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">High payment count may indicate cash advancing. Review transaction patterns for self-payments. If confirmed → <span class="danger">Escalate to Compliance</span>.</div>
+      </div>
+      <div class="crop-item" data-search="owner has capital processing suspended">
+        <div class="crop-item-title">Owner Has Capital Processing Suspended <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">If owner's processing is suspended by Capital team → <span class="danger">Decline</span>. Check suspension reason and duration. May be eligible after suspension lifted.</div>
+      </div>
+      <div class="crop-item" data-search="chargeback amount too large last year 12 weeks 4 weeks disputes">
+        <div class="crop-item-title">Chargeback Amount Too Large (Year/12wk/4wk) <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">If CB GPV <strong>≥2%</strong> in 45 days → <span class="danger">Decline 90 days</span>. If CB GPV <strong>&gt;3%</strong> in 12 months → <span class="danger">Decline 180 days</span>. AAN: <span class="hl">Chargeback History</span>.</div>
+      </div>
+      <div class="crop-item" data-search="owner frozen deactivated account standing">
+        <div class="crop-item-title">Owner is Frozen or Deactivated <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">If frozen/DA due to Compliance, Risk, or Legal → <span class="danger">Decline for Adverse Account Activity</span>. Duration: 90 days to permanent depending on reason.</div>
+      </div>
+      <div class="crop-item" data-search="connected users deactivated frozen linked">
+        <div class="crop-item-title">Connected Users are Deactivated/Frozen <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Check connected user graph. If hard-linked unit frozen/DA due to Compliance/Risk/Legal → <span class="danger">Decline for Adverse Account Activity</span> (90 days to permanent).</div>
+      </div>
+      <div class="crop-item" data-search="risk score exceeded limit high risk">
+        <div class="crop-item-title">Risk Score Exceeded Limit <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">Gap between eligibility and auto risk timing → <span class="danger">Decline 90 days</span>. AAN: <span class="hl">Uncharacteristic Payment Activity</span>.</div>
+      </div>
+      <div class="crop-item" data-search="connected users submitted application outstanding">
+        <div class="crop-item-title">Connected Users Have a Submitted Application <span class="ci-tag ci-tag-wait">Wait</span></div>
+        <div class="crop-item-desc">Wait for connected user's application to be resolved before processing this one. Check <span class="hl">#sfs-loan-app-review</span> for status.</div>
+      </div>
+      <div class="crop-item" data-search="pending payer request payment">
+        <div class="crop-item-title">Pending Payer Request <span class="ci-tag ci-tag-wait">Wait</span></div>
+        <div class="crop-item-desc">Wait for pending payer request to resolve. Do not process application until request is completed or expired.</div>
+      </div>
+      <div class="crop-item" data-search="connected users open plan bad plan declined plan linked">
+        <div class="crop-item-title">Connected Users Have Open/Bad/Declined Plan <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Review connected user's plan status. If past due/written off/breached → assess impact. May need to <span class="danger">Decline</span> based on severity and relationship.</div>
+      </div>
+      <div class="crop-item" data-search="plan amount too large loan size offer">
+        <div class="crop-item-title">Plan Amount Too Large <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Review against <strong>Loan Size Thresholds</strong>. Verify offer doesn't exceed 20% of forecasted sales or 50% of historical processing. Adjust offer amount if needed.</div>
+      </div>
+      <div class="crop-item" data-search="customer recent bank account change no linked bank account">
+        <div class="crop-item-title">Recent Bank Account Change / No Linked Bank <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">If bank change within <strong>14 days</strong> → <span class="warn">SSP for bank account change</span>. If no linked bank account → <span class="danger">Cannot proceed</span>.</div>
+      </div>
+      <div class="crop-item" data-search="plan past due overdue payment delinquent">
+        <div class="crop-item-title">Plan Past Due <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">Open plan is in past due state → <span class="danger">Decline</span>. AAN: <span class="hl">Plan Past Due</span>. Cannot offer new plan until current plan is current.</div>
+      </div>
+      <div class="crop-item" data-search="customer recent email change suspicious">
+        <div class="crop-item-title">Customer Has Recent Email Change <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Check for potential account takeover. If suspicious → escalate to <span class="hl">#sfs-ato</span>. Verify email change was legitimate before proceeding.</div>
+      </div>
+      <div class="crop-item" data-search="sketchy login suspicious ato account takeover">
+        <div class="crop-item-title">Sketchy Login <span class="ci-tag ci-tag-escalate">Escalate</span></div>
+        <div class="crop-item-desc">Suspicious login detected → <span class="warn">Escalate to #sfs-ato</span>. Do not approve until ATO team clears. Check for device/location anomalies.</div>
+      </div>
+      <div class="crop-item" data-search="frozen recently 90 days account">
+        <div class="crop-item-title">Frozen Recently <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Account was frozen in past 90 days. Review freeze reason. If Compliance/Risk → <span class="danger">Decline 90 days</span>. If resolved billing issue → may proceed with caution.</div>
+      </div>
+      <div class="crop-item" data-search="has prepay extra payment recently prepayment">
+        <div class="crop-item-title">Has Prepay or Extra Payment Recently <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Extra payment or prepayment in last 7 days. Verify intent — may indicate plan manipulation. If suspicious → hold for 7 days before processing.</div>
+      </div>
+      <div class="crop-item" data-search="line of credit loc existing">
+        <div class="crop-item-title">Line of Credit <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">Merchant already has a Line of Credit product → <span class="danger">Decline</span>. AAN: <span class="hl">Already Have LOC/Loan</span>. Cannot have both LOC and Flex Loan.</div>
+      </div>
+      <div class="crop-item" data-search="last application was declined previous denial">
+        <div class="crop-item-title">Last Application Was Declined <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Check previous decline reason and date. If within decline period → <span class="danger">Decline</span> with same AAN. If period expired, review for changed circumstances.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Linked Account Review -->
+  <div class="crop-subsection" data-crop-key="linked" data-search="linked account review section 7.3 connected user graph">
+    <div class="crop-sub-header" onclick="toggleCropSub('linked')">
+      <div class="sub-icon si-linked"><i class="fas fa-link"></i></div>
+      <span class="sub-name">Linked Account Review (Section 7.3)</span>
+      <span class="sub-count">4 procedures</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['linked']?'open':''}" id="crop-sub-chev-linked"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['linked']?'open':''}" id="crop-sub-body-linked">
+      <div class="crop-item" data-search="negative balance hard linked units ledger debit failure chargebacks 500">
+        <div class="crop-item-title">Negative Balance <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">Hard linked units with negative ledger balance <strong>&gt;$500</strong> due to debit failure from chargebacks in last 5 years → <span class="danger">Decline permanently</span> for <span class="hl">Adverse Account Activity</span> AAN.</div>
+      </div>
+      <div class="crop-item" data-search="frozen deactivated hard linked unit compliance risk legal adverse account activity">
+        <div class="crop-item-title">Frozen / Deactivated <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">If hard linked unit frozen/DA due to <strong>Compliance, Risk, or Legal</strong> → <span class="danger">Decline for Adverse Account Activity</span>. Duration: <strong>90 days to permanent</strong> depending on severity and reason.</div>
+      </div>
+      <div class="crop-item" data-search="bankruptcy hard linked ein ssn plan 12 months 365 days permanent">
+        <div class="crop-item-title">Bankruptcy <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">Hard linked by EIN/SSN frozen due to bankruptcy <strong>with plan</strong> → <span class="danger">Decline permanently</span>. <strong>Without plan</strong> and &lt;12 months → <span class="danger">Decline 365 days</span>. AAN: <span class="hl">Adverse Account Activity</span>.</div>
+      </div>
+      <div class="crop-item" data-search="evasion repayment processing new account 90 180 365 permanent escalating">
+        <div class="crop-item-title">Evasion <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">Check if seller evading repayment by processing on new account. Escalating penalties: <strong>1st</strong> = <span class="danger">90 days</span>, <strong>2nd</strong> = <span class="danger">180 days</span>, <strong>3rd</strong> = <span class="danger">365 days</span>, <strong>4th+</strong> = <span class="danger">Permanent</span>. AAN: <span class="hl">Adverse Account Activity</span>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Processing Activity Checks -->
+  <div class="crop-subsection" data-crop-key="processing" data-search="processing activity checks section 7.4">
+    <div class="crop-sub-header" onclick="toggleCropSub('processing')">
+      <div class="sub-icon si-processing"><i class="fas fa-chart-bar"></i></div>
+      <span class="sub-name">Processing Activity Checks (Section 7.4)</span>
+      <span class="sub-count">7 procedures</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['processing']?'open':''}" id="crop-sub-chev-processing"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['processing']?'open':''}" id="crop-sub-body-processing">
+      <div class="crop-item" data-search="risk score exceeded gap eligibility auto risk timing 90 days uncharacteristic payment activity">
+        <div class="crop-item-title">Risk Score Exceeded <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">Gap between eligibility and auto risk timing → <span class="danger">Decline 90 days</span>. AAN: <span class="hl">Uncharacteristic Payment Activity</span>.</div>
+      </div>
+      <div class="crop-item" data-search="large dollar outliers cash advancing 60 days self payment">
+        <div class="crop-item-title">Large $ Outliers <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Assess for cash advancing within last <strong>60 days</strong>. Look for unusually large transactions, self-payments, or round-dollar amounts. If confirmed → <span class="danger">Decline 90 days</span>, AAN: <span class="hl">Cash Advancing</span>.</div>
+      </div>
+      <div class="crop-item" data-search="non-seasonal gaps 7 consecutive days no processing payment slowdown history">
+        <div class="crop-item-title">Non-Seasonal Gaps <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc"><strong>7+ consecutive days</strong> with no processing → Send <span class="warn">SSP for payment slowdown</span>, then <span class="danger">Decline 90 days</span> with <span class="hl">Payment History</span> AAN if not resolved.</div>
+      </div>
+      <div class="crop-item" data-search="seasonal gaps 12 month account 9 months year approve season permanent">
+        <div class="crop-item-title">Seasonal Gaps <span class="ci-tag ci-tag-approve">Approve</span></div>
+        <div class="crop-item-desc"><strong>12+ month</strong> account that processes <strong>9+ months/year</strong> → <span class="ok">Approve</span>. If season is <strong>&lt;1 month</strong> → <span class="danger">Decline permanently</span>. Verify seasonal pattern is consistent year-over-year.</div>
+      </div>
+      <div class="crop-item" data-search="bank change 14 days ssp bank account verification">
+        <div class="crop-item-title">Bank Change <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Bank account changed within <strong>14 days</strong> → <span class="warn">SSP for bank account change</span>. Verify new bank account is legitimate and belongs to the merchant.</div>
+      </div>
+      <div class="crop-item" data-search="refunds chargebacks 50% card present cp cb increase 45 days gpv 2% 3% 90 180 decline">
+        <div class="crop-item-title">Refunds / Chargebacks <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc">If <strong>&lt;50% CP</strong> and CB increase in 45 days and CB GPV <strong>≥2%</strong> → <span class="danger">Decline 90 days</span>. If CB GPV <strong>&gt;3%</strong> in 12 months → <span class="danger">Decline 180 days</span>. AAN: <span class="hl">Chargeback History</span> or <span class="hl">Risk of Chargebacks</span>.</div>
+      </div>
+      <div class="crop-item" data-search="failed debits 2 consecutive authorization revoked ach 180 days">
+        <div class="crop-item-title">Failed Debits <span class="ci-tag ci-tag-decline">Decline</span></div>
+        <div class="crop-item-desc"><strong>2+ consecutive</strong> failed debits with <span class="danger">AUTHORIZATION_REVOKED</span> → <span class="danger">Decline 180 days</span>. AAN: <span class="hl">Failed ACH Debit</span>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Compliance Checks -->
+  <div class="crop-subsection" data-crop-key="compliance" data-search="compliance checks section 7.7">
+    <div class="crop-sub-header" onclick="toggleCropSub('compliance')">
+      <div class="sub-icon si-compliance"><i class="fas fa-gavel"></i></div>
+      <span class="sub-name">Compliance Checks (Section 7.7)</span>
+      <span class="sub-count">5 procedures</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['compliance']?'open':''}" id="crop-sub-chev-compliance"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['compliance']?'open':''}" id="crop-sub-body-compliance">
+      <div class="crop-item" data-search="cash advancing 5000 5k 60 days escalate compliance first 90 repeat permanent self payment">
+        <div class="crop-item-title">Cash Advancing <span class="ci-tag ci-tag-escalate">Escalate</span></div>
+        <div class="crop-item-desc"><strong>&gt;$5K</strong> in last 60 days → <span class="warn">Escalate to Compliance</span> via <span class="hl">#compliance</span>. First decline = <span class="danger">90 days</span>, repeat = <span class="danger">Permanent</span>. AAN: <span class="hl">Cash Advancing</span>.</div>
+      </div>
+      <div class="crop-item" data-search="prepaid gift card abuse increase activity escalate compliance 90 days tosv terms of service">
+        <div class="crop-item-title">Prepaid / Gift Card Abuse <span class="ci-tag ci-tag-escalate">Escalate</span></div>
+        <div class="crop-item-desc">Increase in prepaid card activity → <span class="warn">Escalate to Compliance</span>. <span class="danger">Decline 90 days</span> with <span class="hl">Terms of Service Violation (TOSV)</span> AAN.</div>
+      </div>
+      <div class="crop-item" data-search="open legitscript wait compliance review 48 hours appeals eligible 90 permanent">
+        <div class="crop-item-title">Open LegitScript <span class="ci-tag ci-tag-wait">Wait</span></div>
+        <div class="crop-item-desc">Wait for Compliance review (<strong>48hr SLA</strong>). If appeals eligible → <span class="danger">Decline 90 days</span>. If not appeals eligible → <span class="danger">Decline permanently</span>.</div>
+      </div>
+      <div class="crop-item" data-search="cbd cannabidiol enrolled program cbdeddapproved tag compliance">
+        <div class="crop-item-title">CBD <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Must be enrolled in CBD Program with <span class="hl">#CBDEDDApproved</span> tag. Verify enrollment status via <span class="hl">#cbd</span> channel. If not enrolled → <span class="danger">Decline permanently</span>.</div>
+      </div>
+      <div class="crop-item" data-search="firearms allowable states tn ut ga ms tx fl wv ar nd sd mt nh in id guns weapons">
+        <div class="crop-item-title">Firearms <span class="ci-tag ci-tag-review">Review</span></div>
+        <div class="crop-item-desc">Only allowed in specific states: <strong>TN, UT, GA, MS, TX, FL, WV, AR, ND, SD, MT, NH, IN, ID</strong>. If merchant is in a non-allowable state → <span class="danger">Decline permanently</span>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Adverse Action Notices -->
+  <div class="crop-subsection" data-crop-key="aan" data-search="adverse action notices aan decline reason">
+    <div class="crop-sub-header" onclick="toggleCropSub('aan')">
+      <div class="sub-icon si-aan"><i class="fas fa-file-alt"></i></div>
+      <span class="sub-name">Adverse Action Notices (AANs)</span>
+      <span class="sub-count">19 notices</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['aan']?'open':''}" id="crop-sub-chev-aan"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['aan']?'open':''}" id="crop-sub-body-aan">
+      <div class="crop-aan-grid">
+        <div class="crop-aan-item" data-search="chargeback history disputes"><i class="fas fa-circle"></i> Chargeback History</div>
+        <div class="crop-aan-item" data-search="payment history processing activity"><i class="fas fa-circle"></i> Payment History</div>
+        <div class="crop-aan-item" data-search="too many liens ucc"><i class="fas fa-circle"></i> Too Many Liens</div>
+        <div class="crop-aan-item" data-search="not current on liens ucc"><i class="fas fa-circle"></i> Not Current on Liens</div>
+        <div class="crop-aan-item" data-search="terms of service violation tosv"><i class="fas fa-circle"></i> Terms of Service</div>
+        <div class="crop-aan-item" data-search="public search records"><i class="fas fa-circle"></i> Public Search</div>
+        <div class="crop-aan-item" data-search="uncharacteristic payment activity risk score"><i class="fas fa-circle"></i> Uncharacteristic Payment Activity</div>
+        <div class="crop-aan-item" data-search="linked account activity connected users"><i class="fas fa-circle"></i> Linked Account Activity</div>
+        <div class="crop-aan-item" data-search="business verification failure identity"><i class="fas fa-circle"></i> Business Verification Failure</div>
+        <div class="crop-aan-item" data-search="adverse account activity frozen deactivated"><i class="fas fa-circle"></i> Adverse Account Activity</div>
+        <div class="crop-aan-item" data-search="cash advancing self payment"><i class="fas fa-circle"></i> Cash Advancing</div>
+        <div class="crop-aan-item" data-search="failed ach debit authorization revoked"><i class="fas fa-circle"></i> Failed ACH Debit</div>
+        <div class="crop-aan-item" data-search="charity political organization nonprofit"><i class="fas fa-circle"></i> Charity Political Org</div>
+        <div class="crop-aan-item" data-search="insufficient information documentation"><i class="fas fa-circle"></i> Insufficient Information</div>
+        <div class="crop-aan-item" data-search="plan past due overdue delinquent"><i class="fas fa-circle"></i> Plan Past Due</div>
+        <div class="crop-aan-item" data-search="inconsistent processing irregular"><i class="fas fa-circle"></i> Inconsistent Processing</div>
+        <div class="crop-aan-item" data-search="risk of chargebacks disputes"><i class="fas fa-circle"></i> Risk of Chargebacks</div>
+        <div class="crop-aan-item" data-search="donations charitable giving"><i class="fas fa-circle"></i> Donations</div>
+        <div class="crop-aan-item" data-search="already have loc loan line of credit existing"><i class="fas fa-circle"></i> Already Have LOC/Loan</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Escalation Channels -->
+  <div class="crop-subsection" data-crop-key="escalation" data-search="escalation channels contacts slack">
+    <div class="crop-sub-header" onclick="toggleCropSub('escalation')">
+      <div class="sub-icon si-escalation"><i class="fas fa-headset"></i></div>
+      <span class="sub-name">Escalation Channels</span>
+      <span class="sub-count">9 channels</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['escalation']?'open':''}" id="crop-sub-chev-escalation"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['escalation']?'open':''}" id="crop-sub-body-escalation">
+      <div class="crop-esc-grid">
+        <div class="crop-esc-card"><div class="esc-icon esc-lead"><i class="fas fa-user-tie"></i></div><div class="esc-info"><div class="esc-label">Pre-Origination Lead</div><div class="esc-value">Keely Villa</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">ATO</div><div class="esc-value">#sfs-ato</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">Compliance</div><div class="esc-value">#compliance</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">Credit Risk</div><div class="esc-value">#cap-credit-risk-esc</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">Customer Success</div><div class="esc-value">#sfs-ssp-esc</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">Fraud Ops</div><div class="esc-value">#risk-ops-escalations</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">Loan App Review</div><div class="esc-value">#sfs-loan-app-review</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">Recovery</div><div class="esc-value">#Recovery</div></div></div>
+        <div class="crop-esc-card"><div class="esc-icon esc-slack"><i class="fas fa-hashtag"></i></div><div class="esc-info"><div class="esc-label">CBD</div><div class="esc-value">#cbd</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. SLA Reference -->
+  <div class="crop-subsection" data-crop-key="sla" data-search="sla reference service level agreement timeline business days">
+    <div class="crop-sub-header" onclick="toggleCropSub('sla')">
+      <div class="sub-icon si-sla"><i class="fas fa-clock"></i></div>
+      <span class="sub-name">SLA Reference</span>
+      <span class="sub-count">3 SLAs</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['sla']?'open':''}" id="crop-sub-chev-sla"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['sla']?'open':''}" id="crop-sub-body-sla">
+      <div style="border-radius:8px;overflow:hidden;border:1px solid rgba(42,58,74,.5)">
+        <table class="crop-sla-table">
+          <thead><tr><th>Type</th><th>Internal SLA</th><th>External SLA</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600">New Applications</td><td><span class="badge badge-blue">2 business days</span></td><td><span class="badge badge-yellow">3 business days</span></td></tr>
+            <tr><td style="font-weight:600">SSP Responses</td><td><span class="badge badge-blue">2 business days</span></td><td><span class="badge badge-yellow">3 business days</span></td></tr>
+            <tr><td style="font-weight:600">Complaints</td><td colspan="2"><span class="badge badge-orange">5 business days</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Loan Size Thresholds -->
+  <div class="crop-subsection" data-crop-key="threshold" data-search="loan size thresholds review tier lexisnexis ucc lien pacer bankruptcy">
+    <div class="crop-sub-header" onclick="toggleCropSub('threshold')">
+      <div class="sub-icon si-threshold"><i class="fas fa-layer-group"></i></div>
+      <span class="sub-name">Loan Size Thresholds</span>
+      <span class="sub-count">4 tiers</span>
+      <i class="fas fa-chevron-down sub-chevron ${cropSubStates['threshold']?'open':''}" id="crop-sub-chev-threshold"></i>
+    </div>
+    <div class="crop-sub-body ${cropSubStates['threshold']?'open':''}" id="crop-sub-body-threshold">
+      <div style="border-radius:8px;overflow:hidden;border:1px solid rgba(42,58,74,.5)">
+        <table class="crop-threshold-table">
+          <thead><tr><th>Loan Amount</th><th>Tier</th><th>Requirements</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600">≤ $10,000</td><td><span class="tier-badge tier-standard">Standard</span></td><td>Standard review procedures</td></tr>
+            <tr><td style="font-weight:600">$10K – $75K</td><td><span class="tier-badge tier-full">Full CROP</span></td><td>Full CROP review required</td></tr>
+            <tr><td style="font-weight:600">$75K – $250K</td><td><span class="tier-badge tier-enhanced">Enhanced</span></td><td>+ LexisNexis search + UCC Lien search + SOS search</td></tr>
+            <tr><td style="font-weight:600">&gt; $250,000</td><td><span class="tier-badge tier-max">Maximum</span></td><td>+ Business bankruptcy search via PACER + stricter lien limits (max 2 all-asset liens)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>`;
 }
 
 function renderDashboard(){
@@ -659,7 +1050,6 @@ const d=currentData;
 const hasLoans=d.hasActiveLoans&&d.loans.length>0;
 const loan=hasLoans?d.loans[selectedLoanIdx]:null;
 
-// GPV calculations
 const last30gpv=d.gpvData.slice(-30).reduce((s,v)=>s+v.value,0);
 const last90gpv=d.gpvData.slice(-90).reduce((s,v)=>s+v.value,0);
 const avgDaily=d.gpvData.reduce((s,v)=>s+v.value,0)/d.gpvData.length;
@@ -670,7 +1060,6 @@ const gpvTrend=gpvChange>0.05?'↑':gpvChange<-0.05?'↓':'→';
 const gpvTrendClass=gpvChange>0.05?'trend-up':gpvChange<-0.05?'trend-down':'trend-stable';
 const projMonthly=avgDaily*30;
 
-// Chargeback calculations
 const last3cb=d.cbData.slice(-3);
 const totalCB=last3cb.reduce((s,v)=>s+v.total,0);
 const totalCBAmount=last3cb.reduce((s,v)=>s+v.amount,0);
@@ -680,7 +1069,6 @@ const totalWon=last3cb.reduce((s,v)=>s+v.won,0);
 const winRate=totalCB>0?totalWon/totalCB:0;
 const cbRateClass=cbRate<0.01?'badge-green':cbRate<0.02?'badge-yellow':'badge-red';
 
-// Alerts
 const alerts=[];
 if(loan){
   const expectedFrac=Math.min(1,loan.daysAgo/loan.estDuration);
@@ -695,7 +1083,6 @@ if(loan){
 }
 if(alerts.length===0)alerts.push({type:'alert-green',text:'🟢 HEALTHY — No alerts detected'});
 
-// Repayment calculations (only if loan exists)
 let repaidPerDay=0,daysToPayoff=Infinity,projPayoff=null,projPayoffUp=null,projPayoffDown=null,progressPct=0;
 if(loan){
   repaidPerDay=loan.daysAgo>0?loan.cumRepaid/loan.daysAgo:0;
@@ -707,12 +1094,9 @@ if(loan){
   progressPct=Math.min(100,(loan.daysAgo/totalProjectedDays)*100);
 }
 
-// Linked Accounts HTML
 let linkedHTML='';
 if(d.linkedAccounts.length>0){
-linkedHTML=`
-<div class="table-wrap">
-<table><thead><tr>
+linkedHTML=`<div class="table-wrap"><table><thead><tr>
 <th>Unit Token</th><th>Business / Location</th><th>Active Loans</th><th>Total Financed</th><th>Loan Status</th><th>Risk Grade</th>
 </tr></thead><tbody>
 ${d.linkedAccounts.map(la=>`<tr class="linked-row" onclick="lookupLinkedAccount('${la.unitToken}')">
@@ -722,16 +1106,12 @@ ${d.linkedAccounts.map(la=>`<tr class="linked-row" onclick="lookupLinkedAccount(
 <td style="font-weight:600">${fmt$(la.totalFinanced/100)}</td>
 <td>${statusBadge(la.status)}</td>
 <td>${riskBadge(la.risk)}</td>
-</tr>`).join('')}
-</tbody></table>
-</div>`;
+</tr>`).join('')}</tbody></table></div>`;
 } else {
 linkedHTML=`<div class="linked-empty"><i class="fas fa-link-slash"></i> No linked accounts with active loans found</div>`;
 }
 
-// Build HTML
 let html=`
-<!-- Section 1: Merchant Overview -->
 <div class="section fade-in">
 <div class="section-title"><i class="fas fa-store"></i> Merchant Overview</div>
 <div class="cards-row cards-7">
@@ -742,16 +1122,12 @@ let html=`
 <div class="card"><div class="card-label">Business Category</div><div class="card-value small" style="font-size:14px">${d.category}</div></div>
 <div class="card"><div class="card-label">Days Since Activation</div><div class="card-value">${d.daysActive.toLocaleString()}</div></div>
 <div class="card"><div class="card-label">Country</div><div class="card-value small">🇺🇸 USD</div></div>
-</div>
-</div>`;
+</div></div>`;
 
-// Section 2: Active Flex Loans (moved to top, right after Merchant Overview)
 if(hasLoans){
-html+=`
-<div class="section fade-in">
+html+=`<div class="section fade-in">
 <div class="section-title"><i class="fas fa-file-invoice-dollar"></i> Active Flex Loans</div>
-<div class="table-wrap">
-<table><thead><tr>
+<div class="table-wrap"><table><thead><tr>
 <th>Plan Group ID</th><th>Status</th><th>Financed</th><th>Fee</th><th>Receivables</th><th>Hold Rate</th><th>Risk</th><th>Activated</th><th>Origination</th>
 </tr></thead><tbody>
 ${d.loans.map((l,i)=>`<tr class="${i===selectedLoanIdx?'selected':''}" onclick="selectLoan(${i})">
@@ -764,38 +1140,33 @@ ${d.loans.map((l,i)=>`<tr class="${i===selectedLoanIdx?'selected':''}" onclick="
 <td>${riskBadge(l.risk)}</td>
 <td>${fmtDate(l.activated)}</td>
 <td style="font-size:12px">${l.origType.replace(/_/g,' ')}</td>
-</tr>`).join('')}
-</tbody></table>
-</div>
-</div>`;
+</tr>`).join('')}</tbody></table></div></div>`;
 } else {
-// No active loans — show Loan Eligibility section
-html+=`
-<div class="section fade-in">
+html+=`<div class="section fade-in">
 <div class="section-title"><i class="fas fa-file-invoice-dollar"></i> Active Flex Loans</div>
 <div class="linked-empty" style="flex-direction:column;gap:6px;padding:24px">
-  <div style="display:flex;align-items:center;gap:8px"><i class="fas fa-ban" style="font-size:18px;opacity:.5"></i> <span style="font-weight:600">No Active Flex Loans</span></div>
-  <span style="font-size:12px">This merchant does not have an active Flex Loan offer. See eligibility details below.</span>
-</div>
-</div>
-
+<div style="display:flex;align-items:center;gap:8px"><i class="fas fa-ban" style="font-size:18px;opacity:.5"></i> <span style="font-weight:600">No Active Flex Loans</span></div>
+<span style="font-size:12px">This merchant does not have an active Flex Loan offer. See eligibility details below.</span>
+</div></div>
 <div class="section fade-in">
 <div class="section-title"><i class="fas fa-clipboard-check"></i> Loan Eligibility <span class="badge badge-red" style="margin-left:8px;font-size:11px">NO ACTIVE OFFER</span></div>
 <div class="eligibility-container" id="eligibilityContent"></div>
 </div>`;
 }
 
-// Section: Linked Accounts
-html+=`
-<div class="section fade-in">
-<div class="section-title"><i class="fas fa-link"></i> Linked Accounts with Active Loans <span style="font-size:12px;font-weight:500;color:var(--text-muted);margin-left:6px">(${d.linkedAccounts.length} found)</span></div>
-${linkedHTML}
+// CROP Section
+html+=`<div class="section fade-in">
+<div class="section-title"><i class="fas fa-book-open"></i> Credit Review Reference</div>
+${buildCROPHTML()}
 </div>`;
 
-// Section: Repayment Progress (only if loans exist)
+// Linked Accounts
+html+=`<div class="section fade-in">
+<div class="section-title"><i class="fas fa-link"></i> Linked Accounts with Active Loans <span style="font-size:12px;font-weight:500;color:var(--text-muted);margin-left:6px">(${d.linkedAccounts.length} found)</span></div>
+${linkedHTML}</div>`;
+
 if(hasLoans&&loan){
-html+=`
-<div class="section fade-in">
+html+=`<div class="section fade-in">
 <div class="section-title"><i class="fas fa-chart-pie"></i> Repayment Progress — ${loan.planId}</div>
 <div class="chart-row">
 <div class="donut-wrap"><canvas id="donutChart"></canvas></div>
@@ -809,13 +1180,10 @@ html+=`
 <div class="metric-card"><div class="label">Days Active</div><div class="value">${loan.daysAgo}</div></div>
 <div class="metric-card"><div class="label">Est. Duration</div><div class="value">${loan.estDuration}d</div></div>
 <div class="metric-card"><div class="label">Projected Payoff</div><div class="value" style="font-size:13px">${daysToPayoff<9999?fmtDate(projPayoff):'N/A'}</div></div>
-</div>
-</div>`;
+</div></div>`;
 }
 
-// Section: GPV Trends
-html+=`
-<div class="section fade-in">
+html+=`<div class="section fade-in">
 <div class="section-title"><i class="fas fa-chart-line"></i> GPV Trends (Last 180 Days)</div>
 <div class="chart-container"><canvas id="gpvChart" height="280"></canvas></div>
 <div class="cards-row cards-5" style="margin-top:14px">
@@ -824,12 +1192,9 @@ html+=`
 <div class="card"><div class="card-label">Avg Daily GPV</div><div class="card-value small">${fmt$(avgDaily)}</div></div>
 <div class="card"><div class="card-label">GPV Trend</div><div class="card-value small ${gpvTrendClass}">${gpvTrend} ${(gpvChange*100).toFixed(1)}%</div></div>
 <div class="card"><div class="card-label">Proj. Monthly GPV</div><div class="card-value small">${fmt$(projMonthly)}</div></div>
-</div>
-</div>`;
+</div></div>`;
 
-// Section: Business Health Signals
-html+=`
-<div class="section fade-in">
+html+=`<div class="section fade-in">
 <div class="section-title"><i class="fas fa-shield-halved"></i> Business Health Signals</div>
 <div class="alerts-container">${alerts.map(a=>`<div class="alert-banner ${a.type}">${a.text}</div>`).join('')}</div>
 <div class="cards-row cards-4" style="margin-bottom:14px">
@@ -838,13 +1203,10 @@ html+=`
 <div class="card"><div class="card-label">Chargeback Rate</div><div class="card-value"><span class="badge ${cbRateClass}">${fmtPct(cbRate)}</span></div></div>
 <div class="card"><div class="card-label">Win Rate</div><div class="card-value">${fmtPct(winRate)}</div></div>
 </div>
-<div class="chart-container"><canvas id="cbChart" height="240"></canvas></div>
-</div>`;
+<div class="chart-container"><canvas id="cbChart" height="240"></canvas></div></div>`;
 
-// Section: Projected Loan Payoff (only if loans exist)
 if(hasLoans&&loan){
-html+=`
-<div class="section fade-in">
+html+=`<div class="section fade-in">
 <div class="section-title"><i class="fas fa-forward"></i> Projected Loan Payoff</div>
 <div class="projection-card">
 <div class="proj-row"><span class="proj-label">Current Repayment Pace</span><span class="proj-value">${fmt$(repaidPerDay/100)}/day</span></div>
@@ -859,19 +1221,11 @@ html+=`
 <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--text-muted)">
 <span>${fmtDate(loan.activated)}</span>
 <span>${daysToPayoff<9999?fmtDate(projPayoff):'TBD'}</span>
-</div>
-</div>
-</div>
-</div>`;
+</div></div></div></div>`;
 }
 
 document.getElementById('dashboard').innerHTML=html;
-
-// Render eligibility section if no active loans
-if(!d.hasActiveLoans){
-  renderEligibilitySection();
-}
-
+if(!d.hasActiveLoans)renderEligibilitySection();
 renderCharts();
 }
 
@@ -884,21 +1238,17 @@ const loan=hasLoans?d.loans[selectedLoanIdx]:null;
 const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8899aa',font:{family:'Inter',size:11}}},tooltip:{backgroundColor:'#1e2f40',titleColor:'#e8edf2',bodyColor:'#e8edf2',borderColor:'#2a3a4a',borderWidth:1,padding:10,titleFont:{family:'Inter',weight:'600'},bodyFont:{family:'Inter'}}},scales:{x:{ticks:{color:'#5a6a7a',font:{family:'Inter',size:10}},grid:{color:'rgba(42,58,74,0.4)'}},y:{ticks:{color:'#5a6a7a',font:{family:'Inter',size:10}},grid:{color:'rgba(42,58,74,0.4)'}}}};
 
 if(hasLoans&&loan){
-// Donut Chart
 const donutCtx=document.getElementById('donutChart').getContext('2d');
 const donutChart=new Chart(donutCtx,{type:'doughnut',data:{labels:['Repaid','Outstanding'],datasets:[{data:[loan.cumRepaid/100,loan.outstanding/100],backgroundColor:['#22c55e','#374151'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:true,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmt$(ctx.parsed)},backgroundColor:'#1e2f40',titleColor:'#e8edf2',bodyColor:'#e8edf2',borderColor:'#2a3a4a',borderWidth:1}},animation:{animateRotate:true,duration:1200}}});
 charts.push(donutChart);
 
-// Repayment Curve
 const repayCtx=document.getElementById('repayChart').getContext('2d');
 const rng2=new SeededRNG(d.token+'repay'+selectedLoanIdx);
 const repayLabels=[];const actualData=[];const expectedData=[];
 const steps=Math.min(loan.daysAgo,60);
 for(let i=0;i<=steps;i++){
-const day=Math.round(i*loan.daysAgo/steps);
-repayLabels.push('Day '+day);
-const expected=Math.min(1,day/loan.estDuration);
-expectedData.push(expected);
+const day=Math.round(i*loan.daysAgo/steps);repayLabels.push('Day '+day);
+const expected=Math.min(1,day/loan.estDuration);expectedData.push(expected);
 const noise=rng2.range(-0.03,0.03);
 const actual=Math.min(loan.repayFrac,loan.repayFrac*(day/loan.daysAgo)+noise);
 actualData.push(Math.max(0,Math.min(1,actual)));
@@ -908,7 +1258,6 @@ const repayChart=new Chart(repayCtx,{type:'line',data:{labels:repayLabels,datase
 charts.push(repayChart);
 }
 
-// GPV Chart
 const gpvCtx=document.getElementById('gpvChart').getContext('2d');
 const gpvLabels=d.gpvData.map(g=>{const m=g.date.getMonth()+1;const dd=g.date.getDate();return m+'/'+dd});
 const gpvValues=d.gpvData.map(g=>g.value);
@@ -923,7 +1272,6 @@ dropPoints.push(gpvValues[i]<0.5*avg?gpvValues[i]:null);
 const gpvChart=new Chart(gpvCtx,{type:'line',data:{labels:gpvLabels,datasets:[{label:'Daily GPV',data:gpvValues,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.05)',fill:true,tension:0.2,pointRadius:0,pointHoverRadius:3,borderWidth:1.5},{label:'30-Day Avg',data:rollingAvg,borderColor:'#f97316',borderDash:[6,3],fill:false,tension:0.3,pointRadius:0,borderWidth:1.5},{label:'Spike',data:spikePoints,borderColor:'transparent',backgroundColor:'#ef4444',pointRadius:5,pointHoverRadius:7,showLine:false,type:'scatter'},{label:'Drop',data:dropPoints,borderColor:'transparent',backgroundColor:'#eab308',pointRadius:5,pointHoverRadius:7,showLine:false,type:'scatter'}]},options:{...chartOpts,plugins:{...chartOpts.plugins,tooltip:{...chartOpts.plugins.tooltip,callbacks:{label:ctx=>{if(ctx.dataset.label==='Spike')return'⚠️ Spike: '+fmt$(ctx.parsed.y);if(ctx.dataset.label==='Drop')return'⚠️ Drop: '+fmt$(ctx.parsed.y);return ctx.dataset.label+': '+fmt$(ctx.parsed.y)}}}},scales:{...chartOpts.scales,y:{...chartOpts.scales.y,ticks:{...chartOpts.scales.y.ticks,callback:v=>'$'+Math.round(v).toLocaleString()}}},animation:{duration:1500}}});
 charts.push(gpvChart);
 
-// Chargeback Chart
 const cbCtx=document.getElementById('cbChart').getContext('2d');
 const cbLabels=d.cbData.map(c=>{const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[c.month.getMonth()]+' '+c.month.getFullYear()});
 const cbChart=new Chart(cbCtx,{type:'bar',data:{labels:cbLabels,datasets:[{label:'Won',data:d.cbData.map(c=>c.won),backgroundColor:'#22c55e',borderRadius:3},{label:'Lost',data:d.cbData.map(c=>c.lost),backgroundColor:'#ef4444',borderRadius:3},{label:'Pending',data:d.cbData.map(c=>c.pending),backgroundColor:'#eab308',borderRadius:3}]},options:{...chartOpts,plugins:{...chartOpts.plugins},scales:{...chartOpts.scales,x:{...chartOpts.scales.x,stacked:true},y:{...chartOpts.scales.y,stacked:true,beginAtZero:true,ticks:{...chartOpts.scales.y.ticks,stepSize:1}}},animation:{duration:1200}}});
@@ -944,60 +1292,24 @@ const cbRate=totalPayments3>0?totalCB/totalPayments3:0;
 
 let loanReport='';
 if(hasLoans&&loan){
-  const repaidPerDay=loan.daysAgo>0?loan.cumRepaid/loan.daysAgo:0;
-  const daysToPayoff=repaidPerDay>0?Math.ceil(loan.outstanding/repaidPerDay):Infinity;
-  loanReport=`
-SELECTED LOAN: ${loan.planId}
-Status: ${loan.status.toUpperCase()}
-Financed: ${fmt$(loan.financed/100)}
-Receivables: ${fmt$(loan.receivables/100)}
-Repaid: ${fmt$(loan.cumRepaid/100)} (${fmtPct(loan.repayFrac)})
-Outstanding: ${fmt$(loan.outstanding/100)}
-Hold Rate: ${(loan.holdRate/10000*100).toFixed(2)}%
-Repayment Pace: ${fmt$(repaidPerDay/100)}/day
-Projected Payoff: ${daysToPayoff<9999?fmtDate(addDays(new Date(),daysToPayoff)):'N/A'}`;
+const repaidPerDay=loan.daysAgo>0?loan.cumRepaid/loan.daysAgo:0;
+const daysToPayoff=repaidPerDay>0?Math.ceil(loan.outstanding/repaidPerDay):Infinity;
+loanReport=`\nSELECTED LOAN: ${loan.planId}\nStatus: ${loan.status.toUpperCase()}\nFinanced: ${fmt$(loan.financed/100)}\nReceivables: ${fmt$(loan.receivables/100)}\nRepaid: ${fmt$(loan.cumRepaid/100)} (${fmtPct(loan.repayFrac)})\nOutstanding: ${fmt$(loan.outstanding/100)}\nHold Rate: ${(loan.holdRate/10000*100).toFixed(2)}%\nRepayment Pace: ${fmt$(repaidPerDay/100)}/day\nProjected Payoff: ${daysToPayoff<9999?fmtDate(addDays(new Date(),daysToPayoff)):'N/A'}`;
 } else {
-  loanReport=`
-ACTIVE LOANS: None
-LOAN ELIGIBILITY: ${d.eligibility.failedCount} of ${d.eligibility.totalRules} checks failed`;
-  for(const [catName,catData] of Object.entries(d.eligibility.results)){
-    const failed=catData.rules.filter(r=>!r.passed);
-    if(failed.length>0){
-      loanReport+='\n  '+catName+':';
-      failed.forEach(r=>{loanReport+='\n    ✗ '+r.key+': '+r.desc});
-    }
-  }
+loanReport=`\nACTIVE LOANS: None\nLOAN ELIGIBILITY: ${d.eligibility.failedCount} of ${d.eligibility.totalRules} checks failed`;
+for(const [catName,catData] of Object.entries(d.eligibility.results)){
+const failed=catData.rules.filter(r=>!r.passed);
+if(failed.length>0){loanReport+='\n  '+catName+':';failed.forEach(r=>{loanReport+='\n    ✗ '+r.key+': '+r.desc})}
+}
 }
 
 let linkedReport='';
 if(d.linkedAccounts.length>0){
 linkedReport='\nLINKED ACCOUNTS WITH ACTIVE LOANS\n';
-d.linkedAccounts.forEach(la=>{
-linkedReport+='  Unit Token: '+la.unitToken+' | '+la.businessName+' | Loans: '+la.activeLoanCount+' | Financed: '+fmt$(la.totalFinanced/100)+' | Risk: '+la.risk+'\n';
-});
-} else {
-linkedReport='\nLINKED ACCOUNTS: None with active loans\n';
-}
+d.linkedAccounts.forEach(la=>{linkedReport+='  Unit Token: '+la.unitToken+' | '+la.businessName+' | Loans: '+la.activeLoanCount+' | Financed: '+fmt$(la.totalFinanced/100)+' | Risk: '+la.risk+'\n'});
+} else {linkedReport='\nLINKED ACCOUNTS: None with active loans\n'}
 
-const report=`FLEX LOAN MANAGER — MERCHANT REPORT
-====================================
-Merchant: ${d.merchantName}
-Unit Token: ${d.token}
-Risk Grade: ${d.risk}
-Status: ${d.isActive?'ACTIVE':'INACTIVE'}
-Category: ${d.category}
-Days Active: ${d.daysActive}
-${linkedReport}${loanReport}
-
-GPV SUMMARY
-Last 30 Days: ${fmt$(last30gpv)}
-Avg Daily: ${fmt$(avgDaily)}
-
-CHARGEBACKS (90d)
-Count: ${totalCB}
-Rate: ${fmtPct(cbRate)}
-
-Generated: ${new Date().toISOString()}`;
+const report=`FLEX LOAN MANAGER — MERCHANT REPORT\n====================================\nMerchant: ${d.merchantName}\nUnit Token: ${d.token}\nRisk Grade: ${d.risk}\nStatus: ${d.isActive?'ACTIVE':'INACTIVE'}\nCategory: ${d.category}\nDays Active: ${d.daysActive}\n${linkedReport}${loanReport}\n\nGPV SUMMARY\nLast 30 Days: ${fmt$(last30gpv)}\nAvg Daily: ${fmt$(avgDaily)}\n\nCHARGEBACKS (90d)\nCount: ${totalCB}\nRate: ${fmtPct(cbRate)}\n\nGenerated: ${new Date().toISOString()}`;
 
 navigator.clipboard.writeText(report).then(()=>{
 const btn=document.getElementById('copyBtn');
@@ -1007,7 +1319,6 @@ setTimeout(()=>{btn.innerHTML='<i class="fas fa-copy"></i> Copy Report';btn.clas
 }).catch(()=>{alert('Failed to copy. Please try again.')});
 }
 
-// Pre-fill demo token
 document.getElementById('tokenInput').value='MLXBYSKMVA9NJ';
 </script>
 </body>
