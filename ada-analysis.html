@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Additional Debt Allowance SSP — Cancellation Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --navy: #0f2b46;
+    --navy-light: #1a3a5c;
+    --navy-muted: #3d5a80;
+    --red: #c0392b;
+    --red-light: #e74c3c;
+    --red-bg: #fdf0ef;
+    --green: #1e8449;
+    --green-bg: #eafaf1;
+    --blue: #2471a3;
+    --blue-bg: #eaf2f8;
+    --gray-dark: #5d6d7e;
+    --gray: #7f8c8d;
+    --gray-light: #bdc3c7;
+    --gray-bg: #f4f5f6;
+    --border: #e0e4e8;
+    --white: #ffffff;
+    --text: #2c3e50;
+    --text-light: #5d6d7e;
+  }
+
+  html {
+    font-size: 15px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+    color: var(--text);
+    line-height: 1.65;
+    padding: 40px 20px;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 48px 56px 40px;
+    position: relative;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 56px;
+    right: 56px;
+    height: 3px;
+    background: var(--red);
+  }
+
+  .header-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .header-subtitle {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 4px;
+  }
+
+  .header-date {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ── BODY ── */
+  .body {
+    padding: 44px 56px 48px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-number {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--navy-muted);
+    margin-bottom: 6px;
+  }
+
+  .section h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .section h2 .accent {
+    color: var(--red);
+  }
+
+  /* ── PROBLEM STATS ── */
+  .problem-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .problem-stat {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--gray-bg);
+    border-radius: 6px;
+    border-left: 3px solid var(--navy);
+  }
+
+  .problem-stat.alert {
+    background: var(--red-bg);
+    border-left-color: var(--red);
+  }
+
+  .problem-stat .num {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--navy);
+    min-width: 72px;
+    line-height: 1.2;
+  }
+
+  .problem-stat.alert .num {
+    color: var(--red);
+  }
+
+  .problem-stat .desc {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.55;
+    padding-top: 3px;
+  }
+
+  .problem-stat .desc strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ── OUTCOMES CHART ── */
+  .chart-container {
+    margin-top: 8px;
+  }
+
+  .chart-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 80px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .chart-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+  }
+
+  .chart-bar-wrap {
+    background: var(--gray-bg);
+    border-radius: 4px;
+    height: 32px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .chart-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+  }
+
+  .chart-bar.canceled { background: var(--red); }
+  .chart-bar.approved { background: var(--green); }
+  .chart-bar.submitted { background: var(--blue); }
+  .chart-bar.declined { background: var(--gray); }
+
+  .chart-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  .chart-value span {
+    font-weight: 400;
+    color: var(--gray);
+  }
+
+  /* Stacked summary bar */
+  .stacked-bar-container {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .stacked-bar-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+
+  .stacked-bar {
+    display: flex;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    gap: 2px;
+  }
+
+  .stacked-bar div {
+    height: 100%;
+  }
+
+  .stacked-bar .s-canceled { background: var(--red); flex: 44.9; }
+  .stacked-bar .s-approved { background: var(--green); flex: 36.4; }
+  .stacked-bar .s-submitted { background: var(--blue); flex: 11.0; }
+  .stacked-bar .s-declined { background: var(--gray-light); flex: 7.6; }
+
+  .stacked-legend {
+    display: flex;
+    gap: 18px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .stacked-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: var(--text-light);
+  }
+
+  .stacked-legend-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .dot.canceled { background: var(--red); }
+  .dot.approved { background: var(--green); }
+  .dot.submitted { background: var(--blue); }
+  .dot.declined { background: var(--gray-light); }
+
+  /* ── WHY SECTION ── */
+  .why-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .why-list li {
+    position: relative;
+    padding: 12px 0 12px 28px;
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.65;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .why-list li:last-child {
+    border-bottom: none;
+  }
+
+  .why-list li::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 20px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  .why-list li strong {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  /* ── IMPACT GRID ── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .impact-card {
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--white);
+  }
+
+  .impact-card.highlight {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  .impact-card.highlight .impact-num {
+    color: var(--white);
+  }
+
+  .impact-card.highlight .impact-desc {
+    color: rgba(255,255,255,0.7);
+  }
+
+  .impact-card.full-width {
+    grid-column: 1 / -1;
+    background: var(--green-bg);
+    border-color: var(--green);
+  }
+
+  .impact-card.full-width .impact-num {
+    color: var(--green);
+  }
+
+  .impact-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .impact-desc {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* ── RECOMMENDATION ── */
+  .rec-primary {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 28px 28px 24px;
+    margin-bottom: 20px;
+  }
+
+  .rec-primary-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 10px;
+  }
+
+  .rec-primary-text {
+    font-size: 1.0rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .rec-primary-text .highlight-text {
+    color: #f5b041;
+  }
+
+  .rec-rationale {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.65;
+    margin-bottom: 18px;
+  }
+
+  .rec-benefits {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .rec-benefits li {
+    position: relative;
+    padding: 8px 0 8px 28px;
+    font-size: 0.86rem;
+    color: var(--text);
+    line-height: 1.55;
+  }
+
+  .rec-benefits li::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 16px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .rec-benefits li strong {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .rec-secondary {
+    background: var(--gray-bg);
+    border-radius: 6px;
+    padding: 20px 24px;
+    border-left: 3px solid var(--navy-muted);
+  }
+
+  .rec-secondary-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--navy-muted);
+    margin-bottom: 8px;
+  }
+
+  .rec-secondary-text {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.65;
+  }
+
+  .rec-secondary-text strong {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 24px 56px;
+    background: var(--gray-bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer-text {
+    font-size: 0.72rem;
+    color: var(--gray);
+    font-weight: 400;
+  }
+
+  .footer-contact {
+    font-size: 0.72rem;
+    color: var(--navy-muted);
+    font-weight: 500;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body {
+      background: white;
+      padding: 0;
+    }
+
+    .page {
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .header {
+      padding: 36px 48px 32px;
+    }
+
+    .body {
+      padding: 32px 48px 36px;
+    }
+
+    .footer {
+      padding: 16px 48px;
+    }
+
+    .section {
+      page-break-inside: avoid;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .header {
+      padding: 32px 28px 28px;
+    }
+
+    .header::after {
+      left: 28px;
+      right: 28px;
+    }
+
+    .body {
+      padding: 28px 28px 32px;
+    }
+
+    .footer {
+      padding: 20px 28px;
+    }
+
+    .impact-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .chart-row {
+      grid-template-columns: 90px 1fr 70px;
+      gap: 10px;
+    }
+
+    .problem-stat .num {
+      font-size: 1.1rem;
+      min-width: 60px;
+    }
+
+    .rec-primary {
+      padding: 22px 22px 20px;
+    }
+
+    .rec-secondary {
+      padding: 16px 20px;
+    }
+  }
+</style>
+  <script type="application/ld+json">
+{
+  "@context": "urn:goose.ai:schema",
+  "@type": "GooseApp",
+  "name": "ada-ssp-cancellation-analysis",
+  "description": "Static business memo analyzing Additional Debt Allowance SSP cancellations with recommendation to eliminate SSP for sub-$250K loans.",
+  "width": 900,
+  "height": 800,
+  "resizable": true,
+  "mcpServers": [
+    "apps"
+  ]
+}
+  </script>
+  <script type="application/x-goose-prd">
+Create a clean, professional one-page analysis document styled like a business memo/brief. Title: "Additional Debt Allowance SSP — Cancellation Analysis"
+
+Layout should be a single scrollable page with a white background, clean typography (Inter font), and minimal design. No interactive elements — this is a static document meant to be shared/printed.
+
+Content (use these exact numbers):
+
+HEADER:
+- Title: Additional Debt Allowance SSP — Cancellation Analysis
+- Subtitle: SFS Pre-Origination | Last 90 Days
+- Date: April 2026
+
+SECTION 1: "The Problem"
+- 118 loan applications received an Additional Debt Allowance SSP in the last 90 days
+- 53 were canceled (44.9% cancellation rate)
+- $6.9M in lost pipeline from cancellations
+- 79% of cancellations were due to SSP expiration (seller never responded)
+- 64% of canceled applications were A1 risk grade (our lowest-risk sellers)
+
+SECTION 2: "Outcomes" — horizontal bar chart showing:
+- Canceled: 53 (44.9%) — red
+- Approved: 43 (36.4%) — green
+- Still Submitted: 13 (11.0%) — blue
+- Declined: 9 (7.6%) — gray
+- Includes a stacked summary bar with legend below the chart
+
+SECTION 3: "Why Sellers Don't Respond" — brief bullets:
+- The SSP asks sellers to provide a UCC-3 termination statement OR a signed letter from the secured party confirming good standing and authorization for additional debt
+- This requires sellers to contact their existing lender and request documentation — a process that can take weeks
+- The 14-day SSP response window may be insufficient for this type of documentation
+- Many sellers may not understand what a UCC filing is or how to obtain the required documents
+
+SECTION 4: "Impact" — key stats in a clean 2-column grid:
+- $6.9M lost pipeline (90 days)
+- ~$2.3M/month in potential originations lost
+- 42 of 53 cancellations = expired SSPs
+- 34 of 53 canceled sellers were A1 risk grade
+- Approval rate when sellers respond: 83% (43 of 52 who responded) — full-width highlight card
+
+SECTION 5: "Recommendation" — single focused recommendation:
+- Primary recommendation (prominent navy card): Stop sending Additional Debt Allowance SSPs for loans under $250K. SFS does not file UCC liens against businesses for loans below this threshold, so requiring sellers to obtain permission from existing secured parties is unnecessary for these loan sizes.
+- Supporting rationale: Of the 53 canceled applications, the majority had offer amounts well below $250K.
+- Benefits list (green bullet points):
+  - Recover a significant portion of the $6.9M lost pipeline
+  - Reduce reviewer workload and SSP round-trips
+  - Improve seller experience for highest-quality borrowers
+  - Reserve the Additional Debt Allowance SSP for loans ≥$250K where SFS has a direct lien interest
+- Secondary note (muted card): For loans ≥$250K, continue sending the SSP but improve the language to better explain what documentation is needed and where to obtain it.
+
+Footer: "Prepared by SFS Pre-Origination Analytics | Contact: Nadira Lachkar (@nadira)"
+
+Style: Clean, professional, navy/white/red accent colors with gold highlights for key figures in recommendation. Max width 800px centered. Print-friendly.
+  </script>
+</head>
+<body>
+
+<article class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-label">Internal Analysis Brief</div>
+    <h1>Additional Debt Allowance SSP — Cancellation Analysis</h1>
+    <div class="header-subtitle">SFS Pre-Origination | Last 90 Days</div>
+    <div class="header-date">April 2026</div>
+  </header>
+
+  <div class="body">
+
+    <!-- SECTION 1: THE PROBLEM -->
+    <section class="section">
+      <div class="section-number">Section 1</div>
+      <h2>The <span class="accent">Problem</span></h2>
+
+      <div class="problem-grid">
+        <div class="problem-stat">
+          <div class="num">118</div>
+          <div class="desc">Loan applications received an <strong>Additional Debt Allowance SSP</strong> in the last 90 days</div>
+        </div>
+        <div class="problem-stat alert">
+          <div class="num">53</div>
+          <div class="desc">Were <strong>canceled</strong> — a <strong>44.9% cancellation rate</strong></div>
+        </div>
+        <div class="problem-stat alert">
+          <div class="num">$6.9M</div>
+          <div class="desc">In <strong>lost pipeline</strong> from cancellations</div>
+        </div>
+        <div class="problem-stat">
+          <div class="num">79%</div>
+          <div class="desc">Of cancellations were due to <strong>SSP expiration</strong> — the seller never responded</div>
+        </div>
+        <div class="problem-stat">
+          <div class="num">64%</div>
+          <div class="desc">Of canceled applications were <strong>A1 risk grade</strong> — our lowest-risk sellers</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: OUTCOMES -->
+    <section class="section">
+      <div class="section-number">Section 2</div>
+      <h2>Outcomes</h2>
+
+      <div class="chart-container">
+        <div class="chart-row">
+          <div class="chart-label">Canceled</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar canceled" style="width: 44.9%;"></div>
+          </div>
+          <div class="chart-value">53 <span>(44.9%)</span></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">Approved</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar approved" style="width: 36.4%;"></div>
+          </div>
+          <div class="chart-value">43 <span>(36.4%)</span></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">Still Submitted</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar submitted" style="width: 11.0%;"></div>
+          </div>
+          <div class="chart-value">13 <span>(11.0%)</span></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">Declined</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar declined" style="width: 7.6%;"></div>
+          </div>
+          <div class="chart-value">9 <span>(7.6%)</span></div>
+        </div>
+      </div>
+
+      <div class="stacked-bar-container">
+        <div class="stacked-bar-label">Distribution of 118 Applications</div>
+        <div class="stacked-bar">
+          <div class="s-canceled"></div>
+          <div class="s-approved"></div>
+          <div class="s-submitted"></div>
+          <div class="s-declined"></div>
+        </div>
+        <div class="stacked-legend">
+          <div class="stacked-legend-item"><span class="dot canceled"></span> Canceled (44.9%)</div>
+          <div class="stacked-legend-item"><span class="dot approved"></span> Approved (36.4%)</div>
+          <div class="stacked-legend-item"><span class="dot submitted"></span> Still Submitted (11.0%)</div>
+          <div class="stacked-legend-item"><span class="dot declined"></span> Declined (7.6%)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: WHY SELLERS DON'T RESPOND -->
+    <section class="section">
+      <div class="section-number">Section 3</div>
+      <h2>Why Sellers Don't Respond</h2>
+
+      <ul class="why-list">
+        <li>The SSP asks sellers to provide a <strong>UCC-3 termination statement</strong> OR a <strong>signed letter from the secured party</strong> confirming good standing and authorization for additional debt</li>
+        <li>This requires sellers to <strong>contact their existing lender</strong> and request documentation — a process that can take weeks</li>
+        <li>The <strong>14-day SSP response window</strong> may be insufficient for this type of documentation</li>
+        <li>Many sellers may <strong>not understand what a UCC filing is</strong> or how to obtain the required documents</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 4: IMPACT -->
+    <section class="section">
+      <div class="section-number">Section 4</div>
+      <h2>Impact</h2>
+
+      <div class="impact-grid">
+        <div class="impact-card highlight">
+          <div class="impact-num">$6.9M</div>
+          <div class="impact-desc">Lost pipeline over 90 days</div>
+        </div>
+        <div class="impact-card highlight">
+          <div class="impact-num">~$2.3M/mo</div>
+          <div class="impact-desc">Potential originations lost per month</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">42 of 53</div>
+          <div class="impact-desc">Cancellations were expired SSPs — sellers never responded</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">34 of 53</div>
+          <div class="impact-desc">Canceled sellers were A1 risk grade — our lowest-risk segment</div>
+        </div>
+        <div class="impact-card full-width">
+          <div class="impact-num">83% approval rate</div>
+          <div class="impact-desc">When sellers actually respond, 43 of 52 are approved — the problem is getting the response, not the credit quality</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: RECOMMENDATION -->
+    <section class="section">
+      <div class="section-number">Section 5</div>
+      <h2>Recommendation</h2>
+
+      <div class="rec-primary">
+        <div class="rec-primary-label">Primary Recommendation</div>
+        <p class="rec-primary-text">Stop sending Additional Debt Allowance SSPs for loans under <span class="highlight-text">$250K</span>. SFS does not file UCC liens against businesses for loans below this threshold, so requiring sellers to obtain permission from existing secured parties is <span class="highlight-text">unnecessary</span> for these loan sizes.</p>
+      </div>
+
+      <p class="rec-rationale">Of the 53 canceled applications, the majority had offer amounts well below $250K. Removing this SSP requirement for sub-$250K loans would:</p>
+
+      <ul class="rec-benefits">
+        <li><strong>Recover a significant portion</strong> of the $6.9M lost pipeline</li>
+        <li><strong>Reduce reviewer workload</strong> and SSP round-trips</li>
+        <li><strong>Improve seller experience</strong> for our highest-quality borrowers</li>
+        <li><strong>Reserve the Additional Debt Allowance SSP</strong> for loans ≥$250K where SFS has a direct lien interest</li>
+      </ul>
+
+      <div class="rec-secondary">
+        <div class="rec-secondary-label">For Loans ≥$250K</div>
+        <p class="rec-secondary-text">Continue sending the Additional Debt Allowance SSP, but <strong>improve the SSP language</strong> to better explain what documentation is needed and where to obtain it.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-text">Prepared by SFS Pre-Origination Analytics</div>
+    <div class="footer-contact">Contact: Nadira Lachkar (@nadira)</div>
+  </footer>
+
+</article>
+
+</body>
+</html>
