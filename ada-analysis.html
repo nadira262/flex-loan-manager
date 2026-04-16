@@ -60,19 +60,17 @@
 
   /* ── HEADER ── */
   .header {
-    background: var(--navy);
-    color: var(--white);
+    background: var(--white);
+    color: var(--text);
     padding: 48px 56px 40px;
     position: relative;
+    border-bottom: 1px solid var(--border);
   }
 
   .header::after {
     content: '';
-    position: absolute;
-    bottom: 0;
-    left: 56px;
-    right: 56px;
-    height: 3px;
+    display: none;
+    height: 0;
     background: var(--red);
   }
 
@@ -96,14 +94,14 @@
   .header-subtitle {
     font-size: 0.9rem;
     font-weight: 400;
-    color: rgba(255,255,255,0.7);
+    color: var(--gray);
     margin-bottom: 4px;
   }
 
   .header-date {
     font-size: 0.8rem;
     font-weight: 500;
-    color: rgba(255,255,255,0.45);
+    color: var(--gray-light);
   }
 
   /* ── BODY ── */
