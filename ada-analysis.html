@@ -15,16 +15,16 @@
   }
 
   :root {
-    --navy: #0f2b46;
-    --navy-light: #1a3a5c;
-    --navy-muted: #3d5a80;
+    --navy: #1a1a1a;
+    --navy-light: #2a2a2a;
+    --navy-muted: #666666;
     --red: #c0392b;
     --red-light: #e74c3c;
     --red-bg: #fdf0ef;
-    --green: #1e8449;
-    --green-bg: #eafaf1;
-    --blue: #2471a3;
-    --blue-bg: #eaf2f8;
+    --green: #333333;
+    --green-bg: #f5f5f5;
+    --blue: #333333;
+    --blue-bg: #f0f0f0;
     --gray-dark: #5d6d7e;
     --gray: #7f8c8d;
     --gray-light: #bdc3c7;
@@ -226,9 +226,9 @@
   }
 
   .chart-bar.canceled { background: var(--red); }
-  .chart-bar.approved { background: var(--green); }
-  .chart-bar.submitted { background: var(--blue); }
-  .chart-bar.declined { background: var(--gray); }
+  .chart-bar.approved { background: #444444; }
+  .chart-bar.submitted { background: #999999; }
+  .chart-bar.declined { background: #cccccc; }
 
   .chart-value {
     font-size: 0.8rem;
@@ -270,9 +270,9 @@
   }
 
   .stacked-bar .s-canceled { background: var(--red); flex: 44.9; }
-  .stacked-bar .s-approved { background: var(--green); flex: 36.4; }
-  .stacked-bar .s-submitted { background: var(--blue); flex: 11.0; }
-  .stacked-bar .s-declined { background: var(--gray-light); flex: 7.6; }
+  .stacked-bar .s-approved { background: #444444; flex: 36.4; }
+  .stacked-bar .s-submitted { background: #999999; flex: 11.0; }
+  .stacked-bar .s-declined { background: #cccccc; flex: 7.6; }
 
   .stacked-legend {
     display: flex;
@@ -297,9 +297,9 @@
   }
 
   .dot.canceled { background: var(--red); }
-  .dot.approved { background: var(--green); }
-  .dot.submitted { background: var(--blue); }
-  .dot.declined { background: var(--gray-light); }
+  .dot.approved { background: #444444; }
+  .dot.submitted { background: #999999; }
+  .dot.declined { background: #cccccc; }
 
   /* ── WHY SECTION ── */
   .why-list {
@@ -351,9 +351,9 @@
   }
 
   .impact-card.highlight {
-    background: var(--navy);
-    border-color: var(--navy);
-    color: var(--white);
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #ffffff;
   }
 
   .impact-card.highlight .impact-num {
@@ -366,12 +366,12 @@
 
   .impact-card.full-width {
     grid-column: 1 / -1;
-    background: var(--green-bg);
-    border-color: var(--green);
+    background: #fff5f5;
+    border-color: var(--red);
   }
 
   .impact-card.full-width .impact-num {
-    color: var(--green);
+    color: var(--red);
   }
 
   .impact-num {
@@ -414,7 +414,7 @@
   }
 
   .rec-primary-text .highlight-text {
-    color: #f5b041;
+    color: #e74c3c;
   }
 
   .rec-rationale {
@@ -446,7 +446,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--green);
+    background: #1a1a1a;
   }
 
   .rec-benefits li strong {
@@ -783,7 +783,7 @@ Style: Clean, professional, navy/white/red accent colors with gold highlights fo
       <h2>Proposal</h2>
 
       <div class="rec-primary">
-        <div class="rec-primary-label">Primary Recommendation</div>
+        <div class="rec-primary-label">Proposal</div>
         <p class="rec-primary-text">Stop sending Additional Debt Allowance SSPs for loans under <span class="highlight-text">$250K</span>. SFS does not file UCC liens against businesses for loans below this threshold, so requiring sellers to obtain permission from existing secured parties is <span class="highlight-text">unnecessary</span> for these loan sizes.</p>
       </div>
 
@@ -806,7 +806,7 @@ Style: Clean, professional, navy/white/red accent colors with gold highlights fo
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-text">Prepared by SFS Pre-Origination Analytics | <a href="https://app.snowflake.com/squareinc/square/#/compute/history/queries/01c3c183-0a15-7033-0015-c118ceda788f/detail" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500">View Source Data in Snowflake ↗</a></div>
+    <div class="footer-text">Prepared by SFS Pre-Origination Analytics | <a href="https://app.snowflake.com/squareinc/square/#/compute/history/queries/01c3c183-0a15-7033-0015-c118ceda788f/detail" target="_blank" style="color:#c0392b;text-decoration:none;font-weight:500">View Source Data in Snowflake ↗</a></div>
     <div class="footer-contact">Contact: Nadira Lachkar (@nadira)</div>
   </footer>
 
