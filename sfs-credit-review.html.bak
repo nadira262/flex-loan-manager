@@ -5,12 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SFS Credit Review Tool</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#1a2332;--navy-light:#243044;--navy-lighter:#2d3a4e;--blue:#2d7ff9;--blue-light:#e8f0fe;--blue-dark:#1a5fd4;--red:#e74c3c;--red-light:#fdeaea;--orange:#f39c12;--orange-light:#fef5e7;--yellow:#f1c40f;--yellow-light:#fef9e7;--green:#27ae60;--green-light:#e8f8f0;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-300:#dee2e6;--gray-400:#ced4da;--gray-500:#adb5bd;--gray-600:#868e96;--gray-700:#495057;--gray-800:#343a40;--gray-900:#212529;--white:#fff;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 12px rgba(0,0,0,.1);--shadow-lg:0 8px 24px rgba(0,0,0,.12);--radius:8px;--radius-sm:6px;--radius-lg:12px;--main-bg:var(--gray-50);--card-bg:var(--white);--card-border:var(--gray-200);--text-primary:var(--gray-900);--text-secondary:var(--gray-600);--text-muted:var(--gray-500)}
-[data-theme="dark"]{--main-bg:#0d1117;--card-bg:#161b22;--card-border:#30363d;--text-primary:#c9d1d9;--text-secondary:#8b949e;--text-muted:#6e7681;--gray-50:#0d1117;--gray-100:#161b22;--gray-200:#30363d;--gray-300:#484f58;--gray-400:#6e7681;--gray-500:#8b949e;--gray-600:#8b949e;--gray-700:#c9d1d9;--gray-800:#c9d1d9;--gray-900:#f0f6fc;--white:#161b22;--shadow:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 12px rgba(0,0,0,.4);--shadow-lg:0 8px 24px rgba(0,0,0,.5);--red-light:#3d1f1f;--orange-light:#3d2e1a;--yellow-light:#3d361a;--green-light:#1a3d26;--blue-light:#1a2640}
-body{font-family:'Inter',sans-serif;background:var(--main-bg);color:var(--text-primary);display:flex;height:100vh;overflow:hidden;font-size:13px;line-height:1.5;transition:background .3s,color .3s}
+:root{--navy:#1a2332;--navy-light:#243044;--navy-lighter:#2d3a4e;--blue:#2d7ff9;--blue-light:#e8f0fe;--blue-dark:#1a5fd4;--red:#e74c3c;--red-light:#fdeaea;--orange:#f39c12;--orange-light:#fef5e7;--yellow:#f1c40f;--yellow-light:#fef9e7;--green:#27ae60;--green-light:#e8f8f0;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-300:#dee2e6;--gray-400:#ced4da;--gray-500:#adb5bd;--gray-600:#868e96;--gray-700:#495057;--gray-800:#343a40;--gray-900:#212529;--white:#fff;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 12px rgba(0,0,0,.1);--shadow-lg:0 8px 24px rgba(0,0,0,.12);--radius:8px;--radius-sm:6px;--radius-lg:12px}
+body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--gray-900);display:flex;height:100vh;overflow:hidden;font-size:13px;line-height:1.5}
 .sidebar{width:280px;min-width:280px;background:var(--navy);color:var(--white);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
 .sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-thumb{background:var(--navy-lighter);border-radius:4px}
 .sidebar-header{padding:20px 16px 12px;border-bottom:1px solid var(--navy-light)}
@@ -117,112 +116,20 @@ body{font-family:'Inter',sans-serif;background:var(--main-bg);color:var(--text-p
 @keyframes spin{to{transform:rotate(360deg)}}
 .biz-link{color:var(--gray-400);font-size:11px;text-decoration:none;transition:color .15s;display:inline-flex;align-items:center;margin-left:6px}
 .biz-link:hover{color:var(--blue)}
-
-/* Dark mode toggle */
-.theme-toggle{position:absolute;top:16px;right:16px;background:var(--navy-light);border:1px solid var(--navy-lighter);color:var(--gray-400);width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;z-index:10}
-.theme-toggle:hover{color:var(--white);background:var(--navy-lighter)}
-
-/* Review timer */
-.review-timer{padding:8px 16px;border-bottom:1px solid var(--navy-light)}
-.timer-display{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;color:var(--white);letter-spacing:1px}
-.timer-controls{display:flex;gap:4px;margin-top:6px}
-.timer-btn{padding:3px 8px;border:1px solid var(--navy-lighter);background:var(--navy-light);color:var(--gray-400);border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit;transition:all .15s}
-.timer-btn:hover{color:var(--white);border-color:var(--gray-500)}
-.timer-btn.active{color:var(--green);border-color:var(--green)}
-
-/* Notes panel */
-.notes-panel{position:fixed;right:-400px;top:0;width:400px;height:100vh;background:var(--card-bg);border-left:1px solid var(--card-border);box-shadow:var(--shadow-lg);z-index:900;transition:right .3s ease;display:flex;flex-direction:column}
-.notes-panel.open{right:0}
-.notes-header{padding:16px 20px;border-bottom:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between}
-.notes-header h3{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
-.notes-body{flex:1;padding:16px 20px;overflow-y:auto}
-.notes-textarea{width:100%;height:100%;border:none;background:transparent;color:var(--text-primary);font-family:'Inter',sans-serif;font-size:12px;line-height:1.8;resize:none;outline:none}
-.notes-textarea::placeholder{color:var(--text-muted)}
-.notes-footer{padding:10px 20px;border-top:1px solid var(--card-border);font-size:10px;color:var(--text-muted);display:flex;justify-content:space-between;align-items:center}
-.notes-badge{position:absolute;top:-4px;right:-4px;background:var(--blue);color:var(--white);font-size:8px;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
-
-/* Tab navigation */
-.tab-nav{display:flex;gap:0;border-bottom:2px solid var(--card-border);margin-bottom:20px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab-btn{padding:10px 18px;border:none;background:transparent;color:var(--text-secondary);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:6px}
-.tab-btn:hover{color:var(--text-primary);background:var(--gray-100)}
-.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
-.tab-btn .tab-count{background:var(--gray-200);color:var(--text-secondary);font-size:10px;padding:1px 6px;border-radius:8px;font-weight:700}
-.tab-btn.active .tab-count{background:var(--blue-light);color:var(--blue)}
-.tab-content{display:none;animation:fadeIn .2s ease}
-.tab-content.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-
-/* Collapsible blocker cards */
-.blocker-card{transition:all .2s ease}
-.blocker-card:hover{box-shadow:var(--shadow-md)}
-.blocker-toggle{cursor:pointer;user-select:none}
-.blocker-toggle .chevron{transition:transform .2s;font-size:11px;color:var(--gray-400)}
-.blocker-toggle.collapsed .chevron{transform:rotate(-90deg)}
-.blocker-body{overflow:hidden;transition:max-height .3s ease,opacity .2s ease;max-height:800px;opacity:1}
-.blocker-body.collapsed{max-height:0;opacity:0}
-
-/* Keyboard shortcut hints */
-.kbd{display:inline-flex;align-items:center;padding:1px 5px;background:var(--navy-lighter);border:1px solid var(--gray-600);border-radius:3px;font-size:9px;font-family:monospace;color:var(--gray-400);line-height:1.4}
-
-/* Command palette */
-.cmd-palette{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:2000;display:none;align-items:flex-start;justify-content:center;padding-top:20vh}
-.cmd-palette.open{display:flex}
-.cmd-input-wrap{width:560px;background:var(--card-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);border:1px solid var(--card-border);overflow:hidden}
-.cmd-input{width:100%;padding:16px 20px;border:none;background:transparent;color:var(--text-primary);font-size:15px;font-family:inherit;outline:none}
-.cmd-input::placeholder{color:var(--text-muted)}
-.cmd-results{max-height:300px;overflow-y:auto;border-top:1px solid var(--card-border)}
-.cmd-item{padding:10px 20px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);transition:background .1s}
-.cmd-item:hover,.cmd-item.selected{background:var(--blue-light);color:var(--blue)}
-.cmd-item i{width:20px;text-align:center;font-size:12px}
-
-/* Export button */
-.export-btn{position:fixed;bottom:24px;right:24px;background:var(--blue);color:var(--white);border:none;padding:12px 20px;border-radius:var(--radius);font-size:12px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-lg);display:none;align-items:center;gap:8px;font-family:inherit;z-index:100;transition:all .15s}
-.export-btn:hover{background:var(--blue-dark);transform:translateY(-2px)}
-
-/* Improved card transitions */
-.ov-card{transition:all .15s ease;background:var(--card-bg);border-color:var(--card-border)}
-.ov-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.signal-card{transition:all .15s ease;background:var(--card-bg);border-color:var(--card-border)}
-.signal-card:hover{box-shadow:var(--shadow-md)}
-.blocker-card{background:var(--card-bg);border-color:var(--card-border)}
-.passed-section{background:var(--card-bg);border-color:var(--card-border)}
-.decision-section{background:var(--card-bg);border-color:var(--card-border)}
-
-/* Tooltip for GPV chart */
-.chart-tooltip{position:absolute;background:var(--gray-900);color:var(--white);padding:8px 12px;border-radius:var(--radius-sm);font-size:11px;pointer-events:none;z-index:50;box-shadow:var(--shadow-lg);white-space:nowrap;transform:translate(-50%,-100%);margin-top:-8px;opacity:0;transition:opacity .15s}
-.chart-tooltip.visible{opacity:1}
-.chart-tooltip::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--gray-900)}
-
-/* Sidebar improvements */
-.sidebar{position:relative}
-.sidebar-footer{padding:12px 16px;border-top:1px solid var(--navy-light);font-size:10px;color:var(--gray-600);display:flex;align-items:center;gap:6px;margin-top:auto}
-
-/* Responsive */
-@media(max-width:1024px){.sidebar{width:240px;min-width:240px}.notes-panel{width:320px}}
-@media(max-width:768px){.sidebar{position:fixed;left:-280px;z-index:800;transition:left .3s}.sidebar.open{left:0}.overview-cards{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<aside class="sidebar" id="sidebar">
-  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode (Ctrl+D)"><i class="fas fa-moon"></i></button>
+<aside class="sidebar">
   <div class="sidebar-header">
     <h1><i class="fas fa-shield-halved"></i> Credit Review</h1>
     <div class="subtitle">SFS Pre-Origination Tool</div>
   </div>
   <div class="search-section">
-    <label>Application Token <span class="kbd" style="margin-left:auto">⌘K</span></label>
+    <label>Application Token</label>
     <div class="search-row">
       <input type="text" id="tokenInput" placeholder="A-XXXXXXXXXX">
       <button onclick="lookupApplication()"><i class="fas fa-search"></i></button>
-    </div>
-  </div>
-  <div class="review-timer" id="timerSection" style="display:none">
-    <h3 style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:6px">Review Timer</h3>
-    <div class="timer-display"><i class="fas fa-stopwatch" style="color:var(--blue);font-size:14px"></i><span id="timerDisplay">00:00:00</span></div>
-    <div class="timer-controls">
-      <button class="timer-btn active" id="timerStartBtn" onclick="toggleTimer()"><i class="fas fa-pause"></i> Pause</button>
-      <button class="timer-btn" onclick="resetTimer()"><i class="fas fa-redo"></i> Reset</button>
     </div>
   </div>
   <div id="sidebarInfo" style="display:none">
@@ -240,42 +147,9 @@ body{font-family:'Inter',sans-serif;background:var(--main-bg);color:var(--text-p
       <button class="action-btn decline" onclick="showToast('Decline flow coming soon')"><i class="fas fa-times"></i> Decline</button>
       <button class="action-btn ssp" onclick="openSSPModal()"><i class="fas fa-envelope"></i> Send SSP</button>
       <button class="action-btn escalate" onclick="openEscModal()"><i class="fas fa-arrow-up"></i> Escalate</button>
-      <button class="action-btn" style="background:var(--gray-700);color:var(--white);position:relative" onclick="toggleNotesPanel()"><i class="fas fa-sticky-note"></i> Notes <span class="notes-badge" id="notesBadge" style="display:none">!</span></button>
-      <button class="action-btn" style="background:var(--gray-600);color:var(--white)" onclick="exportReviewSummary()"><i class="fas fa-file-export"></i> Export Summary</button>
     </div>
   </div>
-  <div class="sidebar-footer"><i class="fas fa-keyboard"></i> Press <span class="kbd">⌘K</span> to search · <span class="kbd">Esc</span> to close</div>
 </aside>
-
-<!-- Notes Panel -->
-<div class="notes-panel" id="notesPanel">
-  <div class="notes-header">
-    <h3><i class="fas fa-sticky-note" style="color:var(--orange)"></i> Review Notes</h3>
-    <button onclick="toggleNotesPanel()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="notes-body">
-    <textarea class="notes-textarea" id="notesTextarea" placeholder="Type your review notes here...&#10;&#10;• Observations&#10;• Questions for escalation&#10;• Decision rationale&#10;&#10;Notes auto-save per application token."></textarea>
-  </div>
-  <div class="notes-footer">
-    <span id="notesStatus">No notes yet</span>
-    <button onclick="clearNotes()" style="background:none;border:1px solid var(--card-border);color:var(--text-muted);padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit">Clear</button>
-  </div>
-</div>
-
-<!-- Command Palette -->
-<div class="cmd-palette" id="cmdPalette">
-  <div class="cmd-input-wrap">
-    <input class="cmd-input" id="cmdInput" placeholder="Search application token or type a command..." autocomplete="off">
-    <div class="cmd-results" id="cmdResults">
-      <div class="cmd-item" onclick="cmdAction('search')"><i class="fas fa-search"></i> Search application token</div>
-      <div class="cmd-item" onclick="cmdAction('notes')"><i class="fas fa-sticky-note"></i> Open notes panel</div>
-      <div class="cmd-item" onclick="cmdAction('export')"><i class="fas fa-file-export"></i> Export review summary</div>
-      <div class="cmd-item" onclick="cmdAction('ssp')"><i class="fas fa-envelope"></i> Send SSP request</div>
-      <div class="cmd-item" onclick="cmdAction('escalate')"><i class="fas fa-arrow-up"></i> Escalate case</div>
-      <div class="cmd-item" onclick="cmdAction('theme')"><i class="fas fa-moon"></i> Toggle dark mode</div>
-    </div>
-  </div>
-</div>
 
 <main class="main">
   <div id="emptyState" class="empty-state">
@@ -290,22 +164,12 @@ body{font-family:'Inter',sans-serif;background:var(--main-bg);color:var(--text-p
   <div id="errorState" style="display:none;padding:40px;text-align:center;color:var(--red)">
     <i class="fas fa-exclamation-triangle" style="font-size:48px;margin-bottom:16px;display:block"></i>
     <h2 id="errorTitle" style="margin-bottom:8px">Application Not Found</h2>
-    <p id="errorMsg" style="color:var(--text-secondary)"></p>
-    <div id="serverHelp" style="display:none;margin-top:20px;padding:16px 20px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);text-align:left;max-width:500px;margin-left:auto;margin-right:auto">
-      <h3 style="font-size:13px;margin-bottom:8px;color:var(--text-primary)"><i class="fas fa-terminal" style="color:var(--blue)"></i> How to start the server</h3>
-      <ol style="font-size:12px;color:var(--text-secondary);padding-left:20px;line-height:2">
-        <li>Open a terminal</li>
-        <li><code style="background:var(--gray-200);padding:2px 6px;border-radius:3px;font-size:11px">cd ~/Desktop/flex-loan-manager</code></li>
-        <li><code style="background:var(--gray-200);padding:2px 6px;border-radius:3px;font-size:11px">python3 server.py</code></li>
-        <li>Open <a href="http://localhost:5050" style="color:var(--blue)">http://localhost:5050</a></li>
-      </ol>
-    </div>
+    <p id="errorMsg" style="color:var(--gray-600)"></p>
   </div>
   <div id="appContent" class="content-wrapper" style="display:none"></div>
 </main>
 
 <div class="toast" id="toast"></div>
-<button class="export-btn" id="exportBtn" onclick="exportReviewSummary()"><i class="fas fa-file-export"></i> Export Summary</button>
 
 <!-- Escalation Modal -->
 <div class="modal-overlay" id="escModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center">
@@ -687,8 +551,7 @@ async function lookupApplication() {
     document.getElementById('loadingState').style.display = 'none';
     document.getElementById('errorState').style.display = 'block';
     document.getElementById('errorTitle').textContent = 'Connection Error';
-    document.getElementById('errorMsg').textContent = 'Cannot reach the backend server at localhost:5050.';
-    document.getElementById('serverHelp').style.display = 'block';
+    document.getElementById('errorMsg').textContent = 'Cannot reach the server. Make sure server.py is running on localhost:5050. Error: ' + e.message;
   }
 }
 
@@ -752,31 +615,8 @@ function renderDashboard(data) {
     <div class="sla-text"><span>Internal SLA: 2 business days</span><span>External: 3 days</span></div>
   `;
 
-  // Show export button and timer
-  document.getElementById('exportBtn').style.display = 'flex';
-  document.getElementById('timerSection').style.display = 'block';
-  startTimer();
-
-  // Load saved notes for this token
-  loadNotes(app.APPLICATION_TOKEN || document.getElementById('tokenInput').value.trim());
-
   // Main content
   let html = '';
-
-  // Tab navigation
-  const blockerCount = blockers.length;
-  const signalCount = (cbRate > 3 ? 1 : 0) + (activeLoans.length > 0 ? 1 : 0) + (cpPct < 50 ? 1 : 0) + (linked.length > 0 ? 1 : 0);
-  html += `<div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('overview',this)"><i class="fas fa-th-large"></i> Overview</button>
-    <button class="tab-btn" onclick="switchTab('blockers',this)"><i class="fas fa-exclamation-triangle"></i> Blockers <span class="tab-count">${blockerCount}</span></button>
-    <button class="tab-btn" onclick="switchTab('signals',this)"><i class="fas fa-chart-bar"></i> Signals <span class="tab-count">${signalCount}</span></button>
-    <button class="tab-btn" onclick="switchTab('gpv',this)"><i class="fas fa-chart-line"></i> GPV Trends</button>
-    <button class="tab-btn" onclick="switchTab('ssp',this)"><i class="fas fa-envelope"></i> SSP Suggestions</button>
-    <button class="tab-btn" onclick="switchTab('decision',this)"><i class="fas fa-gavel"></i> Decision</button>
-  </div>`;
-
-  // Overview tab
-  html += `<div class="tab-content active" id="tab-overview">`;
 
   // Overview cards
   html += `<div class="section"><div class="section-title">📋 Application Overview</div><div class="overview-cards">
@@ -790,51 +630,31 @@ function renderDashboard(data) {
     <div class="ov-card"><div class="ov-label">Prior Loans</div><div class="ov-value">${loans.length}</div></div>
   </div></div>`;
 
-  // Close overview tab, open blockers tab
-  html += `</div>`;
-  html += `<div class="tab-content" id="tab-blockers">`;
-
   // Blockers section
   if (blockers.length > 0) {
-    html += `<div class="section"><div class="section-title">🚨 Active Blockers (${blockers.length})</div>
-    <div style="display:flex;gap:8px;margin-bottom:12px">
-      <button onclick="expandAllBlockers()" style="padding:4px 10px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text-secondary);border-radius:var(--radius-sm);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-expand-alt"></i> Expand All</button>
-      <button onclick="collapseAllBlockers()" style="padding:4px 10px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text-secondary);border-radius:var(--radius-sm);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-compress-alt"></i> Collapse All</button>
-    </div>`;
-    blockers.forEach((bk, idx) => {
+    html += `<div class="section"><div class="section-title">🚨 Active Blockers (${blockers.length})</div>`;
+    blockers.forEach(bk => {
       const info = getBlockerInfo(bk);
       const borderClass = info.severity === 'critical' ? 'border-red' : 'border-orange';
       const tagClass = info.severity === 'critical' ? 'tag-critical' : 'tag-warning';
       const tagText = info.severity === 'critical' ? 'CRITICAL' : 'WARNING';
 
-      html += `<div class="blocker-card" id="blocker-${idx}"><div class="blocker-inner">
+      html += `<div class="blocker-card"><div class="blocker-inner">
         <div class="blocker-border ${borderClass}"></div>
         <div class="blocker-content">
-          <div class="blocker-header blocker-toggle" onclick="toggleBlocker(${idx})">
-            <h3>${info.title}</h3>
-            <span class="blocker-tag ${tagClass}">${tagText}</span>
-            <i class="fas fa-chevron-down chevron" style="margin-left:auto"></i>
-          </div>
-          <div class="blocker-body" id="blocker-body-${idx}">
-            <div class="blocker-code">${bk}</div>
-            <div class="blocker-desc">${info.desc}</div>
-            <div style="font-size:11px;color:var(--blue);margin-bottom:10px"><i class="fas fa-book"></i> SOP Reference: ${info.sop}</div>
-            <ul class="checklist">
-              ${info.checklist.map(item => `<li><input type="checkbox" onchange="updateProgress()"><span>${item}</span></li>`).join('')}
-            </ul>
-            ${info.aan ? `<div class="decline-info"><strong>If decline required:</strong> AAN: ${info.aan.name} — ${info.aan.days}</div>` : ''}
-          </div>
+          <div class="blocker-header"><h3>${info.title}</h3><span class="blocker-tag ${tagClass}">${tagText}</span></div>
+          <div class="blocker-code">${bk}</div>
+          <div class="blocker-desc">${info.desc}</div>
+          <div style="font-size:11px;color:var(--blue);margin-bottom:10px"><i class="fas fa-book"></i> SOP Reference: ${info.sop}</div>
+          <ul class="checklist">
+            ${info.checklist.map(item => `<li><input type="checkbox" onchange="updateProgress()"><span>${item}</span></li>`).join('')}
+          </ul>
+          ${info.aan ? `<div class="decline-info"><strong>If decline required:</strong>AAN: ${info.aan.name} — ${info.aan.days}</div>` : ''}
         </div>
       </div></div>`;
     });
     html += `</div>`;
-  } else {
-    html += `<div style="text-align:center;padding:40px;color:var(--text-muted)"><i class="fas fa-check-circle" style="font-size:48px;color:var(--green);display:block;margin-bottom:12px"></i><h3 style="color:var(--green)">No Active Blockers</h3><p style="margin-top:4px">All automated checks passed.</p></div>`;
   }
-
-  // Close blockers tab, open signals tab
-  html += `</div>`;
-  html += `<div class="tab-content" id="tab-signals">`;
 
   // Auto-detected signals
   html += `<div class="section"><div class="section-title">📊 Auto-Detected Signals</div>`;
@@ -875,10 +695,6 @@ function renderDashboard(data) {
 
   html += `</div>`;
 
-  // Close signals tab, open GPV tab
-  html += `</div>`;
-  html += `<div class="tab-content" id="tab-gpv">`;
-
   // GPV Chart section
   if (gpv.length > 0) {
     const totalGPV30 = gpv.slice(0, 30).reduce((s, r) => s + (r.GPV_PAYMENT_AMOUNT_BASE_UNIT || 0), 0);
@@ -893,40 +709,28 @@ function renderDashboard(data) {
         <div><strong>Active Days:</strong> ${activeDays} of ${gpv.length}</div>
         <div><strong>CP %:</strong> ${cpPct.toFixed(1)}%</div>
       </div>
-      <div id="gpvChartContainer" style="position:relative"></div>
+      <div id="gpvChartContainer"></div>
     </div></div>`;
-  } else {
-    html += `<div style="text-align:center;padding:40px;color:var(--text-muted)"><i class="fas fa-chart-line" style="font-size:48px;display:block;margin-bottom:12px;color:var(--gray-300)"></i><h3>No GPV Data Available</h3><p style="margin-top:4px">No processing history found for this merchant.</p></div>`;
   }
-
-  // Close GPV tab, open SSP tab
-  html += `</div>`;
-  html += `<div class="tab-content" id="tab-ssp">`;
 
   // Smart SSP Suggestions
   const sspSuggestions = getSmartSSPSuggestions(blockers, {loanAmount: offerAmt, cbRate: cbRate});
   if (sspSuggestions.length > 0) {
     html += `<div class="section"><div class="section-title">💡 Suggested SSP Templates</div>
-    <div style="background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--card-border);padding:16px">
-      <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Based on the detected blockers and account signals, these SSP templates may be relevant:</p>
+    <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gray-200);padding:16px">
+      <p style="font-size:11px;color:var(--gray-500);margin-bottom:10px">Based on the detected blockers and account signals, these SSP templates may be relevant:</p>
       ${sspSuggestions.map(s => `
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-200);font-size:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-envelope"></i></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-envelope"></i></div>
           <div style="flex:1">
-            <div style="font-weight:600;color:var(--text-primary)">${s.name} <span class="badge badge-blue" style="margin-left:4px">${s.cat}</span></div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${s.reason}</div>
+            <div style="font-weight:600">${s.name} <span class="badge badge-blue" style="margin-left:4px">${s.cat}</span></div>
+            <div style="font-size:11px;color:var(--gray-500)">${s.reason}</div>
           </div>
-          <button onclick="openSSPModalWithTemplate('${s.cat}','${s.name}')" style="padding:5px 12px;border:1px solid var(--blue);background:transparent;color:var(--blue);border-radius:var(--radius-sm);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.background='var(--blue)';this.style.color='var(--white)'" onmouseout="this.style.background='transparent';this.style.color='var(--blue)'">Use</button>
+          <button onclick="openSSPModalWithTemplate('${s.cat}','${s.name}')" style="padding:4px 10px;border:1px solid var(--blue);background:var(--white);color:var(--blue);border-radius:var(--radius-sm);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Use</button>
         </div>
       `).join('')}
     </div></div>`;
-  } else {
-    html += `<div style="text-align:center;padding:40px;color:var(--text-muted)"><i class="fas fa-envelope" style="font-size:48px;display:block;margin-bottom:12px;color:var(--gray-300)"></i><h3>No SSP Suggestions</h3><p style="margin-top:4px">No blocker-based SSP templates detected. You can still <a href="#" onclick="openSSPModal();return false" style="color:var(--blue)">browse all templates</a>.</p></div>`;
   }
-
-  // Close SSP tab, open decision tab
-  html += `</div>`;
-  html += `<div class="tab-content" id="tab-decision">`;
 
   // Passed checks
   const passedSteps = data.application.filter(s => s.AUTO_STEP_RESULT === 'approved');
@@ -964,9 +768,6 @@ function renderDashboard(data) {
       <button class="decision-btn d-escalate" onclick="openEscModal()"><i class="fas fa-arrow-up"></i> Escalate</button>
     </div>
   </div></div>`;
-
-  // Close decision tab
-  html += `</div>`;
 
   document.getElementById('appContent').innerHTML = html;
   document.getElementById('appContent').style.display = 'block';
@@ -1082,41 +883,15 @@ function renderGPVChart(gpvData, containerId) {
   const sorted = [...gpvData].sort((a, b) => new Date(a.THE_DATE) - new Date(b.THE_DATE));
   const values = sorted.map(r => (r.GPV_PAYMENT_AMOUNT_BASE_UNIT || 0) / 100);
   const dates = sorted.map(r => r.THE_DATE);
-  const counts = sorted.map(r => r.GPV_PAYMENT_COUNT || 0);
   
   const canvas = document.createElement('canvas');
   canvas.width = 800;
   canvas.height = 200;
   canvas.style.width = '100%';
   canvas.style.height = '200px';
-  canvas.style.cursor = 'crosshair';
   const container = document.getElementById(containerId);
   if (!container) return;
   container.appendChild(canvas);
-
-  // Tooltip
-  const tooltip = document.createElement('div');
-  tooltip.className = 'chart-tooltip';
-  container.appendChild(tooltip);
-
-  canvas.addEventListener('mousemove', e => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const mouseX = (e.clientX - rect.left) * scaleX;
-    const pad = {top: 20, right: 20, bottom: 30, left: 60};
-    const cW = canvas.width - pad.left - pad.right;
-    const idx = Math.floor(((mouseX - pad.left) / cW) * values.length);
-    if (idx >= 0 && idx < values.length) {
-      const d = new Date(dates[idx]);
-      tooltip.innerHTML = `<strong>${d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}</strong><br>GPV: $${values[idx].toLocaleString()}<br>Txns: ${counts[idx]}`;
-      tooltip.classList.add('visible');
-      const tipX = e.clientX - rect.left;
-      const tipY = e.clientY - rect.top;
-      tooltip.style.left = tipX + 'px';
-      tooltip.style.top = tipY + 'px';
-    }
-  });
-  canvas.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
   
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
@@ -1377,270 +1152,6 @@ function sendSSP() {
 // Allow Enter key to search
 document.getElementById('tokenInput').addEventListener('keypress', e => {
   if (e.key === 'Enter') lookupApplication();
-});
-
-// ============ TAB NAVIGATION ============
-function switchTab(tabId, btn) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const tab = document.getElementById('tab-' + tabId);
-  if (tab) tab.classList.add('active');
-  if (btn) btn.classList.add('active');
-}
-
-// ============ COLLAPSIBLE BLOCKERS ============
-function toggleBlocker(idx) {
-  const header = document.querySelector(`#blocker-${idx} .blocker-toggle`);
-  const body = document.getElementById(`blocker-body-${idx}`);
-  if (header && body) {
-    header.classList.toggle('collapsed');
-    body.classList.toggle('collapsed');
-  }
-}
-function expandAllBlockers() {
-  document.querySelectorAll('.blocker-toggle').forEach(h => h.classList.remove('collapsed'));
-  document.querySelectorAll('.blocker-body').forEach(b => b.classList.remove('collapsed'));
-}
-function collapseAllBlockers() {
-  document.querySelectorAll('.blocker-toggle').forEach(h => h.classList.add('collapsed'));
-  document.querySelectorAll('.blocker-body').forEach(b => b.classList.add('collapsed'));
-}
-
-// ============ DARK MODE ============
-function toggleTheme() {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  localStorage.setItem('sfs-theme', isDark ? 'light' : 'dark');
-  document.getElementById('themeToggle').innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-}
-// Restore theme on load
-(function() {
-  const saved = localStorage.getItem('sfs-theme');
-  if (saved === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
-  }
-})();
-
-// ============ REVIEW TIMER ============
-let timerInterval = null;
-let timerSeconds = 0;
-let timerRunning = false;
-
-function startTimer() {
-  if (timerRunning) return;
-  timerRunning = true;
-  timerSeconds = 0;
-  updateTimerDisplay();
-  timerInterval = setInterval(() => {
-    timerSeconds++;
-    updateTimerDisplay();
-  }, 1000);
-  document.getElementById('timerStartBtn').innerHTML = '<i class="fas fa-pause"></i> Pause';
-  document.getElementById('timerStartBtn').classList.add('active');
-}
-
-function toggleTimer() {
-  if (timerRunning) {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    document.getElementById('timerStartBtn').innerHTML = '<i class="fas fa-play"></i> Resume';
-    document.getElementById('timerStartBtn').classList.remove('active');
-  } else {
-    timerRunning = true;
-    timerInterval = setInterval(() => {
-      timerSeconds++;
-      updateTimerDisplay();
-    }, 1000);
-    document.getElementById('timerStartBtn').innerHTML = '<i class="fas fa-pause"></i> Pause';
-    document.getElementById('timerStartBtn').classList.add('active');
-  }
-}
-
-function resetTimer() {
-  clearInterval(timerInterval);
-  timerSeconds = 0;
-  timerRunning = false;
-  updateTimerDisplay();
-  document.getElementById('timerStartBtn').innerHTML = '<i class="fas fa-play"></i> Start';
-  document.getElementById('timerStartBtn').classList.remove('active');
-}
-
-function updateTimerDisplay() {
-  const h = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
-  const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
-  const s = String(timerSeconds % 60).padStart(2, '0');
-  const display = document.getElementById('timerDisplay');
-  if (display) display.textContent = `${h}:${m}:${s}`;
-  // Color warning if >5 min
-  if (timerSeconds > 300 && display) display.style.color = 'var(--orange)';
-  if (timerSeconds > 600 && display) display.style.color = 'var(--red)';
-}
-
-// ============ NOTES PANEL ============
-let currentNotesToken = null;
-
-function toggleNotesPanel() {
-  document.getElementById('notesPanel').classList.toggle('open');
-}
-
-function loadNotes(token) {
-  currentNotesToken = token;
-  const saved = localStorage.getItem('sfs-notes-' + token) || '';
-  document.getElementById('notesTextarea').value = saved;
-  updateNotesStatus();
-  // Show badge if notes exist
-  const badge = document.getElementById('notesBadge');
-  if (badge) badge.style.display = saved ? 'flex' : 'none';
-}
-
-function updateNotesStatus() {
-  const text = document.getElementById('notesTextarea').value;
-  const status = document.getElementById('notesStatus');
-  if (text) {
-    const words = text.trim().split(/\s+/).length;
-    status.textContent = `${words} word${words !== 1 ? 's' : ''} · Auto-saved`;
-  } else {
-    status.textContent = 'No notes yet';
-  }
-}
-
-function clearNotes() {
-  if (!confirm('Clear all notes for this application?')) return;
-  document.getElementById('notesTextarea').value = '';
-  if (currentNotesToken) localStorage.removeItem('sfs-notes-' + currentNotesToken);
-  updateNotesStatus();
-  document.getElementById('notesBadge').style.display = 'none';
-}
-
-// Auto-save notes
-document.getElementById('notesTextarea').addEventListener('input', () => {
-  if (currentNotesToken) {
-    localStorage.setItem('sfs-notes-' + currentNotesToken, document.getElementById('notesTextarea').value);
-  }
-  updateNotesStatus();
-  const badge = document.getElementById('notesBadge');
-  if (badge) badge.style.display = document.getElementById('notesTextarea').value ? 'flex' : 'none';
-});
-
-// ============ EXPORT REVIEW SUMMARY ============
-function exportReviewSummary() {
-  if (!currentAppData) { showToast('No application loaded'); return; }
-  const app = currentAppData.application[0];
-  const m = currentAppData.merchant || {};
-  const checks = document.querySelectorAll('#appContent .checklist input[type="checkbox"]');
-  const total = checks.length;
-  const done = Array.from(checks).filter(c => c.checked).length;
-  const notes = document.getElementById('notesTextarea').value;
-  const timerH = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
-  const timerM = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
-  const timerS = String(timerSeconds % 60).padStart(2, '0');
-
-  const allBlockers = new Set();
-  currentAppData.application.forEach(step => {
-    const afr = step.AGGREGATED_AUTO_STEP_FAILURE_REASON || '';
-    const fr = step.AUTO_STEP_FAILURE_REASON || '';
-    if (afr) afr.split(',').map(b => b.trim()).filter(b => b).forEach(b => allBlockers.add(b));
-    if (fr) fr.split(',').map(b => b.trim()).filter(b => b).forEach(b => allBlockers.add(b));
-  });
-
-  let summary = `═══════════════════════════════════════
-  SFS CREDIT REVIEW SUMMARY
-═══════════════════════════════════════
-Application: ${app.APPLICATION_TOKEN || '—'}
-Unit Token:  ${app.UNIT_TOKEN || '—'}
-Business:    ${m.BUSINESS_NAME || '—'} (${m.RECEIPT_CITY || ''}, ${m.RECEIPT_STATE || ''})
-Product:     ${app.PRODUCT_NAME || '—'}
-Loan Amount: $${(app.SELECTED_OFFER_AMOUNT || 0).toLocaleString()}
-Risk Grade:  ${app.RISK_GRADE_NAME || '—'}
-Offer Type:  ${app.OFFER_TYPE || '—'}
-
-Blockers (${allBlockers.size}):
-${Array.from(allBlockers).map(b => '  • ' + b).join('\n') || '  None'}
-
-Checklist Progress: ${done}/${total} (${total > 0 ? Math.round(done/total*100) : 0}%)
-Review Time: ${timerH}:${timerM}:${timerS}
-${notes ? '\nReviewer Notes:\n' + notes : ''}
-═══════════════════════════════════════`;
-
-  navigator.clipboard.writeText(summary).then(() => {
-    showToast('Review summary copied to clipboard!');
-  }).catch(() => showToast('Failed to copy summary'));
-}
-
-// ============ COMMAND PALETTE ============
-function openCmdPalette() {
-  document.getElementById('cmdPalette').classList.add('open');
-  document.getElementById('cmdInput').value = '';
-  document.getElementById('cmdInput').focus();
-}
-
-function closeCmdPalette() {
-  document.getElementById('cmdPalette').classList.remove('open');
-}
-
-function cmdAction(action) {
-  closeCmdPalette();
-  switch(action) {
-    case 'search':
-      document.getElementById('tokenInput').focus();
-      document.getElementById('tokenInput').select();
-      break;
-    case 'notes': toggleNotesPanel(); break;
-    case 'export': exportReviewSummary(); break;
-    case 'ssp': openSSPModal(); break;
-    case 'escalate': openEscModal(); break;
-    case 'theme': toggleTheme(); break;
-  }
-}
-
-document.getElementById('cmdInput').addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeCmdPalette();
-  if (e.key === 'Enter') {
-    const val = document.getElementById('cmdInput').value.trim();
-    if (val) {
-      closeCmdPalette();
-      document.getElementById('tokenInput').value = val;
-      lookupApplication();
-    }
-  }
-});
-
-document.getElementById('cmdPalette').addEventListener('click', e => {
-  if (e.target.id === 'cmdPalette') closeCmdPalette();
-});
-
-// ============ KEYBOARD SHORTCUTS ============
-document.addEventListener('keydown', e => {
-  // Cmd/Ctrl+K → Command palette
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-    e.preventDefault();
-    openCmdPalette();
-  }
-  // Ctrl+D → Toggle dark mode
-  if (e.ctrlKey && e.key === 'd') {
-    e.preventDefault();
-    toggleTheme();
-  }
-  // Escape → Close modals/panels
-  if (e.key === 'Escape') {
-    closeCmdPalette();
-    document.getElementById('notesPanel').classList.remove('open');
-    document.getElementById('escModal').style.display = 'none';
-    document.getElementById('sspModal').style.display = 'none';
-  }
-  // 1-6 → Switch tabs when no input focused
-  if (!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
-    const tabMap = {'1':'overview','2':'blockers','3':'signals','4':'gpv','5':'ssp','6':'decision'};
-    if (tabMap[e.key]) {
-      const btns = document.querySelectorAll('.tab-btn');
-      const idx = parseInt(e.key) - 1;
-      if (btns[idx]) {
-        switchTab(tabMap[e.key], btns[idx]);
-      }
-    }
-  }
 });
 </script>
 </body>
